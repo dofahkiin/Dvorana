@@ -47,7 +47,8 @@ class TermsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->Term->create();
+            $this->request->data['Term']['client_id'] = $this->Auth->user('id');
+            $this->request->data['Term']['status'] = "nepotvrđen";
 			if ($this->Term->save($this->request->data)) {
 				$this->Session->setFlash(__('The term has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -100,4 +101,27 @@ class TermsController extends AppController {
 			$this->Session->setFlash(__('The term could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
-	}}
+	}
+
+    public function isAuthorized($user) {
+        // All registered users can add posts
+        if ($this->action === 'add' or $this->action === 'index') {
+            return true;
+        }
+
+        // The owner of a post can edit and delete it
+        if (in_array($this->action, array('edit', 'delete'))) {
+            $termId = $this->request->params['pass'][0];
+            if ($this->Term->isOwnedBy($termId, $user['id'])) {
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
+
+    public function home() {
+
+    }
+
+}

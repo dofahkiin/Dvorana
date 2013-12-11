@@ -40,4 +40,8 @@ class Term extends AppModel {
 			),
 		),
 	);
+
+    public function isOwnedBy($term, $user) {
+        return $this->field('id', array('id' => $term, 'client_id' => $user)) === $term;
+    }
 }

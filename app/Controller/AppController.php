@@ -30,4 +30,31 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+
+    public $components = array(
+        'Session',
+        'Auth' => array(
+            'loginRedirect' => array('controller' => 'terms', 'action' => 'index'),
+            'logoutRedirect' => array('controller' => 'home', 'action' => 'home'),
+            'authorize' => array('Controller')
+        )
+    );
+
+    public function beforeFilter() {
+        $this->Auth->allow('home');
+    }
+
+    public function beforeRender(){
+        $this->set('userData', $this->Auth->user());
+    }
+
+    public function isAuthorized($user) {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'Menadžer') {
+            return true;
+        }
+
+        // Default deny
+        return false;
+    }
 }

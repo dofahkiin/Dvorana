@@ -8,6 +8,24 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('add','logout');
+    }
+
+    public function login() {
+        if ($this->request->is('post')) {
+            if ($this->Auth->login()) {
+                return $this->redirect($this->Auth->redirect());
+            }
+            $this->Session->setFlash(__('Invalid username or password, try again'));
+        }
+    }
+
+    public function logout() {
+        return $this->redirect($this->Auth->logout());
+    }
+
 /**
  * Components
  *
@@ -47,10 +65,26 @@ class UsersController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+            if($this->Auth->user()){
+                $loggedUser = true;
+            }
+            else {
+                $loggedUser = false;
+            }
+
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+                if(!$loggedUser)
+                {
+                    $id = $this->User->id;
+                    $this->request->data['User'] = array_merge(
+                        $this->request->data['User'],
+                        array('id' => $id)
+                    );
+                    $this->Auth->login($this->request->data['User']);
+                }
+				//$this->Session->setFlash(__('The user has been saved.'));
+				return $this->redirect(array('controller'=>'terms', 'action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
 			}

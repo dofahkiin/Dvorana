@@ -41,8 +41,20 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
             <nav>
                 <ul>
-                    <li><a href="http://localhost/github/dvorana/">Termini</a></li>
-                    <li><a href="http://localhost/github/dvorana/users">Korisnici</a></li>
+                    <li><a href="/github/dvorana">Home</a></li>
+                    <li><a href="/github/dvorana/terms">Termini</a></li>
+
+
+                    <?php
+                    if($userData != null){
+                        if($userData['role'] == 'Menadžer')
+                        {
+                            echo "<li><a href=\"/github/dvorana/users\">Korisnici</a></li>";
+                        }
+                        echo "<li><a href=\"/github/dvorana/users/logout\">Logout(".$userData['name'].")</a></li>";
+                    }
+                    ?>
+
                 </ul>
             </nav>
 

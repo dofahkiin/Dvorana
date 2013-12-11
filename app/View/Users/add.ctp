@@ -10,7 +10,7 @@
 		echo $this->Form->input('telephone');
 		echo $this->Form->input('email');
 		echo $this->Form->input('role', array(
-            'options' => array('menadzer'=>'Mendadžer', 'klijent' => 'Klijent')
+            'options' => array('Menadžer'=>'Menadžer', 'Klijent' => 'Klijent')
         ));
 	?>
 	</fieldset>
