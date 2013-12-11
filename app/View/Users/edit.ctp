@@ -10,7 +10,8 @@
 		echo $this->Form->input('password');
 		echo $this->Form->input('telephone');
 		echo $this->Form->input('email');
-		echo $this->Form->input('role');
+		echo $this->Form->input('role', array(
+            'options' => array('menadzer'=>'Mendadžer', 'klijent' => 'Klijent')));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
