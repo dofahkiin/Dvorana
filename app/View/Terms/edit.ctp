@@ -6,7 +6,7 @@
 		echo $this->Form->input('id');
 		echo $this->Form->input('date');
 		echo $this->Form->input('term');
-		echo $this->Form->input('client_id');
+		//echo $this->Form->input('client_id');
 		echo $this->Form->input('status');
 		echo $this->Form->input('price');
 		echo $this->Form->input('comment');

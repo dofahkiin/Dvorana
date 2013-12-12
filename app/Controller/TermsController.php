@@ -69,6 +69,10 @@ class TermsController extends AppController {
 		if (!$this->Term->exists($id)) {
 			throw new NotFoundException(__('Invalid term'));
 		}
+
+        if($this->isOwned() or $this->Auth->user('role') == 'Menadžer')
+        {
+
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Term->save($this->request->data)) {
 				$this->Session->setFlash(__('The term has been saved.'));
@@ -79,7 +83,13 @@ class TermsController extends AppController {
 		} else {
 			$options = array('conditions' => array('Term.' . $this->Term->primaryKey => $id));
 			$this->request->data = $this->Term->find('first', $options);
-		}
+		    }
+        }
+
+        else {
+            $this->Session->setFlash(__('The term could not be edited.'));
+            return $this->redirect(array('action' => 'index'));
+        }
 	}
 
 /**
@@ -94,34 +104,43 @@ class TermsController extends AppController {
 		if (!$this->Term->exists()) {
 			throw new NotFoundException(__('Invalid term'));
 		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Term->delete()) {
-			$this->Session->setFlash(__('The term has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The term could not be deleted. Please, try again.'));
-		}
+
+        if($this->isOwned() or $this->Auth->user('role') == 'Menadžer')
+        {
+            $this->request->onlyAllow('post', 'delete');
+            if ($this->Term->delete()) {
+                $this->Session->setFlash(__('The term has been deleted.'));
+            } else {
+                $this->Session->setFlash(__('The term could not be deleted. Please, try again.'));
+            }
+        }
+        else {
+            $this->Session->setFlash(__('The term could not be deleted.'));
+        }
+
+
 		return $this->redirect(array('action' => 'index'));
 	}
 
     public function isAuthorized($user) {
         // All registered users can add posts
-        if ($this->action === 'add' or $this->action === 'index') {
+        if ($this->action === 'add' or $this->action === 'index'
+            or $this->action === 'delete' or $this->action === 'view'
+            or $this->action === 'edit' ) {
             return true;
         }
 
         // The owner of a post can edit and delete it
-        if (in_array($this->action, array('edit', 'delete'))) {
-            $termId = $this->request->params['pass'][0];
-            if ($this->Term->isOwnedBy($termId, $user['id'])) {
-                return true;
-            }
-        }
-
         return parent::isAuthorized($user);
     }
 
-    public function home() {
+   public function isOwned()
+   {
+       $termId = $this->request->params['pass'][0];
+       if ($this->Term->isOwnedBy($termId, $this->Auth->user('id'))) {
+           return true;
+       }
 
-    }
+   }
 
 }

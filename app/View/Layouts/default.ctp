@@ -42,11 +42,12 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
             <nav>
                 <ul>
                     <li><a href="/github/dvorana">Home</a></li>
-                    <li><a href="/github/dvorana/terms">Termini</a></li>
+
 
 
                     <?php
                     if($userData != null){
+                        echo "<li><a href=\"/github/dvorana/terms\">Termini</a></li>";
                         if($userData['role'] == 'Menadžer')
                         {
                             echo "<li><a href=\"/github/dvorana/users\">Korisnici</a></li>";
