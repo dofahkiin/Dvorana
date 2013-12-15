@@ -143,4 +143,13 @@ class TermsController extends AppController {
 
    }
 
+    public function save (){
+        return true;
+
+    }
+
+    public function getEvents(){
+        pr("Hello");
+    }
+
 }

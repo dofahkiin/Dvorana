@@ -25,6 +25,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<title>
 
 	</title>
+    <script type="text/javascript">var myBaseUrl = '<?php echo $this->Html->url('/'); ?>';</script>
 	<?php
 		echo $this->Html->meta('icon');
 
@@ -33,6 +34,8 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
+
+        echo $this->Js->writeBuffer();
 	?>
 </head>
 <body>
