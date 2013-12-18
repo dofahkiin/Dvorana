@@ -144,12 +144,42 @@ class TermsController extends AppController {
    }
 
     public function save (){
-        return true;
+        $start_time = (int)$_POST['start'];
+        $start_time = $start_time + 60*60;
+        $start = date('c',$start_time);
 
+        $end_time = (int)$_POST['end'];
+        $end_time = $end_time + 60*60;
+        $end = date('c',$end_time);
+
+        $this->request->data['Term']['client_id'] = $this->Auth->user('id');
+        $this->request->data['Term']['status'] = "nepotvrđen";
+        $this->request->data['Term']['start'] = $start;
+        $this->request->data['Term']['end'] = $end;
+        $this->request->data['Term']['date'] = date("Y-m-d", $start_time);
+        $this->request->data['Term']['comment'] = $_POST['body'];
+        $this->request->data['Term']['term'] = date("G:i-", $start_time) . date("G:i", $end_time);
+        if ($this->Term->save($this->request->data)) {
+            $this->Session->setFlash(__('The term has been saved.'));
+            return $this->redirect(array('action' => 'index'));
+        }
     }
 
     public function getEvents(){
-        pr("Hello");
+        $options = array('order' => array('Terms.start' => 'desc'));
+        $allTerms = $this->Term->find('all');
+        $terms = array();
+        foreach($allTerms as $row){
+            $termArray['id'] = $row['Term']['id'];
+            $termArray['title'] = "";
+            $termArray['body'] = $row['Term']['comment'];
+            $termArray['start'] = date('Y-m-d\TH:i:s+00:00', strtotime($row['Term']['start']));
+            $termArray['end'] = date('Y-m-d\TH:i:s+00:00', strtotime($row['Term']['end']));
+            $terms[] = $termArray;
+        }
+//        echo json_encode($terms);
+        echo '{"events":'.json_encode($terms).'}';
+        exit;
     }
 
 }

@@ -60,7 +60,7 @@ $(document).ready(function() {
                    var end = calEvent.end.getTime()/1000;
                    var title = calEvent.title;
                    var body = calEvent.body;
-				  $.post(myBaseUrl + "terms/save",{start:5, end:end, title:title, body:body });
+				  $.post(myBaseUrl + "terms/save",{start:start, end:end, title:title, body:body });
 
                   $calendar.weekCalendar("removeUnsavedEvents");
                   $calendar.weekCalendar("updateEvent", calEvent);
