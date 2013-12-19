@@ -144,21 +144,18 @@ class TermsController extends AppController {
    }
 
     public function save (){
-        $start_time = (int)$_POST['start'];
-        $start_time = $start_time + 60*60;
-        $start = date('c',$start_time);
+        date_default_timezone_set('Europe/Sarajevo');
 
-        $end_time = (int)$_POST['end'];
-        $end_time = $end_time + 60*60;
-        $end = date('c',$end_time);
+        $start = date('c',(int)$_POST['start']);
+        $end = date('c',(int)$_POST['end']);
 
         $this->request->data['Term']['client_id'] = $this->Auth->user('id');
         $this->request->data['Term']['status'] = "nepotvrđen";
         $this->request->data['Term']['start'] = $start;
         $this->request->data['Term']['end'] = $end;
-        $this->request->data['Term']['date'] = date("Y-m-d", $start_time);
+        $this->request->data['Term']['date'] = date("Y-m-d", strtotime($start));
         $this->request->data['Term']['comment'] = $_POST['body'];
-        $this->request->data['Term']['term'] = date("G:i-", $start_time) . date("G:i", $end_time);
+        $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
         if ($this->Term->save($this->request->data)) {
             $this->Session->setFlash(__('The term has been saved.'));
             return $this->redirect(array('action' => 'index'));
@@ -173,12 +170,34 @@ class TermsController extends AppController {
             $termArray['id'] = $row['Term']['id'];
             $termArray['title'] = "";
             $termArray['body'] = $row['Term']['comment'];
-            $termArray['start'] = date('Y-m-d\TH:i:s+00:00', strtotime($row['Term']['start']));
-            $termArray['end'] = date('Y-m-d\TH:i:s+00:00', strtotime($row['Term']['end']));
+            $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
+            $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));
             $terms[] = $termArray;
         }
-//        echo json_encode($terms);
-        echo '{"events":'.json_encode($terms).'}';
+        echo json_encode($terms);
+        exit;
+    }
+
+    public function move()
+    {
+        date_default_timezone_set('Europe/Sarajevo');
+        $id=(int)$_POST['id'];
+        if (!$this->Term->exists($id)) {
+            exit;
+        }
+
+        $start = date('c',(int)$_POST['start']);
+        $end = date('c',(int)$_POST['end']);
+
+        $this->Term->read(null, $id);
+        $this->Term->set(array(
+            'start' => $start,
+            'end' => $end,
+            'date' => date("Y-m-d",strtotime($start)),
+            'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end))
+        ));
+        $this->Term->save();
+
         exit;
     }
 
