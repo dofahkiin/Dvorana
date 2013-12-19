@@ -85,6 +85,11 @@ $(document).ready(function() {
 
       },
       eventResize : function(calEvent, $event) {
+          $.post(myBaseUrl + "terms/move",{
+              'id':calEvent.id,
+              'start':calEvent.start.getTime()/1000,
+              'end':calEvent.end.getTime()/1000
+          },null);
       },
       eventClick : function(calEvent, $event) {
 
