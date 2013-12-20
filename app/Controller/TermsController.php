@@ -119,7 +119,8 @@ class TermsController extends AppController {
         if ($this->action === 'add' or $this->action === 'index'
             or $this->action === 'delete' or $this->action === 'view'
             or $this->action === 'edit' or $this->action === 'getEvents'
-            or  $this->action === 'save') {
+            or  $this->action === 'save' or  $this->action === 'otkazi'
+            or  $this->action === 'owner') {
             return true;
         }
 
@@ -214,4 +215,38 @@ class TermsController extends AppController {
         exit;
     }
 
+    public function otkazi(){
+        $id=(int)$_POST['id'];
+
+        if (!$this->Term->exists($id)) {
+            exit;
+        }
+
+        $this->Term->read(null, $id);
+        $this->Term->set(array(
+            'status' => 'otkazan'
+        ));
+        $this->Term->save();
+
+        exit;
+    }
+
+    public function owner(){
+
+        $id = $_POST['id'];
+        $this->Term->id = $id;
+
+        if($this->isOwned($id))
+        {
+            echo json_encode(array("owner" => true));
+        }
+        else
+        {
+            echo json_encode(array("owner" => false));
+        }
+
+        exit;
+
+
+    }
 }

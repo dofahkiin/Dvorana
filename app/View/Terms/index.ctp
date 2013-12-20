@@ -1,9 +1,9 @@
 <?php
 echo $this->Html->css(array(
-    'reset','jquery-ui-1.8rc3.custom',
+    'reset','jquery-ui-1.10.3.custom',
     'jquery.weekcalendar','demo'));
 echo $this->Html->script(array(
-    'jquery-1.4.2.min','jquery-ui-1.8rc3.custom.min',
+    'jquery-1.10.2','jquery-migrate-1.2.1','jquery-ui-1.10.3.custom.min',
     'jquery.weekcalendar','demo'));
 
 
@@ -61,9 +61,7 @@ echo $this->Html->script(array(
 </div>
 <div id="cal">
     <h1>jQuery Week Calendar (full demo)</h1>
-    <div id="about_button_container">
-        <button type="button" id="about_button">About this demo</button>
-    </div>
+
     <div id='calendar'></div>
     <div id="event_edit_container">
         <form>
