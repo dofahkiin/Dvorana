@@ -70,7 +70,7 @@ class TermsController extends AppController {
 			throw new NotFoundException(__('Invalid term'));
 		}
 
-        if($this->isOwned() or $this->Auth->user('role') == 'Menadžer')
+        if($this->isOwned($id) or $this->Auth->user('role') == 'Menadžer')
         {
 
 		if ($this->request->is(array('post', 'put'))) {
@@ -100,33 +100,26 @@ class TermsController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
-		$this->Term->id = $id;
+
+        $id = $_POST['id'];
+        $this->Term->id = $id;
 		if (!$this->Term->exists()) {
 			throw new NotFoundException(__('Invalid term'));
 		}
 
-        if($this->isOwned() or $this->Auth->user('role') == 'Menadžer')
+        if($this->isOwned($id) or $this->Auth->user('role') == 'Menadžer')
         {
-            $this->request->onlyAllow('post', 'delete');
-            if ($this->Term->delete()) {
-                $this->Session->setFlash(__('The term has been deleted.'));
-            } else {
-                $this->Session->setFlash(__('The term could not be deleted. Please, try again.'));
-            }
+            $this->Term->delete();
         }
-        else {
-            $this->Session->setFlash(__('The term could not be deleted.'));
-        }
-
-
-		return $this->redirect(array('action' => 'index'));
+		exit;
 	}
 
     public function isAuthorized($user) {
         // All registered users can add posts
         if ($this->action === 'add' or $this->action === 'index'
             or $this->action === 'delete' or $this->action === 'view'
-            or $this->action === 'edit' ) {
+            or $this->action === 'edit' or $this->action === 'getEvents'
+            or  $this->action === 'save') {
             return true;
         }
 
@@ -134,9 +127,8 @@ class TermsController extends AppController {
         return parent::isAuthorized($user);
     }
 
-   public function isOwned()
+   public function isOwned($termId)
    {
-       $termId = $this->request->params['pass'][0];
        if ($this->Term->isOwnedBy($termId, $this->Auth->user('id'))) {
            return true;
        }
@@ -146,20 +138,41 @@ class TermsController extends AppController {
     public function save (){
         date_default_timezone_set('Europe/Sarajevo');
 
+        $id = $_POST['id'];
         $start = date('c',(int)$_POST['start']);
         $end = date('c',(int)$_POST['end']);
 
-        $this->request->data['Term']['client_id'] = $this->Auth->user('id');
-        $this->request->data['Term']['status'] = "nepotvrđen";
-        $this->request->data['Term']['start'] = $start;
-        $this->request->data['Term']['end'] = $end;
-        $this->request->data['Term']['date'] = date("Y-m-d", strtotime($start));
-        $this->request->data['Term']['comment'] = $_POST['body'];
-        $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
-        if ($this->Term->save($this->request->data)) {
-            $this->Session->setFlash(__('The term has been saved.'));
-            return $this->redirect(array('action' => 'index'));
+        if($id && $this->Term->exists($id))
+        {
+            $this->Term->read(null, $id);
+            $this->Term->set(array(
+                'start' => $start,
+                'end' => $end,
+                'date' => date("Y-m-d",strtotime($start)),
+                'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end)),
+                'comment' => $_POST['body']
+            ));
+            $this->Term->save();
         }
+
+        else
+        {
+            $this->request->data['Term']['client_id'] = $this->Auth->user('id');
+            $this->request->data['Term']['status'] = "nepotvrđen";
+            $this->request->data['Term']['start'] = $start;
+            $this->request->data['Term']['end'] = $end;
+            $this->request->data['Term']['date'] = date("Y-m-d", strtotime($start));
+            $this->request->data['Term']['comment'] = $_POST['body'];
+            $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
+            if ($this->Term->save($this->request->data)) {
+                $this->Session->setFlash(__('The term has been saved.'));
+                return $this->redirect(array('action' => 'index'));
+            }
+
+        }
+
+        exit;
+
     }
 
     public function getEvents(){

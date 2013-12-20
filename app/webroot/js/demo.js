@@ -30,6 +30,20 @@ $(document).ready(function() {
          return calEvent.readOnly != true;
       },
       eventNew : function(calEvent, $event) {
+          var termDate = calEvent.start.getDate();
+
+          var d = new Date();
+          var month = d.getMonth()+1;
+          var today = d.getDate();
+
+          if(termDate - today < 2)
+          {
+            alert("Termin mora biti zakazan dva dana unaprijed.");
+              $calendar.weekCalendar("removeUnsavedEvents");
+          }
+          else
+          {
+
          var $dialogContent = $("#event_edit_container");
          resetForm($dialogContent);
          var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
@@ -48,9 +62,12 @@ $(document).ready(function() {
             },
             buttons: {
                save : function() {
+
+
+
                   calEvent.id = id;
                   id++;
-                  calEvent.start = new Date(startField.val());
+                   calEvent.start = new Date(startField.val());
                   calEvent.end = new Date(endField.val());
                   calEvent.title = titleField.val();
                   calEvent.body = bodyField.val();
@@ -60,6 +77,9 @@ $(document).ready(function() {
                    var end = calEvent.end.getTime()/1000;
                    var title = calEvent.title;
                    var body = calEvent.body;
+
+
+
 				  $.post(myBaseUrl + "terms/save",{start:start, end:end, title:title, body:body });
 
                   $calendar.weekCalendar("removeUnsavedEvents");
@@ -74,7 +94,7 @@ $(document).ready(function() {
 
          $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
          setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
-
+          }
       },
       eventDrop : function(calEvent, $event) {
           $.post(myBaseUrl + "terms/move",{
@@ -121,12 +141,22 @@ $(document).ready(function() {
                   calEvent.title = titleField.val();
                   calEvent.body = bodyField.val();
 
+                   var start = calEvent.start.getTime()/1000;
+                   var end = calEvent.end.getTime()/1000;
+                   var title = calEvent.title;
+                   var body = calEvent.body;
+
+                  $.post(myBaseUrl + "terms/save",{start:start, end:end, title:title, body:body, id:calEvent.id });
                   $calendar.weekCalendar("updateEvent", calEvent);
                   $dialogContent.dialog("close");
                },
                "delete" : function() {
-                  $calendar.weekCalendar("removeEvent", calEvent.id);
-                  $dialogContent.dialog("close");
+                   if(confirm('Jeste li sigurni da želite obrisati termin?')){
+                       $.post(myBaseUrl + "terms/delete",{id:calEvent.id});
+                       $calendar.weekCalendar("removeEvent", calEvent.id);
+                       $dialogContent.dialog("close");
+                   }
+
                },
                cancel : function() {
                   $dialogContent.dialog("close");
