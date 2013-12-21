@@ -58,7 +58,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
                         if($userData['role'] == 'Menadžer')
                         {
                             echo "<li><a href=\"/github/dvorana/users\">Korisnici</a></li>";
-                            echo "<li><a href=\"/github/dvorana/settings\">Podešavanja</a></li>";
+                            echo "<li><a href=\"/github/dvorana/settings/edit/limit\">Podešavanja</a></li>";
                         }
                         echo "<li><a href=\"/github/dvorana/users/logout\">Logout(".$userData['name'].")</a></li>";
                     }

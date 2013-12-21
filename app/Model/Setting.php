@@ -7,9 +7,23 @@ App::uses('AppModel', 'Model');
  * Time: 10.17
  */
 
-class Setting extends AppModel {
+class Setting extends AppModel
+{
 
     public $displayField = 'name';
+    public $primaryKey = 'name';
 
+    public $validate = array(
+        'value' => array(
+            'notEmpty' => array(
+                'rule' => array('numeric'),
+                'message' => 'Your custom message here',
+                'allowEmpty' => false,
+                //'required' => false,
+                //'last' => false, // Stop validation after this rule
+                //'on' => 'create', // Limit validation to 'create' or 'update' operations
+            )
+        )
+    );
 
 }
