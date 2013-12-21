@@ -25,7 +25,11 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<title>
 
 	</title>
+
+
     <script type="text/javascript">var myBaseUrl = '<?php echo $this->Html->url('/'); ?>';</script>
+
+
 	<?php
 		echo $this->Html->meta('icon');
 
@@ -54,6 +58,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
                         if($userData['role'] == 'Menadžer')
                         {
                             echo "<li><a href=\"/github/dvorana/users\">Korisnici</a></li>";
+                            echo "<li><a href=\"/github/dvorana/settings\">Podešavanja</a></li>";
                         }
                         echo "<li><a href=\"/github/dvorana/users/logout\">Logout(".$userData['name'].")</a></li>";
                     }

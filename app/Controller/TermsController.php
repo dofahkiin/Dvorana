@@ -114,17 +114,17 @@ class TermsController extends AppController {
 		exit;
 	}
 
-    public function isAuthorized($user) {
+    public function isAuthorized($user)
+    {
         // All registered users can add posts
-        if ($this->action === 'add' or $this->action === 'index'
-            or $this->action === 'delete' or $this->action === 'view'
-            or $this->action === 'edit' or $this->action === 'getEvents'
-            or  $this->action === 'save' or  $this->action === 'otkazi'
-            or  $this->action === 'owner') {
+        if (in_array($this->action, array(
+            'add', 'index', 'delete', 'view', 'edit', 'getEvents',
+            'save', 'otkazi', 'owner', 'move'))
+        ) {
             return true;
         }
 
-        // The owner of a post can edit and delete it
+        // The owner of a term can edit and delete it
         return parent::isAuthorized($user);
     }
 
