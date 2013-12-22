@@ -150,6 +150,7 @@ class TermsController extends AppController
 
         $start = date('c', (int)$_POST['start']);
         $end = date('c', (int)$_POST['end']);
+        $status = $_POST['status'];
 
         if (isset($id) && $this->Term->exists($id)) {
             $this->Term->read(null, $id);
@@ -158,12 +159,13 @@ class TermsController extends AppController
                 'end' => $end,
                 'date' => date("Y-m-d", strtotime($start)),
                 'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end)),
-                'comment' => $_POST['body']
+                'comment' => $_POST['body'],
+                'status' =>  $status
             ));
             $this->Term->save();
         } else {
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
-            $this->request->data['Term']['status'] = "nepotvrđen";
+            $this->request->data['Term']['status'] = $status;
             $this->request->data['Term']['start'] = $start;
             $this->request->data['Term']['end'] = $end;
             $this->request->data['Term']['date'] = date("Y-m-d", strtotime($start));
@@ -188,7 +190,7 @@ class TermsController extends AppController
         $terms = array();
         foreach ($allTerms as $row) {
             $termArray['id'] = $row['Term']['id'];
-            $termArray['title'] = "";
+            $termArray['status'] =  $row['Term']['status'];
             $termArray['body'] = $row['Term']['comment'];
             $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
             $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));

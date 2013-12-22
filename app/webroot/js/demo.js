@@ -50,6 +50,7 @@ $(document).ready(function () {
                     var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
                     var titleField = $dialogContent.find("input[name='title']");
                     var bodyField = $dialogContent.find("textarea[name='body']");
+                    var statusField = $dialogContent.find("select[name='status']");
 
 
                     $dialogContent.dialog({
@@ -70,6 +71,7 @@ $(document).ready(function () {
                                 calEvent.end = new Date(endField.val());
                                 calEvent.title = titleField.val();
                                 calEvent.body = bodyField.val();
+                                calEvent.status = statusField.val();
 
                                 //post to events.php
                                 var start = calEvent.start.getTime() / 1000;
@@ -78,7 +80,7 @@ $(document).ready(function () {
                                 var body = calEvent.body;
 
 
-                                $.post(myBaseUrl + "terms/save", {start: start, end: end, title: title, body: body }, function (data) {
+                                $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body }, function (data) {
                                     calEvent.id = jQuery.parseJSON(data);
                                 });
 
@@ -157,12 +159,13 @@ $(document).ready(function () {
             var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
             var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
             var titleField = $dialogContent.find("input[name='title']").val(calEvent.title);
+            var statusField = $dialogContent.find("select[name='status']").val(calEvent.status)
             var bodyField = $dialogContent.find("textarea[name='body']");
             bodyField.val(calEvent.body);
 
             $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
-                var d = jQuery.parseJSON(data);
-                if (d["owner"]) {
+                var user = jQuery.parseJSON(data);
+                if (user["owner"]) {
                     var termDate = calEvent.start.getDate();
                     var d = new Date();
                     var month = d.getMonth() + 1;
@@ -177,6 +180,11 @@ $(document).ready(function () {
                             $calendar.weekCalendar("refresh");
                         }
                         else {
+                            if(!user["menadzer"])
+                            {
+                                $("#status").hide();
+                            }
+
                             $dialogContent.dialog({
                                 modal: true,
                                 title: "Edit - " + calEvent.title,
@@ -192,13 +200,14 @@ $(document).ready(function () {
                                         calEvent.end = new Date(endField.val());
                                         calEvent.title = titleField.val();
                                         calEvent.body = bodyField.val();
+                                        calEvent.status = statusField.val();
 
                                         var start = calEvent.start.getTime() / 1000;
                                         var end = calEvent.end.getTime() / 1000;
                                         var title = calEvent.title;
                                         var body = calEvent.body;
 
-                                        $.post(myBaseUrl + "terms/save", {start: start, end: end, title: title, body: body, id: calEvent.id });
+                                        $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id });
                                         $calendar.weekCalendar("updateEvent", calEvent);
                                         $dialogContent.dialog("close");
                                     },

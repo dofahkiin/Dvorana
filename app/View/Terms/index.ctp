@@ -76,13 +76,15 @@ echo $this->Html->script(array(
                 <li>
                     <label for="end">End Time: </label><select name="end"><option value="">Select End Time</option></select>
                 </li>
-                <li>
-                    <label for="status">Status: </label>
-                    <select>
-                        <option value="1">Nepotvrđen</option>
-                        <option value="2">Potvrđen</option>
-                        <option value="3">Završen</option>
+                <li id="status">
+                    <label>Status: </label>
+                    <select name="status">
+                        <option value="nepotvrđen">nepotvrđen</option>
+                        <option value="potvrđen">potvrđen</option>
+                        <option value="završen">završen</option>
+                        <option value="otkazan">otkazan</option>
                     </select>
+
                 </li>
                 <li>
                     <label for="body">Body: </label><textarea name="body"></textarea>
