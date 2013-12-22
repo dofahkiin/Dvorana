@@ -39,7 +39,8 @@ class SettingsController extends AppController
 //        $this->Setting->name = 'limit';
         $limit = $this->Setting->findByName('limit');
         $limitVal = $limit['Setting']['value'];
-        echo json_encode(intval($limitVal));
+        $menadzer = ($this->Auth->user('role') == 'Menadžer');
+        echo json_encode(array("limit" => intval($limitVal), "menadzer" => $menadzer));
         exit;
     }
 

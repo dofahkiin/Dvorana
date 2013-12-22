@@ -36,14 +36,16 @@ $(document).ready(function () {
             var today = d.getDate();
 
             $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                var limit = parseInt(data);
+                var limit = jQuery.parseJSON(data);
 
-                if (termDate - today < limit) {
-                    alert("Termin mora biti zakazan minimalno " + limit + " dana unaprijed.");
+                if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                    alert("Termin mora biti zakazan minimalno " + limit["limit"] + " dana unaprijed.");
                     $calendar.weekCalendar("removeUnsavedEvents");
                 }
                 else {
-
+                    if (!limit["menadzer"]) {
+                        $("#status").hide();
+                    }
                     var $dialogContent = $("#event_edit_container");
                     resetForm($dialogContent);
                     var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
@@ -102,49 +104,72 @@ $(document).ready(function () {
 
         },
         eventDrop: function (calEvent, $event) {
-            var termDate = calEvent.start.getDate();
-            var d = new Date();
-            var month = d.getMonth() + 1;
-            var today = d.getDate();
+            $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
+                var user = jQuery.parseJSON(data);
+                if (user["owner"] || user["menadzer"]) {
 
-            $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                var limit = parseInt(data);
+                    var termDate = calEvent.start.getDate();
+                    var d = new Date();
+                    var month = d.getMonth() + 1;
+                    var today = d.getDate();
 
-                if (termDate - today < limit) {
-                    alert("Termin se može mijenjati minimalno " + limit + " dana unaprijed.");
-                    $calendar.weekCalendar("refresh");
+                    $.post(myBaseUrl + "settings/limit", {}, function (data) {
+                        var limit = jQuery.parseJSON(data);
+
+                        if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                            alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
+                            $calendar.weekCalendar("refresh");
+                        }
+                        else {
+                            $.post(myBaseUrl + "terms/move", {
+                                'id': calEvent.id,
+                                'start': calEvent.start.getTime() / 1000,
+                                'end': calEvent.end.getTime() / 1000
+                            }, null);
+
+                        }
+
+                    });
                 }
-                else {
-                    $.post(myBaseUrl + "terms/move", {
-                        'id': calEvent.id,
-                        'start': calEvent.start.getTime() / 1000,
-                        'end': calEvent.end.getTime() / 1000
-                    }, null);
 
+                else {
+                    alert("Možete mijenjati samo vlastite termine");
+                    $calendar.weekCalendar("refresh");
                 }
 
             });
-
         },
         eventResize: function (calEvent, $event) {
-            var termDate = calEvent.start.getDate();
-            var d = new Date();
-            var month = d.getMonth() + 1;
-            var today = d.getDate();
 
-            $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                var limit = parseInt(data);
+            $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
+                var user = jQuery.parseJSON(data);
+                if (user["owner"] || user["menadzer"]) {
 
-                if (termDate - today < limit) {
-                    alert("Termin se može mijenjati minimalno " + limit + " dana unaprijed.");
-                    $calendar.weekCalendar("refresh");
+
+                    var termDate = calEvent.start.getDate();
+                    var d = new Date();
+                    var month = d.getMonth() + 1;
+                    var today = d.getDate();
+
+                    $.post(myBaseUrl + "settings/limit", {}, function (data) {
+                        var limit = jQuery.parseJSON(data);
+
+                        if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                            alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
+                            $calendar.weekCalendar("refresh");
+                        }
+                        else {
+                            $.post(myBaseUrl + "terms/move", {
+                                'id': calEvent.id,
+                                'start': calEvent.start.getTime() / 1000,
+                                'end': calEvent.end.getTime() / 1000
+                            }, null);
+                        }
+                    });
                 }
                 else {
-                    $.post(myBaseUrl + "terms/move", {
-                        'id': calEvent.id,
-                        'start': calEvent.start.getTime() / 1000,
-                        'end': calEvent.end.getTime() / 1000
-                    }, null);
+                    alert("Možete mijenjati samo vlastite termine");
+                    $calendar.weekCalendar("refresh");
                 }
             });
         },
@@ -165,7 +190,7 @@ $(document).ready(function () {
 
             $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
                 var user = jQuery.parseJSON(data);
-                if (user["owner"]) {
+                if (user["owner"] || user["menadzer"]) {
                     var termDate = calEvent.start.getDate();
                     var d = new Date();
                     var month = d.getMonth() + 1;
@@ -173,15 +198,14 @@ $(document).ready(function () {
 
 
                     $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                        var limit = parseInt(data);
+                        var limit = jQuery.parseJSON(data);
 
-                        if (termDate - today < limit) {
-                            alert("Termin se može mijenjati minimalno " + limit + " dana unaprijed.");
+                        if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                            alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
                             $calendar.weekCalendar("refresh");
                         }
                         else {
-                            if(!user["menadzer"])
-                            {
+                            if (!user["menadzer"]) {
                                 $("#status").hide();
                             }
 
