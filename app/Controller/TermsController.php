@@ -6,113 +6,115 @@ App::uses('AppController', 'Controller');
  * @property Term $Term
  * @property PaginatorComponent $Paginator
  */
-class TermsController extends AppController {
+class TermsController extends AppController
+{
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
+    /**
+     * Components
+     *
+     * @var array
+     */
+    public $components = array('Paginator');
 
-/**
- * index method
- *
- * @return void
- */
-	public function index() {
-		$this->Term->recursive = 0;
-		$this->set('terms', $this->Paginator->paginate());
-	}
+    /**
+     * index method
+     *
+     * @return void
+     */
+    public function index()
+    {
+        $this->Term->recursive = 0;
+        $this->set('terms', $this->Paginator->paginate());
+    }
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) {
-		if (!$this->Term->exists($id)) {
-			throw new NotFoundException(__('Invalid term'));
-		}
-		$options = array('conditions' => array('Term.' . $this->Term->primaryKey => $id));
-		$this->set('term', $this->Term->find('first', $options));
-	}
+    /**
+     * view method
+     *
+     * @throws NotFoundException
+     * @param string $id
+     * @return void
+     */
+    public function view($id = null)
+    {
+        if (!$this->Term->exists($id)) {
+            throw new NotFoundException(__('Invalid term'));
+        }
+        $options = array('conditions' => array('Term.' . $this->Term->primaryKey => $id));
+        $this->set('term', $this->Term->find('first', $options));
+    }
 
-/**
- * add method
- *
- * @return void
- */
-	public function add() {
-		if ($this->request->is('post')) {
+    /**
+     * add method
+     *
+     * @return void
+     */
+    public function add()
+    {
+        if ($this->request->is('post')) {
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
             $this->request->data['Term']['status'] = "nepotvrđen";
-			if ($this->Term->save($this->request->data)) {
-				$this->Session->setFlash(__('The term has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The term could not be saved. Please, try again.'));
-			}
-		}
-	}
+            if ($this->Term->save($this->request->data)) {
+                $this->Session->setFlash(__('The term has been saved.'));
+                return $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash(__('The term could not be saved. Please, try again.'));
+            }
+        }
+    }
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function edit($id = null) {
-		if (!$this->Term->exists($id)) {
-			throw new NotFoundException(__('Invalid term'));
-		}
-
-        if($this->isOwned($id) or $this->Auth->user('role') == 'Menadžer')
-        {
-
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Term->save($this->request->data)) {
-				$this->Session->setFlash(__('The term has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The term could not be saved. Please, try again.'));
-			}
-		} else {
-			$options = array('conditions' => array('Term.' . $this->Term->primaryKey => $id));
-			$this->request->data = $this->Term->find('first', $options);
-		    }
+    /**
+     * edit method
+     *
+     * @throws NotFoundException
+     * @param string $id
+     * @return void
+     */
+    public function edit($id = null)
+    {
+        if (!$this->Term->exists($id)) {
+            throw new NotFoundException(__('Invalid term'));
         }
 
-        else {
+        if ($this->isOwned($id) or $this->Auth->user('role') == 'Menadžer') {
+
+            if ($this->request->is(array('post', 'put'))) {
+                if ($this->Term->save($this->request->data)) {
+                    $this->Session->setFlash(__('The term has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('The term could not be saved. Please, try again.'));
+                }
+            } else {
+                $options = array('conditions' => array('Term.' . $this->Term->primaryKey => $id));
+                $this->request->data = $this->Term->find('first', $options);
+            }
+        } else {
             $this->Session->setFlash(__('The term could not be edited.'));
             return $this->redirect(array('action' => 'index'));
         }
-	}
+    }
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function delete($id = null) {
+    /**
+     * delete method
+     *
+     * @throws NotFoundException
+     * @param string $id
+     * @return void
+     */
+    public function delete($id = null)
+    {
 
         $id = $_POST['id'];
         $this->Term->id = $id;
-		if (!$this->Term->exists()) {
-			throw new NotFoundException(__('Invalid term'));
-		}
+        if (!$this->Term->exists()) {
+            throw new NotFoundException(__('Invalid term'));
+        }
 
-        if($this->isOwned($id) or $this->Auth->user('role') == 'Menadžer')
-        {
+        if ($this->isOwned($id) or $this->Auth->user('role') == 'Menadžer') {
             $this->Term->delete();
         }
-		exit;
-	}
+        exit;
+    }
 
     public function isAuthorized($user)
     {
@@ -128,36 +130,38 @@ class TermsController extends AppController {
         return parent::isAuthorized($user);
     }
 
-   public function isOwned($termId)
-   {
-       if ($this->Term->isOwnedBy($termId, $this->Auth->user('id'))) {
-           return true;
-       }
+    public function isOwned($termId)
+    {
+        if ($this->Term->isOwnedBy($termId, $this->Auth->user('id'))) {
+            return true;
+        } else
+            return false;
 
-   }
+    }
 
-    public function save (){
+    public function save()
+    {
         date_default_timezone_set('Europe/Sarajevo');
 
-        $id = $_POST['id'];
-        $start = date('c',(int)$_POST['start']);
-        $end = date('c',(int)$_POST['end']);
-
-        if($id && $this->Term->exists($id))
+        if(isset($_POST['id']))
         {
+            $id = $_POST['id'];
+        }
+
+        $start = date('c', (int)$_POST['start']);
+        $end = date('c', (int)$_POST['end']);
+
+        if (isset($id) && $this->Term->exists($id)) {
             $this->Term->read(null, $id);
             $this->Term->set(array(
                 'start' => $start,
                 'end' => $end,
-                'date' => date("Y-m-d",strtotime($start)),
+                'date' => date("Y-m-d", strtotime($start)),
                 'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end)),
                 'comment' => $_POST['body']
             ));
             $this->Term->save();
-        }
-
-        else
-        {
+        } else {
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
             $this->request->data['Term']['status'] = "nepotvrđen";
             $this->request->data['Term']['start'] = $start;
@@ -166,9 +170,10 @@ class TermsController extends AppController {
             $this->request->data['Term']['comment'] = $_POST['body'];
             $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
             if ($this->Term->save($this->request->data)) {
-                $this->Session->setFlash(__('The term has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                $term_id=$this->Term->getLastInsertId();
+                echo json_encode(intval($term_id));
             }
+
 
         }
 
@@ -176,11 +181,12 @@ class TermsController extends AppController {
 
     }
 
-    public function getEvents(){
+    public function getEvents()
+    {
         $options = array('order' => array('Terms.start' => 'desc'));
         $allTerms = $this->Term->find('all');
         $terms = array();
-        foreach($allTerms as $row){
+        foreach ($allTerms as $row) {
             $termArray['id'] = $row['Term']['id'];
             $termArray['title'] = "";
             $termArray['body'] = $row['Term']['comment'];
@@ -195,19 +201,19 @@ class TermsController extends AppController {
     public function move()
     {
         date_default_timezone_set('Europe/Sarajevo');
-        $id=(int)$_POST['id'];
+        $id = (int)$_POST['id'];
         if (!$this->Term->exists($id)) {
             exit;
         }
 
-        $start = date('c',(int)$_POST['start']);
-        $end = date('c',(int)$_POST['end']);
+        $start = date('c', (int)$_POST['start']);
+        $end = date('c', (int)$_POST['end']);
 
         $this->Term->read(null, $id);
         $this->Term->set(array(
             'start' => $start,
             'end' => $end,
-            'date' => date("Y-m-d",strtotime($start)),
+            'date' => date("Y-m-d", strtotime($start)),
             'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end))
         ));
         $this->Term->save();
@@ -215,8 +221,9 @@ class TermsController extends AppController {
         exit;
     }
 
-    public function otkazi(){
-        $id=(int)$_POST['id'];
+    public function otkazi()
+    {
+        $id = (int)$_POST['id'];
 
         if (!$this->Term->exists($id)) {
             exit;
@@ -231,22 +238,16 @@ class TermsController extends AppController {
         exit;
     }
 
-    public function owner(){
+    public function owner()
+    {
 
         $id = $_POST['id'];
         $this->Term->id = $id;
 
-        if($this->isOwned($id))
-        {
-            echo json_encode(array("owner" => true));
-        }
-        else
-        {
-            echo json_encode(array("owner" => false));
-        }
+        $menadzer = ($this->Auth->user('role') == 'Menadžer');
+        $own = $this->isOwned($id);
 
+        echo json_encode(array("owner" => $own, "menadzer" => $menadzer));
         exit;
-
-
     }
 }
