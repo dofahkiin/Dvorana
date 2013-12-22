@@ -15,7 +15,22 @@ $(document).ready(function () {
             return $(window).height() - $("h1").outerHeight() - 1;
         },
         eventRender: function (calEvent, $event) {
-            if (calEvent.end.getTime() < new Date().getTime()) {
+            if (calEvent.status == "otkazan") {
+                $event.css("backgroundColor", "#da1337");
+                $event.find(".wc-time").css({
+                    "backgroundColor": "#B80115",
+                    "border": "1px solid #A70004"
+                });
+            }
+            else if(calEvent.status == "potvrđen"){
+                $event.css("backgroundColor", "#5DDDB2");
+                $event.find(".wc-time").css({
+                    "backgroundColor": "#3BBB90",
+                    "border": "1px solid #2AAA80"
+                });
+            }
+
+            else if (calEvent.status == "završen") {
                 $event.css("backgroundColor", "#aaa");
                 $event.find(".wc-time").css({
                     "backgroundColor": "#999",
