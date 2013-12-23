@@ -17,7 +17,7 @@
  */
 
 * {
-	margin:0;
+	/*margin:0;*/
 	/* padding:0;*/
 }
 
@@ -315,7 +315,7 @@ input, textarea {
 select {
 	clear: both;
 	font-size: 120%;
-	vertical-align: text-bottom;
+	/*vertical-align: text-bottom;*/
 }
 select[multiple=multiple] {
 	width: 100%;

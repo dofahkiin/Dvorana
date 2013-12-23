@@ -46,3 +46,9 @@ echo $this->Html->script(array(
     </div>
 </div>
 
+<select name="hall" id="wc-hall" style="display:none;">
+    <option value="1">Sala 1</option>
+    <option value="2">Sala 2</option>
+    <option value="3">Sala 3</option>
+</select>
+

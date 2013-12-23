@@ -3,6 +3,7 @@ $(document).ready(function () {
 
     var $calendar = $('#calendar');
     var id = 10;
+    var sale = $('#wc-hall');
 
     $calendar.weekCalendar({
         timeslotsPerHour: 4,
@@ -15,28 +16,33 @@ $(document).ready(function () {
             return $(window).height() - $("h1").outerHeight() - 1;
         },
         eventRender: function (calEvent, $event) {
-            if (calEvent.status == "otkazan") {
-                $event.css("backgroundColor", "#da1337");
-                $event.find(".wc-time").css({
-                    "backgroundColor": "#B80115",
-                    "border": "1px solid #A70004"
-                });
-            }
-            else if(calEvent.status == "potvrđen"){
-                $event.css("backgroundColor", "#5DDDB2");
-                $event.find(".wc-time").css({
-                    "backgroundColor": "#3BBB90",
-                    "border": "1px solid #2AAA80"
-                });
+            if (calEvent.hall == parseInt(sale.val())) {
+
+
+                if (calEvent.status == "otkazan") {
+                    $event.css("backgroundColor", "#da1337");
+                    $event.find(".wc-time").css({
+                        "backgroundColor": "#B80115",
+                        "border": "1px solid #A70004"
+                    });
+                }
+                else if (calEvent.status == "potvrđen") {
+                    $event.css("backgroundColor", "#5DDDB2");
+                    $event.find(".wc-time").css({
+                        "backgroundColor": "#3BBB90",
+                        "border": "1px solid #2AAA80"
+                    });
+                }
+
+                else if (calEvent.status == "završen") {
+                    $event.css("backgroundColor", "#aaa");
+                    $event.find(".wc-time").css({
+                        "backgroundColor": "#999",
+                        "border": "1px solid #888"
+                    });
+                }
             }
 
-            else if (calEvent.status == "završen") {
-                $event.css("backgroundColor", "#aaa");
-                $event.find(".wc-time").css({
-                    "backgroundColor": "#999",
-                    "border": "1px solid #888"
-                });
-            }
         },
         draggable: function (calEvent, $event) {
             return calEvent.readOnly != true;
@@ -68,6 +74,7 @@ $(document).ready(function () {
                     var titleField = $dialogContent.find("input[name='title']");
                     var bodyField = $dialogContent.find("textarea[name='body']");
                     var statusField = $dialogContent.find("select[name='status']");
+//                    var hallField = $dialogContent.find("select[name='hall']");
 
 
                     $dialogContent.dialog({
@@ -89,6 +96,7 @@ $(document).ready(function () {
                                 calEvent.title = titleField.val();
                                 calEvent.body = bodyField.val();
                                 calEvent.status = statusField.val();
+                                calEvent.hall = sale.val();
 
                                 //post to events.php
                                 var start = calEvent.start.getTime() / 1000;
@@ -97,7 +105,7 @@ $(document).ready(function () {
                                 var body = calEvent.body;
 
 
-                                $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body }, function (data) {
+                                $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, hall: calEvent.hall }, function (data) {
                                     calEvent.id = jQuery.parseJSON(data);
                                 });
 
@@ -199,7 +207,7 @@ $(document).ready(function () {
             var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
             var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
             var titleField = $dialogContent.find("input[name='title']").val(calEvent.title);
-            var statusField = $dialogContent.find("select[name='status']").val(calEvent.status)
+            var statusField = $dialogContent.find("select[name='status']").val(calEvent.status);
             var bodyField = $dialogContent.find("textarea[name='body']");
             bodyField.val(calEvent.body);
 
@@ -286,7 +294,15 @@ $(document).ready(function () {
         noEvents: function () {
 
         },
-        data: myBaseUrl + "terms/getEvents"
+        data: function(start, end, callback) {
+            $.getJSON( myBaseUrl + "terms/getEvents", {
+                start: start.getTime(),
+                end: end.getTime(),
+                hall: sale.val()
+            },  function(result) {
+                callback(result);
+            });
+        }
     });
 
     function resetForm($dialogContent) {
@@ -318,6 +334,15 @@ $(document).ready(function () {
         $endTimeOptions = $endTimeField.find("option");
         $startTimeField.trigger("change");
     }
+
+
+    var nav = $('.wc-nav');
+    nav.append(sale);
+    sale.show();
+
+    sale.change(function() {
+        $calendar.weekCalendar("refresh");
+    });
 
     var $endTimeField = $("select[name='end']");
     var $endTimeOptions = $endTimeField.find("option");

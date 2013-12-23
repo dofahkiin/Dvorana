@@ -171,6 +171,7 @@ class TermsController extends AppController
             $this->request->data['Term']['date'] = date("Y-m-d", strtotime($start));
             $this->request->data['Term']['comment'] = $_POST['body'];
             $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
+            $this->request->data['Term']['hall_id'] = intval($_POST['hall']);
             if ($this->Term->save($this->request->data)) {
                 $term_id=$this->Term->getLastInsertId();
                 echo json_encode(intval($term_id));
@@ -189,12 +190,16 @@ class TermsController extends AppController
         $allTerms = $this->Term->find('all');
         $terms = array();
         foreach ($allTerms as $row) {
-            $termArray['id'] = $row['Term']['id'];
-            $termArray['status'] =  $row['Term']['status'];
-            $termArray['body'] = $row['Term']['comment'];
-            $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
-            $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));
-            $terms[] = $termArray;
+            if($row['Term']['hall_id'] == $_REQUEST['hall'])
+            {
+                $termArray['id'] = $row['Term']['id'];
+                $termArray['status'] =  $row['Term']['status'];
+                $termArray['body'] = $row['Term']['comment'];
+                $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
+                $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));
+                $termArray['hall'] =  $row['Term']['hall_id'];
+                $terms[] = $termArray;
+            }
         }
         echo json_encode($terms);
         exit;

@@ -7,11 +7,12 @@
 
 .wc-nav {
 	padding-bottom: 6px;
-	text-align: right;	
+	/*text-align: right;*/
 }
 
 .wc-nav button {
-	margin: 0 0.5em;	
+	/*margin: 0 0.5em;*/
+    padding: 4px 20px;
 }
  
 
@@ -146,6 +147,11 @@ table.wc-time-slots {
 
 .wc-time-slots .wc-today {
 	background-color: #ffffcc;	
+}
+
+#wc-hall  {
+    width: 150px;
+    float: right;
 }
 
 
