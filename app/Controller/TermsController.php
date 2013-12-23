@@ -121,7 +121,7 @@ class TermsController extends AppController
         // All registered users can add posts
         if (in_array($this->action, array(
             'add', 'index', 'delete', 'view', 'edit', 'getEvents',
-            'save', 'otkazi', 'owner', 'move'))
+            'save', 'otkazi', 'owner', 'move', 'izvjestaj'))
         ) {
             return true;
         }
@@ -256,5 +256,21 @@ class TermsController extends AppController
 
         echo json_encode(array("owner" => $own, "menadzer" => $menadzer));
         exit;
+    }
+
+    public function izvjestaj(){
+        $this->Term->recursive = 0;
+
+        if($this->Auth->user('role') == 'Klijent'){
+            $this->Paginator->settings = array(
+                'conditions' => array('Term.client_id' => $this->Auth->user('id')),
+                'limit' => 10
+            );
+            $data = $this->Paginator->paginate('Term');
+            $this->set('terms', $data);
+        }
+        else {
+            $this->set('terms', $this->Paginator->paginate());
+        }
     }
 }
