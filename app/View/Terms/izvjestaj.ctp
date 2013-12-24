@@ -3,8 +3,8 @@
     <table cellpadding="0" cellspacing="0">
         <tr>
             <th><?php echo $this->Paginator->sort('date'); ?></th>
-            <th><?php echo $this->Paginator->sort('term'); ?></th>
             <th><?php echo $this->Paginator->sort('status'); ?></th>
+            <th><?php echo $this->Paginator->sort('term'); ?></th>
             <th><?php echo $this->Paginator->sort('hall_id'); ?></th>
             <th><?php echo $this->Paginator->sort('comment'); ?></th>
             <th><?php echo $this->Paginator->sort('price'); ?></th>
@@ -13,8 +13,8 @@
         <?php foreach ($terms as $term): ?>
             <tr>
                 <td><?php echo h($term['Term']['date']); ?>&nbsp;</td>
-                <td><?php echo h($term['Term']['term']); ?>&nbsp;</td>
                 <td><?php echo h($term['Term']['status']); ?>&nbsp;</td>
+                <td><?php echo h($term[0]['term']); ?>&nbsp;</td>
                 <td><?php echo h($term['Term']['hall_id']); ?>&nbsp;</td>
                 <td><?php echo h($term['Term']['comment']); ?>&nbsp;</td>
                 <td><?php echo h($term['Term']['price']); ?>&nbsp;</td>

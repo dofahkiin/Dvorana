@@ -13,7 +13,7 @@
         <?php foreach ($terms as $term): ?>
             <tr>
                 <td><?php echo h($term['Term']['date']); ?>&nbsp;</td>
-                <td><?php echo h($term['Term']['term']); ?>&nbsp;</td>
+                <td><?php echo h($term[0]['term']); ?>&nbsp;</td>
                 <td><?php echo h($term['Term']['status']); ?>&nbsp;</td>
                 <td><?php echo h($term['Term']['hall_id']); ?>&nbsp;</td>
                 <td><?php echo h($term['Term']['comment']); ?>&nbsp;</td>

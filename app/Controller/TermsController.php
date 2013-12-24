@@ -147,8 +147,9 @@ class TermsController extends AppController
             $id = $_POST['id'];
         }
 
-        $start = date('c', (int)$_POST['start']);
-        $end = date('c', (int)$_POST['end']);
+        $start = date('H:i:s', (int)$_POST['start']);
+        $end = date('H:i:s', (int)$_POST['end']);
+        $date = date('c', (int)$_POST['start']);
         $status = $_POST['status'];
 
         if (isset($id) && $this->Term->exists($id)) {
@@ -156,8 +157,7 @@ class TermsController extends AppController
             $this->Term->set(array(
                 'start' => $start,
                 'end' => $end,
-                'date' => date("Y-m-d", strtotime($start)),
-                'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end)),
+                'date' =>  date("Y-m-d", strtotime($date)),
                 'comment' => $_POST['body'],
                 'status' => $status
             ));
@@ -167,9 +167,9 @@ class TermsController extends AppController
             $this->request->data['Term']['status'] = $status;
             $this->request->data['Term']['start'] = $start;
             $this->request->data['Term']['end'] = $end;
-            $this->request->data['Term']['date'] = date("Y-m-d", strtotime($start));
+            $this->request->data['Term']['date'] = date("Y-m-d", strtotime($date));
             $this->request->data['Term']['comment'] = $_POST['body'];
-            $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
+//            $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
             $this->request->data['Term']['hall_id'] = intval($_POST['hall']);
             if ($this->Term->save($this->request->data)) {
                 $term_id = $this->Term->getLastInsertId();
@@ -190,11 +190,16 @@ class TermsController extends AppController
         $terms = array();
         foreach ($allTerms as $row) {
             if ($row['Term']['hall_id'] == $_REQUEST['hall']) {
+                $date = $row['Term']['date'];
+                $start = $row['Term']['start'];
+                $end =  $row['Term']['end'];
                 $termArray['id'] = $row['Term']['id'];
                 $termArray['status'] = $row['Term']['status'];
                 $termArray['body'] = $row['Term']['comment'];
-                $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
-                $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));
+//                $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
+                $termArray['start'] = date('Y-m-d\T', strtotime($date)). date('H:i', strtotime($start));
+//                $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));
+                $termArray['end'] =  date('Y-m-d\T', strtotime($date)). date('H:i', strtotime($end));
                 $termArray['hall'] = $row['Term']['hall_id'];
                 $terms[] = $termArray;
             }
@@ -211,15 +216,15 @@ class TermsController extends AppController
             exit;
         }
 
-        $start = date('c', (int)$_POST['start']);
-        $end = date('c', (int)$_POST['end']);
+        $start = date('H:i:s', (int)$_POST['start']);
+        $end = date('H:i:s', (int)$_POST['end']);
+        $date = date('c', (int)$_POST['start']);
 
         $this->Term->read(null, $id);
         $this->Term->set(array(
             'start' => $start,
             'end' => $end,
-            'date' => date("Y-m-d", strtotime($start)),
-            'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end))
+            'date' => date("Y-m-d", strtotime($date))
         ));
         $this->Term->save();
 
@@ -264,7 +269,7 @@ class TermsController extends AppController
             $this->Paginator->settings = array(
                 'conditions' => array('Term.client_id' => $this->Auth->user('id')),
                 'limit' => 10,
-                'fields' => array('Term.id', 'Term.date', 'Term.term', 'Term.status', 'Term.hall_id', 'Term.comment', 'Term.price')
+                'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term" , 'Term.status', 'Term.hall_id', 'Term.comment', 'Term.price')
             );
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
@@ -281,6 +286,7 @@ class TermsController extends AppController
             $do = $this->request->data['Term']['do'];
             $hall = $this->request->data['Term']['hall'];
             $status = $this->request->data['Term']['status'];
+            $time = $this->request->data['Term']['vrijemeOd']['hour'].':'.$this->request->data['Term']['vrijemeOd']['min'].':'.'00';
             $this->Term->recursive = 0;
 
             $range = array();
@@ -307,7 +313,8 @@ class TermsController extends AppController
                     'Term.date >=' => $od,
                     'Term.date <=' => $do,
                     'Term.hall_id' => $hall,
-                    'Term.status' => $status));
+                    'Term.status' => $status,
+                    'Term.start >=' => $time));
             }
 
             if ($this->Auth->user('role') == 'Klijent') {
@@ -316,7 +323,7 @@ class TermsController extends AppController
                         $range
                     ),
                     'limit' => 10,
-                    'fields' => array('Term.id', 'Term.date', 'Term.term', 'Term.status', 'Term.hall_id', 'Term.comment', 'Term.price')
+                    'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", 'Term.status', 'Term.hall_id', 'Term.comment', 'Term.price')
                 );
                 $data = $this->Paginator->paginate('Term');
                 $this->set('terms', $data);
