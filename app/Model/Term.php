@@ -17,9 +17,9 @@ class Term extends AppModel {
  * Validation rules
  *
  * @var array
- */
+ *//*
 	public $validate = array(
-		'date' => array(
+	'date' => array(
 			'date' => array(
 				'rule' => array('date'),
 				//'message' => 'Your custom message here',
@@ -40,7 +40,7 @@ class Term extends AppModel {
 			),
 		),
 	);
-
+*/
     public function isOwnedBy($term, $user) {
         return $this->field('id', array('id' => $term, 'client_id' => $user)) === $term;
     }

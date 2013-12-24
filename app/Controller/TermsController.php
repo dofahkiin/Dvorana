@@ -121,7 +121,7 @@ class TermsController extends AppController
         // All registered users can add posts
         if (in_array($this->action, array(
             'add', 'index', 'delete', 'view', 'edit', 'getEvents',
-            'save', 'otkazi', 'owner', 'move', 'izvjestaj','search'))
+            'save', 'otkazi', 'owner', 'move', 'izvjestaj', 'search'))
         ) {
             return true;
         }
@@ -277,22 +277,44 @@ class TermsController extends AppController
     {
         if ($this->request->is(array('post', 'put'))) {
             $keyword = $this->request->data['Term']['date'];
-            $options = array(
-                'conditions' => array(
-                    'OR' => array(
-                        'Term.date' =>  $keyword['year'].'-'.$keyword['month'].'-'.$keyword['day']
-                    )
-                )
-            );
-//            $list = $this->Term->find('all', $options);
-
-
+            $od = $this->request->data['Term']['od'];
+            $do = $this->request->data['Term']['do'];
+            $hall = $this->request->data['Term']['hall'];
+            $status = $this->request->data['Term']['status'];
             $this->Term->recursive = 0;
+
+            $range = array();
+            if (count(array_filter($this->request->data['Term'])) > 1) {
+                $cond = array();
+                if ($keyword != "") {
+                    $cond[] = array('Term.date' => $keyword);
+                }
+                if ($od != "") {
+                    $cond[] = array('Term.date >=' => $od);
+                }
+                if ($do != "") {
+                    $cond[] = array('Term.date <=' => $do);
+                }
+                if ($hall != "") {
+                    $cond[] = array('Term.hall_id' => $hall);
+                }
+                if ($status != "") {
+                    $cond[] = array('Term.status' => $status);
+                }
+                $range = array('AND' => $cond);
+            } else {
+                $range = array('OR' => array('Term.date' => $keyword,
+                    'Term.date >=' => $od,
+                    'Term.date <=' => $do,
+                    'Term.hall_id' => $hall,
+                    'Term.status' => $status));
+            }
 
             if ($this->Auth->user('role') == 'Klijent') {
                 $this->Paginator->settings = array(
                     'conditions' => array('Term.client_id' => $this->Auth->user('id'),
-                        'OR' => array('Term.date' =>  $keyword['year'].'-'.$keyword['month'].'-'.$keyword['day'])),
+                        $range
+                    ),
                     'limit' => 10,
                     'fields' => array('Term.id', 'Term.date', 'Term.term', 'Term.status', 'Term.hall_id', 'Term.comment', 'Term.price')
                 );

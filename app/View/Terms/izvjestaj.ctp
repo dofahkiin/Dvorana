@@ -44,7 +44,34 @@
     <?php
     echo $this->Form->create('Term', array('action' => 'search'));
     echo $this->Form->input('date', array(
-        'label' => 'Datum:'));
+        'label' => 'Datum:',
+        'type' => 'text'));
+    echo $this->Form->input('od', array(
+        'label' => 'Od:',
+        'type' => 'text'));
+    echo $this->Form->input('do', array(
+        'label' => 'Do:',
+        'type' => 'text'));
+    echo $this->Form->input('hall', array(
+        'label' => 'Sala:',
+        'type' => 'select',
+        'options' => array(1 => 'Sala 1', 2 => 'Sala 2', 3 => 'Sala 3'),
+        'empty' => 'Izaberi salu'));
+    echo $this->Form->input('status', array(
+        'label' => 'Termin:',
+        'type' => 'select',
+        'options' => array("nepotvrđen" => "nepotvrđen",
+                            "potvrđen" => "potvrđen",
+                            "otkazan" => "otkazan",
+                            "završen" => "završen"),
+        'empty' => 'Izaberi status'));
+    echo $this->Form->input('vrijemeOd', array(
+        'label' => 'Početak termina:',
+        'type' => 'time',
+        'interval' => 15,
+        'timeFormat'=>'24',
+        'separator'=>'-',
+        'empty' => array('Sat', 'min', 'sec')));
     echo $this->Form->submit('Pretraži');
     echo $this->Form->end();
     ?>
