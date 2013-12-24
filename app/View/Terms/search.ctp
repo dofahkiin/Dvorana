@@ -1,5 +1,5 @@
 <div class="terms index">
-    <h2><?php echo __('Terms'); ?></h2>
+    <h2><?php echo __('Rezultat pretrage'); ?></h2>
     <table cellpadding="0" cellspacing="0">
         <tr>
             <th><?php echo $this->Paginator->sort('date'); ?></th>
@@ -39,13 +39,4 @@
         echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
         ?>
     </div>
-</div>
-<div class="actions">
-    <?php
-    echo $this->Form->create('Term', array('action' => 'search'));
-    echo $this->Form->input('date', array(
-        'label' => 'Datum:'));
-    echo $this->Form->submit('Pretraži');
-    echo $this->Form->end();
-    ?>
 </div>

@@ -121,7 +121,7 @@ class TermsController extends AppController
         // All registered users can add posts
         if (in_array($this->action, array(
             'add', 'index', 'delete', 'view', 'edit', 'getEvents',
-            'save', 'otkazi', 'owner', 'move', 'izvjestaj'))
+            'save', 'otkazi', 'owner', 'move', 'izvjestaj','search'))
         ) {
             return true;
         }
@@ -143,8 +143,7 @@ class TermsController extends AppController
     {
         date_default_timezone_set('Europe/Sarajevo');
 
-        if(isset($_POST['id']))
-        {
+        if (isset($_POST['id'])) {
             $id = $_POST['id'];
         }
 
@@ -160,7 +159,7 @@ class TermsController extends AppController
                 'date' => date("Y-m-d", strtotime($start)),
                 'term' => date("G:i-", strtotime($start)) . date("G:i", strtotime($end)),
                 'comment' => $_POST['body'],
-                'status' =>  $status
+                'status' => $status
             ));
             $this->Term->save();
         } else {
@@ -173,7 +172,7 @@ class TermsController extends AppController
             $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
             $this->request->data['Term']['hall_id'] = intval($_POST['hall']);
             if ($this->Term->save($this->request->data)) {
-                $term_id=$this->Term->getLastInsertId();
+                $term_id = $this->Term->getLastInsertId();
                 echo json_encode(intval($term_id));
             }
 
@@ -190,14 +189,13 @@ class TermsController extends AppController
         $allTerms = $this->Term->find('all');
         $terms = array();
         foreach ($allTerms as $row) {
-            if($row['Term']['hall_id'] == $_REQUEST['hall'])
-            {
+            if ($row['Term']['hall_id'] == $_REQUEST['hall']) {
                 $termArray['id'] = $row['Term']['id'];
-                $termArray['status'] =  $row['Term']['status'];
+                $termArray['status'] = $row['Term']['status'];
                 $termArray['body'] = $row['Term']['comment'];
                 $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
                 $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));
-                $termArray['hall'] =  $row['Term']['hall_id'];
+                $termArray['hall'] = $row['Term']['hall_id'];
                 $terms[] = $termArray;
             }
         }
@@ -258,20 +256,53 @@ class TermsController extends AppController
         exit;
     }
 
-    public function izvjestaj(){
+    public function izvjestaj()
+    {
         $this->Term->recursive = 0;
 
-        if($this->Auth->user('role') == 'Klijent'){
+        if ($this->Auth->user('role') == 'Klijent') {
             $this->Paginator->settings = array(
                 'conditions' => array('Term.client_id' => $this->Auth->user('id')),
                 'limit' => 10,
-                'fields' => array('Term.id', 'Term.date', 'Term.term', 'Term.status','Term.hall_id', 'Term.comment', 'Term.price')
+                'fields' => array('Term.id', 'Term.date', 'Term.term', 'Term.status', 'Term.hall_id', 'Term.comment', 'Term.price')
             );
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
-        }
-        else {
+        } else {
             $this->set('terms', $this->Paginator->paginate());
+        }
+    }
+
+    public function search()
+    {
+        if ($this->request->is(array('post', 'put'))) {
+            $keyword = $this->request->data['Term']['date'];
+            $options = array(
+                'conditions' => array(
+                    'OR' => array(
+                        'Term.date' =>  $keyword['year'].'-'.$keyword['month'].'-'.$keyword['day']
+                    )
+                )
+            );
+//            $list = $this->Term->find('all', $options);
+
+
+            $this->Term->recursive = 0;
+
+            if ($this->Auth->user('role') == 'Klijent') {
+                $this->Paginator->settings = array(
+                    'conditions' => array('Term.client_id' => $this->Auth->user('id'),
+                        'OR' => array('Term.date' =>  $keyword['year'].'-'.$keyword['month'].'-'.$keyword['day'])),
+                    'limit' => 10,
+                    'fields' => array('Term.id', 'Term.date', 'Term.term', 'Term.status', 'Term.hall_id', 'Term.comment', 'Term.price')
+                );
+                $data = $this->Paginator->paginate('Term');
+                $this->set('terms', $data);
+            } else {
+                $this->set('terms', $this->Paginator->paginate());
+            }
+
+
         }
     }
 }
