@@ -264,7 +264,8 @@ class TermsController extends AppController
         if($this->Auth->user('role') == 'Klijent'){
             $this->Paginator->settings = array(
                 'conditions' => array('Term.client_id' => $this->Auth->user('id')),
-                'limit' => 10
+                'limit' => 10,
+                'fields' => array('Term.id', 'Term.date', 'Term.term', 'Term.status','Term.hall_id', 'Term.comment', 'Term.price')
             );
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
