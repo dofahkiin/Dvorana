@@ -7,10 +7,10 @@ $(document).ready(function () {
 
     $calendar.weekCalendar({
         timeslotsPerHour: 4,
-        allowCalEventOverlap: true,
-        overlapEventsSeparate: true,
+        allowCalEventOverlap: false,
+        overlapEventsSeparate: false,
         firstDayOfWeek: 1,
-        businessHours: {start: 8, end: 18, limitDisplay: true },
+        businessHours: {start: 8, end: 22, limitDisplay: true },
         daysToShow: 7,
         height: function ($calendar) {
             return $(window).height() - $("h1").outerHeight() - 1;
