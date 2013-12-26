@@ -65,13 +65,24 @@
                             "otkazan" => "otkazan",
                             "završen" => "završen"),
         'empty' => 'Izaberi status'));
-    echo $this->Form->input('vrijemeOd', array(
-        'label' => 'Početak termina:',
+    echo $this->Form->input('vrijemeT', array(
+        'label' => 'Vrijeme termina:',
         'type' => 'time',
         'interval' => 15,
         'timeFormat'=>'24',
-        'separator'=>'-',
-        'empty' => array('Sat', 'min', 'sec')));
+        'empty' => array("")));
+    echo $this->Form->input('vrijemeOd', array(
+        'label' => 'Vrijeme od:',
+        'type' => 'time',
+        'interval' => 15,
+        'timeFormat'=>'24',
+        'empty' => array("")));
+    echo $this->Form->input('vrijemeDo', array(
+        'label' => 'Vrijeme do:',
+        'type' => 'time',
+        'interval' => 15,
+        'timeFormat'=>'24',
+        'empty' => array("")));
     echo $this->Form->submit('Pretraži');
     echo $this->Form->end();
     ?>

@@ -286,10 +286,50 @@ class TermsController extends AppController
             $do = $this->request->data['Term']['do'];
             $hall = $this->request->data['Term']['hall'];
             $status = $this->request->data['Term']['status'];
-            $time = $this->request->data['Term']['vrijemeOd']['hour'].':'.$this->request->data['Term']['vrijemeOd']['min'].':'.'00';
+
+            if($this->request->data['Term']['vrijemeOd']['hour'] != ""){
+                $vrijemeOd = $this->request->data['Term']['vrijemeOd']['hour'].
+                    ':'.
+                    $this->request->data['Term']['vrijemeOd']['min'].
+                    ':'.
+                    '00';
+                $this->request->data['Term']['vrijemeOd']= $vrijemeOd;
+            } else {
+                $vrijemeOd ="";
+                $this->request->data['Term']['vrijemeOd']="";
+            }
+
+            if($this->request->data['Term']['vrijemeDo']['hour'] != ""){
+                $vrijemeDo = $this->request->data['Term']['vrijemeDo']['hour'].
+                    ':'.
+                    $this->request->data['Term']['vrijemeDo']['min'].
+                    ':'.
+                    '00';
+                $this->request->data['Term']['vrijemeDo']= $vrijemeDo;
+            } else {
+                $vrijemeDo ="";
+                $this->request->data['Term']['vrijemeDo']="";
+            }
+
+
+            if($this->request->data['Term']['vrijemeT']['hour'] != ""){
+                $vrijemeT = $this->request->data['Term']['vrijemeT']['hour'].
+                    ':'.
+                    $this->request->data['Term']['vrijemeT']['min'].
+                    ':'.
+                    '00';
+                $this->request->data['Term']['vrijemeT']= $vrijemeT;
+            } else {
+                $vrijemeT ="";
+                $this->request->data['Term']['vrijemeT']="";
+            }
+
+
+
             $this->Term->recursive = 0;
 
             $range = array();
+            $num = count(array_filter($this->request->data['Term']));
             if (count(array_filter($this->request->data['Term'])) > 1) {
                 $cond = array();
                 if ($keyword != "") {
@@ -307,6 +347,15 @@ class TermsController extends AppController
                 if ($status != "") {
                     $cond[] = array('Term.status' => $status);
                 }
+                if ($vrijemeT != "") {
+                    $cond[] = array('Term.start' => $vrijemeT);
+                }
+                if ($vrijemeOd != "") {
+                    $cond[] = array('Term.start >=' => $vrijemeOd);
+                }
+                if ($vrijemeDo != "") {
+                    $cond[] = array('Term.start <=' => $vrijemeDo);
+                }
                 $range = array('AND' => $cond);
             } else {
                 $range = array('OR' => array('Term.date' => $keyword,
@@ -314,7 +363,9 @@ class TermsController extends AppController
                     'Term.date <=' => $do,
                     'Term.hall_id' => $hall,
                     'Term.status' => $status,
-                    'Term.start >=' => $time));
+                    'Term.start >=' => $vrijemeOd,
+                    'Term.start <=' => $vrijemeDo,
+                    'Term.start' => $vrijemeT,));
             }
 
             if ($this->Auth->user('role') == 'Klijent') {
