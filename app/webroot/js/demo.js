@@ -40,6 +40,7 @@ $(document).ready(function () {
                         "backgroundColor": "#999",
                         "border": "1px solid #888"
                     });
+                    calEvent.readOnly = true;
                 }
             }
 
@@ -51,15 +52,14 @@ $(document).ready(function () {
             return calEvent.readOnly != true;
         },
         eventNew: function (calEvent, $event) {
-            var termDate = calEvent.start.getDate();
-            var d = new Date();
-            var month = d.getMonth() + 1;
-            var today = d.getDate();
+
+            var diffDays = getDifference(calEvent.start);
 
             $.post(myBaseUrl + "settings/limit", {}, function (data) {
                 var limit = jQuery.parseJSON(data);
 
-                if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                // termDate - today
+                if (diffDays < limit["limit"] && !limit["menadzer"]) {
                     alert("Termin mora biti zakazan minimalno " + limit["limit"] + " dana unaprijed.");
                     $calendar.weekCalendar("removeUnsavedEvents");
                 }
@@ -145,15 +145,12 @@ $(document).ready(function () {
                 var user = jQuery.parseJSON(data);
                 if (user["owner"] || user["menadzer"]) {
 
-                    var termDate = calEvent.start.getDate();
-                    var d = new Date();
-                    var month = d.getMonth() + 1;
-                    var today = d.getDate();
+                    var diffDays = getDifference(calEvent.start);
 
                     $.post(myBaseUrl + "settings/limit", {}, function (data) {
                         var limit = jQuery.parseJSON(data);
 
-                        if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                        if (diffDays < limit["limit"] && !limit["menadzer"]) {
                             alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
                             $calendar.weekCalendar("refresh");
                         }
@@ -183,15 +180,12 @@ $(document).ready(function () {
                 if (user["owner"] || user["menadzer"]) {
 
 
-                    var termDate = calEvent.start.getDate();
-                    var d = new Date();
-                    var month = d.getMonth() + 1;
-                    var today = d.getDate();
+                    var diffDays = getDifference(calEvent.start);
 
                     $.post(myBaseUrl + "settings/limit", {}, function (data) {
                         var limit = jQuery.parseJSON(data);
 
-                        if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                        if (diffDays < limit["limit"] && !limit["menadzer"]) {
                             alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
                             $calendar.weekCalendar("refresh");
                         }
@@ -228,16 +222,12 @@ $(document).ready(function () {
             $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
                 var user = jQuery.parseJSON(data);
                 if (user["owner"] || user["menadzer"]) {
-                    var termDate = calEvent.start.getDate();
-                    var d = new Date();
-                    var month = d.getMonth() + 1;
-                    var today = d.getDate();
 
-
+                    var diffDays = getDifference(calEvent.start);
                     $.post(myBaseUrl + "settings/limit", {}, function (data) {
                         var limit = jQuery.parseJSON(data);
 
-                        if (termDate - today < limit["limit"] && !limit["menadzer"]) {
+                        if (diffDays < limit["limit"] && !limit["menadzer"]) {
                             alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
                             $calendar.weekCalendar("refresh");
                         }
@@ -429,5 +419,11 @@ $(document).ready(function () {
         $('#end').children().remove().end().append('<option value="">Select End Time</option>');
     }
 
+    function getDifference(start){
+        var termDate = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+        var d = new Date();
+        var timeDiff = termDate.getTime() - d.getTime();
+        return Math.ceil(timeDiff / (1000 * 3600 * 24));
+    }
 
 });
