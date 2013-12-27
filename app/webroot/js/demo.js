@@ -6,11 +6,11 @@ $(document).ready(function () {
     var sale = $('#wc-hall');
 
     $calendar.weekCalendar({
-        timeslotsPerHour: 4,
-        allowCalEventOverlap: false,
-        overlapEventsSeparate: false,
-        firstDayOfWeek: 1,
-        businessHours: {start: 8, end: 22, limitDisplay: true },
+        // timeslotsPerHour: 4,
+//        allowCalEventOverlap: false,
+//        overlapEventsSeparate: false,
+//        firstDayOfWeek: 1,
+//        businessHours: {start: 08, end: 22, limitDisplay: true },
         daysToShow: 7,
         height: function ($calendar) {
             return $(window).height() - $("h1").outerHeight() - 1;
@@ -83,6 +83,7 @@ $(document).ready(function () {
                         close: function () {
                             $dialogContent.dialog("destroy");
                             $dialogContent.hide();
+                            clearTime();
                             $('#calendar').weekCalendar("removeUnsavedEvents");
                         },
                         buttons: {
@@ -106,12 +107,25 @@ $(document).ready(function () {
 
 
                                 $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, hall: calEvent.hall }, function (data) {
-                                    calEvent.id = jQuery.parseJSON(data);
+//                                    calEvent.id = jQuery.parseJSON(data);
+                                    var tmp = jQuery.parseJSON(data);
+                                    if(tmp == "error")
+                                    {
+                                        alert("Greška, izaberite slobodan termin.");
+                                    }
+                                    else{
+                                        calEvent.id = tmp;
+                                        $calendar.weekCalendar("removeUnsavedEvents");
+                                        $calendar.weekCalendar("updateEvent", calEvent);
+                                        clearTime();
+                                        $dialogContent.dialog("close");
+
+                                    }
+
+
                                 });
 
-                                $calendar.weekCalendar("removeUnsavedEvents");
-                                $calendar.weekCalendar("updateEvent", calEvent);
-                                $dialogContent.dialog("close");
+
                             },
                             cancel: function () {
                                 $dialogContent.dialog("close");
@@ -238,6 +252,7 @@ $(document).ready(function () {
                                 close: function () {
                                     $dialogContent.dialog("destroy");
                                     $dialogContent.hide();
+                                    clearTime();
                                     $('#calendar').weekCalendar("removeUnsavedEvents");
                                 },
                                 buttons: {
@@ -254,14 +269,31 @@ $(document).ready(function () {
                                         var title = calEvent.title;
                                         var body = calEvent.body;
 
-                                        $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id });
-                                        $calendar.weekCalendar("updateEvent", calEvent);
-                                        $dialogContent.dialog("close");
+                                        $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id }, function (data) {
+//                                    calEvent.id = jQuery.parseJSON(data);
+                                            var tmp = jQuery.parseJSON(data);
+                                            if(tmp == "error")
+                                            {
+                                                alert("Greška, izaberite slobodan termin.");
+                                            }
+                                            else{
+//                                                calEvent.id = tmp;
+//                                                $calendar.weekCalendar("removeUnsavedEvents");
+                                                $calendar.weekCalendar("updateEvent", calEvent);
+                                                $dialogContent.dialog("close");
+
+                                            }
+
+
+                                        });
+//                                        $calendar.weekCalendar("updateEvent", calEvent);
+//                                        $dialogContent.dialog("close");
                                     },
                                     "otkaži": function () {
                                         if (confirm('Da li ste sigurni da želite otkazati termin?')) {
                                             $.post(myBaseUrl + "terms/otkazi", {id: calEvent.id});
 //                                          $calendar.weekCalendar("removeEvent", calEvent.id);
+                                            $calendar.weekCalendar("refresh");
                                             $dialogContent.dialog("close");
                                         }
 
@@ -391,6 +423,11 @@ $(document).ready(function () {
             }
         }).show();
     });
+
+    function clearTime(){
+        $('#start').children().remove().end().append('<option value="">Select Start Time</option>');
+        $('#end').children().remove().end().append('<option value="">Select End Time</option>');
+    }
 
 
 });

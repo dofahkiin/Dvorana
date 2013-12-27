@@ -21,17 +21,17 @@
 
        options : {
          date: new Date(),
-         timeFormat : "h:i",
+         timeFormat : "H:i",
          dateFormat : "M d, Y",
          alwaysDisplayTimeMinutes: true,
          use24Hour : true,
          daysToShow : 7,
-         firstDayOfWeek : 0, // 0 = Sunday, 1 = Monday, 2 = Tuesday, ... , 6 = Saturday
+         firstDayOfWeek : 1, // 0 = Sunday, 1 = Monday, 2 = Tuesday, ... , 6 = Saturday
          useShortDayNames: false,
          timeSeparator : " - ",
          startParam : "start",
          endParam : "end",
-         businessHours : {start: 8, end: 22, limitDisplay : false},
+         businessHours : {start: 8, end: 22, limitDisplay : true},
          newEventText : "New Event",
          timeslotHeight: 20,
          defaultEventLength : 2,

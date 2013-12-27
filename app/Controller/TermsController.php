@@ -152,7 +152,33 @@ class TermsController extends AppController
         $date = date('c', (int)$_POST['start']);
         $status = $_POST['status'];
 
+
+
+
+
+
         if (isset($id) && $this->Term->exists($id)) {
+            $currentDay = $this->Term->find('all', array(
+                'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)),
+                                      'Term.id <>' => $id)
+            ));
+
+            $overlap = false;
+
+            foreach ($currentDay as $row) {
+                if (($row['Term']['start'] >= $start && $row['Term']['start'] < $end) ||
+                    $row['Term']['end'] > $start && $row['Term']['end'] <= $end
+                ) {
+                    $overlap = true;
+                }
+            }
+
+            if ($overlap) {
+                echo json_encode("error");
+                exit;
+            }
+
+
             $this->Term->read(null, $id);
             $this->Term->set(array(
                 'start' => $start,
@@ -163,13 +189,34 @@ class TermsController extends AppController
             ));
             $this->Term->save();
         } else {
+
+            $currentDay = $this->Term->find('all', array(
+                'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)))
+            ));
+
+            $overlap = false;
+
+            foreach ($currentDay as $row) {
+                if (($row['Term']['start'] >= $start && $row['Term']['start'] < $end) ||
+                    $row['Term']['end'] > $start && $row['Term']['end'] <= $end
+                ) {
+                    $overlap = true;
+                }
+            }
+
+            if ($overlap) {
+                echo json_encode("error");
+                exit;
+            }
+
+
+
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
             $this->request->data['Term']['status'] = $status;
             $this->request->data['Term']['start'] = $start;
             $this->request->data['Term']['end'] = $end;
             $this->request->data['Term']['date'] = date("Y-m-d", strtotime($date));
             $this->request->data['Term']['comment'] = $_POST['body'];
-//            $this->request->data['Term']['term'] = date("G:i-", strtotime($start)) . date("G:i", strtotime($end));
             $this->request->data['Term']['hall_id'] = intval($_POST['hall']);
             if ($this->Term->save($this->request->data)) {
                 $term_id = $this->Term->getLastInsertId();
@@ -276,7 +323,7 @@ class TermsController extends AppController
         } else {
             $this->Paginator->settings = array(
                 'limit' => 10,
-                'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term","User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
             );
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
@@ -294,11 +341,11 @@ class TermsController extends AppController
             $od = $this->request->data['Term']['od'];
             $do = $this->request->data['Term']['do'];
             $hall = $this->request->data['Term']['hall'];
-            $status ="";
-            $name="";
-            $surname="";
+            $status = "";
+            $name = "";
+            $surname = "";
 
-            if($this->Auth->user('role') == 'Menadžer'){
+            if ($this->Auth->user('role') == 'Menadžer') {
                 $status = $this->request->data['Term']['status'];
                 $name = $this->request->data['Term']['name'];
                 $surname = $this->request->data['Term']['surname'];
@@ -408,7 +455,7 @@ class TermsController extends AppController
                 $this->Paginator->settings = array(
                     'conditions' => array($range),
                     'limit' => 10,
-                    'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term","User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                    'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
                 );
                 $data = $this->Paginator->paginate('Term');
                 $this->set('terms', $data);

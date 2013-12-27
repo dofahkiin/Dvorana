@@ -18,12 +18,12 @@ echo $this->Html->script(array(
                         <span>Date: </span><span class="date_holder"></span>
                     </li>
                     <li>
-                        <label for="start">Start Time: </label><select name="start">
+                        <label for="start">Start Time: </label><select name="start" id="start">
                             <option value="">Select Start Time</option>
                         </select>
                     </li>
                     <li>
-                        <label for="end">End Time: </label><select name="end">
+                        <label for="end">End Time: </label><select name="end" id="end">
                             <option value="">Select End Time</option>
                         </select>
                     </li>
