@@ -319,18 +319,18 @@ class TermsController extends AppController
         exit;
     }
 
-    public function owner()
-    {
-
-        $id = $_POST['id'];
-        $this->Term->id = $id;
-
-        $menadzer = ($this->Auth->user('role') == 'Menadžer');
-        $own = $this->isOwned($id);
-
-        echo json_encode(array("owner" => $own, "menadzer" => $menadzer));
-        exit;
-    }
+//    public function owner()
+//    {
+//
+//        $id = $_POST['id'];
+//        $this->Term->id = $id;
+//
+//        $menadzer = ($this->Auth->user('role') == 'Menadžer');
+//        $own = $this->isOwned($id);
+//
+//        echo json_encode(array("owner" => $own, "menadzer" => $menadzer));
+//        exit;
+//    }
 
     public function izvjestaj()
     {

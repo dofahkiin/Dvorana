@@ -34,15 +34,15 @@ class SettingsController extends AppController
         }
     }
 
-    public function limit()
-    {
-//        $this->Setting->name = 'limit';
-        $limit = $this->Setting->findByName('limit');
-        $limitVal = $limit['Setting']['value'];
-        $menadzer = ($this->Auth->user('role') == 'Menadžer');
-        echo json_encode(array("limit" => intval($limitVal), "menadzer" => $menadzer));
-        exit;
-    }
+//    public function limit()
+//    {
+////        $this->Setting->name = 'limit';
+//        $limit = $this->Setting->findByName('limit');
+//        $limitVal = $limit['Setting']['value'];
+//        $menadzer = ($this->Auth->user('role') == 'Menadžer');
+//        echo json_encode(array("limit" => intval($limitVal), "menadzer" => $menadzer));
+//        exit;
+//    }
 
     public function isAuthorized($user)
     {

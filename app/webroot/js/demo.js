@@ -46,11 +46,11 @@ $(document).ready(function () {
                     calEvent.readOnly = true;
                 }
 
-                if(getDifference(calEvent.start) < limit && !menadzer){
+                if (getDifference(calEvent.start) < limit && !menadzer) {
                     calEvent.readOnly = true;
                 }
 
-                if($.inArray(calEvent.id, ownerTerms["owner"]) == -1 && !menadzer){
+                if ($.inArray(calEvent.id, ownerTerms["owner"]) == -1 && !menadzer) {
                     calEvent.readOnly = true;
                 }
             }
@@ -66,154 +66,133 @@ $(document).ready(function () {
 
             var diffDays = getDifference(calEvent.start);
 
-            $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                var limit = jQuery.parseJSON(data);
-
-                // termDate - today
-                if (diffDays < limit["limit"] && !limit["menadzer"]) {
-                    alert("Termin mora biti zakazan minimalno " + limit["limit"] + " dana unaprijed.");
-                    $calendar.weekCalendar("removeUnsavedEvents");
+            if (diffDays < limit && !menadzer) {
+                alert("Termin mora biti zakazan minimalno " + limit + " dana unaprijed.");
+                $calendar.weekCalendar("removeUnsavedEvents");
+            }
+            else {
+                if (!menadzer) {
+                    $("#status").hide();
                 }
-                else {
-                    if (!limit["menadzer"]) {
-                        $("#status").hide();
-                    }
-                    var $dialogContent = $("#event_edit_container");
-                    resetForm($dialogContent);
-                    var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
-                    var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
-                    var titleField = $dialogContent.find("input[name='title']");
-                    var bodyField = $dialogContent.find("textarea[name='body']");
-                    var statusField = $dialogContent.find("select[name='status']");
+                var $dialogContent = $("#event_edit_container");
+                resetForm($dialogContent);
+                var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
+                var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
+                var titleField = $dialogContent.find("input[name='title']");
+                var bodyField = $dialogContent.find("textarea[name='body']");
+                var statusField = $dialogContent.find("select[name='status']");
 //                    var hallField = $dialogContent.find("select[name='hall']");
 
 
-                    $dialogContent.dialog({
-                        modal: true,
-                        title: "New Calendar Event",
-                        close: function () {
-                            $dialogContent.dialog("destroy");
-                            $dialogContent.hide();
-                            clearTime();
-                            $('#calendar').weekCalendar("removeUnsavedEvents");
+                $dialogContent.dialog({
+                    modal: true,
+                    title: "New Calendar Event",
+                    close: function () {
+                        $dialogContent.dialog("destroy");
+                        $dialogContent.hide();
+                        clearTime();
+                        $('#calendar').weekCalendar("removeUnsavedEvents");
+                    },
+                    buttons: {
+                        save: function () {
+
+
+                            calEvent.id = id;
+                            id++;
+                            calEvent.start = new Date(startField.val());
+                            calEvent.end = new Date(endField.val());
+                            calEvent.title = titleField.val();
+                            calEvent.body = bodyField.val();
+                            calEvent.status = statusField.val();
+                            calEvent.hall = sale.val();
+
+                            //post to events.php
+                            var start = calEvent.start.getTime() / 1000;
+                            var end = calEvent.end.getTime() / 1000;
+                            var title = calEvent.title;
+                            var body = calEvent.body;
+
+
+                            $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, hall: calEvent.hall }, function (data) {
+                                var tmp = jQuery.parseJSON(data);
+                                if (tmp == "error") {
+                                    alert("Greška, izaberite slobodan termin.");
+                                }
+                                else {
+                                    calEvent.id = tmp;
+                                    ownerTerms["owner"].push(calEvent.id);
+                                    $calendar.weekCalendar("removeUnsavedEvents");
+                                    $calendar.weekCalendar("updateEvent", calEvent);
+                                    clearTime();
+                                    $dialogContent.dialog("close");
+                                }
+                            });
+
+
                         },
-                        buttons: {
-                            save: function () {
-
-
-                                calEvent.id = id;
-                                id++;
-                                calEvent.start = new Date(startField.val());
-                                calEvent.end = new Date(endField.val());
-                                calEvent.title = titleField.val();
-                                calEvent.body = bodyField.val();
-                                calEvent.status = statusField.val();
-                                calEvent.hall = sale.val();
-
-                                //post to events.php
-                                var start = calEvent.start.getTime() / 1000;
-                                var end = calEvent.end.getTime() / 1000;
-                                var title = calEvent.title;
-                                var body = calEvent.body;
-
-
-                                $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, hall: calEvent.hall }, function (data) {
-//                                    calEvent.id = jQuery.parseJSON(data);
-                                    var tmp = jQuery.parseJSON(data);
-                                    if(tmp == "error")
-                                    {
-                                        alert("Greška, izaberite slobodan termin.");
-                                    }
-                                    else{
-                                        calEvent.id = tmp;
-                                        $calendar.weekCalendar("removeUnsavedEvents");
-                                        $calendar.weekCalendar("updateEvent", calEvent);
-                                        clearTime();
-                                        $dialogContent.dialog("close");
-
-                                    }
-
-
-                                });
-
-
-                            },
-                            cancel: function () {
-                                $dialogContent.dialog("close");
-                            }
+                        cancel: function () {
+                            $dialogContent.dialog("close");
                         }
-                    }).show();
+                    }
+                }).show();
 
-                    $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
-                    setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
-                }
-            });
+                $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
+                setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
+            }
 
 
         },
         eventDrop: function (calEvent, $event) {
-            $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
-                var user = jQuery.parseJSON(data);
-                if (user["owner"] || user["menadzer"]) {
 
-                    var diffDays = getDifference(calEvent.start);
+            if ($.inArray(calEvent.id, ownerTerms["owner"]) != -1 || menadzer) {
 
-                    $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                        var limit = jQuery.parseJSON(data);
+                var diffDays = getDifference(calEvent.start);
 
-                        if (diffDays < limit["limit"] && !limit["menadzer"]) {
-                            alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
-                            $calendar.weekCalendar("refresh");
-                        }
-                        else {
-                            $.post(myBaseUrl + "terms/move", {
-                                'id': calEvent.id,
-                                'start': calEvent.start.getTime() / 1000,
-                                'end': calEvent.end.getTime() / 1000
-                            }, null);
 
-                        }
-
-                    });
-                }
-
-                else {
-                    alert("Možete mijenjati samo vlastite termine");
+                if (diffDays < limit && !menadzer) {
+                    alert("Termin se može mijenjati minimalno " + limit + " dana unaprijed.");
                     $calendar.weekCalendar("refresh");
                 }
+                else {
+                    $.post(myBaseUrl + "terms/move", {
+                        'id': calEvent.id,
+                        'start': calEvent.start.getTime() / 1000,
+                        'end': calEvent.end.getTime() / 1000
+                    }, null);
 
-            });
+                }
+
+            }
+
+            else {
+                alert("Možete mijenjati samo vlastite termine");
+                $calendar.weekCalendar("refresh");
+            }
+
         },
         eventResize: function (calEvent, $event) {
 
-            $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
-                var user = jQuery.parseJSON(data);
-                if (user["owner"] || user["menadzer"]) {
 
+            if ($.inArray(calEvent.id, ownerTerms["owner"]) != -1 || menadzer) {
 
-                    var diffDays = getDifference(calEvent.start);
-
-                    $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                        var limit = jQuery.parseJSON(data);
-
-                        if (diffDays < limit["limit"] && !limit["menadzer"]) {
-                            alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
-                            $calendar.weekCalendar("refresh");
-                        }
-                        else {
-                            $.post(myBaseUrl + "terms/move", {
-                                'id': calEvent.id,
-                                'start': calEvent.start.getTime() / 1000,
-                                'end': calEvent.end.getTime() / 1000
-                            }, null);
-                        }
-                    });
-                }
-                else {
-                    alert("Možete mijenjati samo vlastite termine");
+                var diffDays = getDifference(calEvent.start);
+                if (diffDays < limit && !menadzer) {
+                    alert("Termin se može mijenjati minimalno " + limit + " dana unaprijed.");
                     $calendar.weekCalendar("refresh");
                 }
-            });
+                else {
+                    $.post(myBaseUrl + "terms/move", {
+                        'id': calEvent.id,
+                        'start': calEvent.start.getTime() / 1000,
+                        'end': calEvent.end.getTime() / 1000
+                    }, null);
+                }
+            }
+            else {
+                alert("Možete mijenjati samo vlastite termine");
+                $calendar.weekCalendar("refresh");
+            }
+
         },
         eventClick: function (calEvent, $event) {
 
@@ -230,95 +209,82 @@ $(document).ready(function () {
             var bodyField = $dialogContent.find("textarea[name='body']");
             bodyField.val(calEvent.body);
 
-            $.post(myBaseUrl + "terms/owner", {id: calEvent.id}, function (data) {
-                var user = jQuery.parseJSON(data);
-                if (user["owner"] || user["menadzer"]) {
 
-                    var diffDays = getDifference(calEvent.start);
-                    $.post(myBaseUrl + "settings/limit", {}, function (data) {
-                        var limit = jQuery.parseJSON(data);
+            if ($.inArray(calEvent.id, ownerTerms["owner"]) != -1 || menadzer) {
 
-                        if (diffDays < limit["limit"] && !limit["menadzer"]) {
-                            alert("Termin se može mijenjati minimalno " + limit["limit"] + " dana unaprijed.");
-                            $calendar.weekCalendar("refresh");
-                        }
-                        else {
-                            if (!user["menadzer"]) {
-                                $("#status").hide();
-                            }
-
-                            $dialogContent.dialog({
-                                modal: true,
-                                title: "Edit - " + calEvent.title,
-                                close: function () {
-                                    $dialogContent.dialog("destroy");
-                                    $dialogContent.hide();
-                                    clearTime();
-                                    $('#calendar').weekCalendar("removeUnsavedEvents");
-                                },
-                                buttons: {
-                                    save: function () {
-
-                                        calEvent.start = new Date(startField.val());
-                                        calEvent.end = new Date(endField.val());
-                                        calEvent.title = titleField.val();
-                                        calEvent.body = bodyField.val();
-                                        calEvent.status = statusField.val();
-
-                                        var start = calEvent.start.getTime() / 1000;
-                                        var end = calEvent.end.getTime() / 1000;
-                                        var title = calEvent.title;
-                                        var body = calEvent.body;
-
-                                        $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id }, function (data) {
-//                                    calEvent.id = jQuery.parseJSON(data);
-                                            var tmp = jQuery.parseJSON(data);
-                                            if(tmp == "error")
-                                            {
-                                                alert("Greška, izaberite slobodan termin.");
-                                            }
-                                            else{
-//                                                calEvent.id = tmp;
-//                                                $calendar.weekCalendar("removeUnsavedEvents");
-                                                $calendar.weekCalendar("updateEvent", calEvent);
-                                                $dialogContent.dialog("close");
-
-                                            }
+                var diffDays = getDifference(calEvent.start);
 
 
-                                        });
-//                                        $calendar.weekCalendar("updateEvent", calEvent);
-//                                        $dialogContent.dialog("close");
-                                    },
-                                    "otkaži": function () {
-                                        if (confirm('Da li ste sigurni da želite otkazati termin?')) {
-                                            $.post(myBaseUrl + "terms/otkazi", {id: calEvent.id});
-//                                          $calendar.weekCalendar("removeEvent", calEvent.id);
-                                            $calendar.weekCalendar("refresh");
-                                            $dialogContent.dialog("close");
-                                        }
-
-                                    },
-                                    cancel: function () {
-                                        $dialogContent.dialog("close");
-                                    }
-                                }
-                            }).show();
-
-                            var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
-                            var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
-                            $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
-                            setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
-                            $(window).resize().resize(); //fixes a bug in modal overlay size ??
-
-                        }
-
-                    });
+                if (diffDays < limit && !menadzer) {
+                    alert("Termin se može mijenjati minimalno " + limit + " dana unaprijed.");
+                    $calendar.weekCalendar("refresh");
                 }
                 else {
-                    alert("Možete mijenjati samo vlastite termine");
+                    if (!menadzer) {
+                        $("#status").hide();
+                    }
+
+                    $dialogContent.dialog({
+                        modal: true,
+                        title: "Edit - " + calEvent.title,
+                        close: function () {
+                            $dialogContent.dialog("destroy");
+                            $dialogContent.hide();
+                            clearTime();
+                            $('#calendar').weekCalendar("removeUnsavedEvents");
+                        },
+                        buttons: {
+                            save: function () {
+
+                                calEvent.start = new Date(startField.val());
+                                calEvent.end = new Date(endField.val());
+                                calEvent.title = titleField.val();
+                                calEvent.body = bodyField.val();
+                                calEvent.status = statusField.val();
+
+                                var start = calEvent.start.getTime() / 1000;
+                                var end = calEvent.end.getTime() / 1000;
+                                var title = calEvent.title;
+                                var body = calEvent.body;
+
+                                $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id }, function (data) {
+                                    var tmp = jQuery.parseJSON(data);
+                                    if (tmp == "error") {
+                                        alert("Greška, izaberite slobodan termin.");
+                                    }
+                                    else {
+                                        $calendar.weekCalendar("updateEvent", calEvent);
+                                        $dialogContent.dialog("close");
+                                    }
+                                });
+                            },
+                            "otkaži": function () {
+                                if (confirm('Da li ste sigurni da želite otkazati termin?')) {
+                                    $.post(myBaseUrl + "terms/otkazi", {id: calEvent.id});
+//                                          $calendar.weekCalendar("removeEvent", calEvent.id);
+                                    $calendar.weekCalendar("refresh");
+                                    $dialogContent.dialog("close");
+                                }
+
+                            },
+                            cancel: function () {
+                                $dialogContent.dialog("close");
+                            }
+                        }
+                    }).show();
+
+                    var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
+                    var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
+                    $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
+                    setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
+                    $(window).resize().resize(); //fixes a bug in modal overlay size ??
+
                 }
-            });
+
+            }
+            else {
+                alert("Možete mijenjati samo vlastite termine");
+            }
         },
         eventMouseover: function (calEvent, $event) {
         },
@@ -327,12 +293,12 @@ $(document).ready(function () {
         noEvents: function () {
 
         },
-        data: function(start, end, callback) {
-            $.getJSON( myBaseUrl + "terms/getEvents", {
+        data: function (start, end, callback) {
+            $.getJSON(myBaseUrl + "terms/getEvents", {
                 start: start.getTime(),
                 end: end.getTime(),
                 hall: sale.val()
-            },  function(result) {
+            }, function (result) {
 
                 var tmp = result.pop();
                 limit = parseInt(tmp['limit']);
@@ -383,7 +349,7 @@ $(document).ready(function () {
     nav.append(sale);
     sale.show();
 
-    sale.change(function() {
+    sale.change(function () {
         $calendar.weekCalendar("refresh");
     });
 
@@ -435,12 +401,12 @@ $(document).ready(function () {
         }).show();
     });
 
-    function clearTime(){
+    function clearTime() {
         $('#start').children().remove().end().append('<option value="">Select Start Time</option>');
         $('#end').children().remove().end().append('<option value="">Select End Time</option>');
     }
 
-    function getDifference(start){
+    function getDifference(start) {
         var termDate = new Date(start.getFullYear(), start.getMonth(), start.getDate());
         var d = new Date();
         var timeDiff = termDate.getTime() - d.getTime();
