@@ -20,8 +20,8 @@ class Setting extends AppModel
                 'message' => 'Unesite limit'),
             'Brojevi' => array(
                 'rule'     => 'numeric',
-                'message'  => 'Samo brojevi'
-            )));
+                'message'  => 'Samo brojevi')
+        ));
 
     public function getLimit()
     {

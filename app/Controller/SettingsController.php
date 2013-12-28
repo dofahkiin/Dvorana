@@ -26,7 +26,7 @@ class SettingsController extends AppController
             ));
             $this->Setting->save();
 //            $this->autoRender = $this->layout = false;
-            $this->render('success', 'ajax');
+//            $this->render('success', 'ajax');
 
         } else {
             $limit = $this->Setting->findByName($name);
