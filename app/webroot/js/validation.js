@@ -30,7 +30,7 @@ $(document).ready(function () {
                 toastr.options = {"positionClass": "toast-bottom-full-width"}
                 toastr.success('Podešavanja sačuvana!')
             },
-            type: "post", url: "\/github\/dvorana\/settings\/edit\/limit"});
+            type: "post", url: myBaseUrl + "settings/edit"});
         return false;
     });
 })
