@@ -26,4 +26,9 @@ class Setting extends AppModel
         )
     );
 
+    public function getLimit()
+    {
+        return $this->Setting->find('all');
+    }
+
 }

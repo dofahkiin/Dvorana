@@ -4,6 +4,7 @@ $(document).ready(function () {
     var $calendar = $('#calendar');
     var id = 10;
     var sale = $('#wc-hall');
+    var limit;
 
     $calendar.weekCalendar({
         // timeslotsPerHour: 4,
@@ -40,6 +41,10 @@ $(document).ready(function () {
                         "backgroundColor": "#999",
                         "border": "1px solid #888"
                     });
+                    calEvent.readOnly = true;
+                }
+
+                if(getDifference(calEvent.start) < limit){
                     calEvent.readOnly = true;
                 }
             }
@@ -322,6 +327,9 @@ $(document).ready(function () {
                 end: end.getTime(),
                 hall: sale.val()
             },  function(result) {
+
+                var tmp = result.pop();
+                limit = parseInt(tmp['limit']);
                 callback(result);
             });
         }

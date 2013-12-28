@@ -16,6 +16,8 @@ class TermsController extends AppController
      */
     public $components = array('Paginator');
 
+    public $uses = array('Term','Setting');
+
     /**
      * index method
      *
@@ -251,6 +253,13 @@ class TermsController extends AppController
                 $terms[] = $termArray;
             }
         }
+
+        $limit = $this->Setting->find('first', array(
+            'conditions' => array('Setting.name' => 'limit')
+        ));
+
+        $terms[] = array("limit" => $limit['Setting']['value']);
+
         echo json_encode($terms);
         exit;
     }
