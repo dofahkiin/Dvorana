@@ -237,8 +237,13 @@ class TermsController extends AppController
         $options = array('order' => array('Terms.start' => 'desc'));
         $allTerms = $this->Term->find('all');
         $terms = array();
+        $ownerTerms = array();
         foreach ($allTerms as $row) {
             if ($row['Term']['hall_id'] == $_REQUEST['hall']) {
+                if($row['Term']['client_id'] == $this->Auth->user('id')){
+                    $ownerTerms[] = $row['Term']['id'];
+                }
+
                 $date = $row['Term']['date'];
                 $start = $row['Term']['start'];
                 $end = $row['Term']['end'];
@@ -254,14 +259,14 @@ class TermsController extends AppController
             }
         }
 
-        $owner = $this->Term->find('all', array(
-           'conditions' => array('Term.client_id' => $this->Auth->user('id'))
-        ));
-
-        $ownerTerms = array();
-        foreach($owner as $row){
-            $ownerTerms[] = $row['Term']['id'];
-        }
+//        $owner = $this->Term->find('all', array(
+//           'conditions' => array('Term.client_id' => $this->Auth->user('id'))
+//        ));
+//
+//        $ownerTerms = array();
+//        foreach($owner as $row){
+//            $ownerTerms[] = $row['Term']['id'];
+//        }
 
         $menadzer = ($this->Auth->user('role') == 'Menadžer');
 
