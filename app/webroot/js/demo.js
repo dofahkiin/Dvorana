@@ -5,6 +5,8 @@ $(document).ready(function () {
     var id = 10;
     var sale = $('#wc-hall');
     var limit;
+    var menadzer;
+    var ownerTerms;
 
     $calendar.weekCalendar({
         // timeslotsPerHour: 4,
@@ -44,7 +46,11 @@ $(document).ready(function () {
                     calEvent.readOnly = true;
                 }
 
-                if(getDifference(calEvent.start) < limit){
+                if(getDifference(calEvent.start) < limit && !menadzer){
+                    calEvent.readOnly = true;
+                }
+
+                if($.inArray(calEvent.id, ownerTerms["owner"]) == -1 && !menadzer){
                     calEvent.readOnly = true;
                 }
             }
@@ -330,6 +336,13 @@ $(document).ready(function () {
 
                 var tmp = result.pop();
                 limit = parseInt(tmp['limit']);
+
+                tmp = result.pop();
+                menadzer = tmp["menadzer"];
+
+                ownerTerms = result.pop();
+
+
                 callback(result);
             });
         }

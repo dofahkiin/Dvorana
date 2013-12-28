@@ -254,9 +254,24 @@ class TermsController extends AppController
             }
         }
 
+        $owner = $this->Term->find('all', array(
+           'conditions' => array('Term.client_id' => $this->Auth->user('id'))
+        ));
+
+        $ownerTerms = array();
+        foreach($owner as $row){
+            $ownerTerms[] = $row['Term']['id'];
+        }
+
+        $menadzer = ($this->Auth->user('role') == 'Menadžer');
+
         $limit = $this->Setting->find('first', array(
             'conditions' => array('Setting.name' => 'limit')
         ));
+
+        $terms[] = array("owner" => $ownerTerms);
+
+        $terms[] = array("menadzer" => $menadzer);
 
         $terms[] = array("limit" => $limit['Setting']['value']);
 
