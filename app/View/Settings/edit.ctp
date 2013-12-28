@@ -1,9 +1,11 @@
 <?php echo $this->Html->script('jquery-1.10.2', FALSE); ?>
+<?php echo $this->Html->script('validation', FALSE); ?>
 
 <?php
 echo $this->Form->create('Setting');
 echo $this->Form->input('value', array(
-    'label' => 'Minimalni broj dana nakon kojih korisnik može mijenjati termin:'));
+    'label' => 'Minimalni broj dana nakon kojih korisnik može mijenjati termin:',
+    'id' => 'value'));
 echo $this->Js->submit('Sačuvaj podešavanja', array(
     'before' => $this->Js->get('#sending')->effect('fadeIn'),
     'success' => $this->Js->get('#sending')->effect('fadeOut'),

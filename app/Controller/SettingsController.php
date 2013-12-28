@@ -54,4 +54,20 @@ class SettingsController extends AppController
         // The owner of a post can edit and delete it
         return parent::isAuthorized($user);
     }
+
+    public function validate_form()
+    {
+        if ($this->request->is('ajax')) {
+            $this->request->data['Setting'][$this->request->data['name']] =  $this->request->data['value'];
+            $this->Setting->set($this->request->data);
+            if ($this->Setting->validates()) {
+                $this->autoRender = FALSE;
+            }
+            else {
+                $error = $this->validateErrors($this->Setting);
+                $this->set('error', $error[$this->request->data['name']][0]);
+            }
+        }
+
+    }
 }

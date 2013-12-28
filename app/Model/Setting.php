@@ -15,16 +15,13 @@ class Setting extends AppModel
 
     public $validate = array(
         'value' => array(
-            'notEmpty' => array(
-                'rule' => array('numeric'),
-                'message' => 'Your custom message here',
-                'allowEmpty' => false,
-                //'required' => false,
-                //'last' => false, // Stop validation after this rule
-                //'on' => 'create', // Limit validation to 'create' or 'update' operations
-            )
-        )
-    );
+            'Prazno' => array(
+                'rule'    => 'notEmpty',
+                'message' => 'Unesite limit'),
+            'Brojevi' => array(
+                'rule'     => 'numeric',
+                'message'  => 'Samo brojevi'
+            )));
 
     public function getLimit()
     {
