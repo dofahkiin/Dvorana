@@ -22,7 +22,7 @@ class SettingsController extends AppController
         if ($this->request->is(array('post', 'put'))) {
             $this->Setting->read(null, "limit");
             $this->Setting->set(array(
-                'value' => $this->request->data['Setting']['limit']
+                'value' => $this->request->data['Setting']['value']
             ));
             $this->Setting->save();
 

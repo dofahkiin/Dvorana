@@ -62,6 +62,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
                         }
 
                         echo "<li><a href=\"/github/dvorana/terms/izvjestaj\">Izvještaj</a></li>";
+                        echo "<li><a href=\"/github/dvorana/users/edit/". $userData['id']."\">Uredi profil</a></li>";
                         echo "<li><a href=\"/github/dvorana/users/logout\">Logout(".$userData['name'].")</a></li>";
                     }
                     ?>
