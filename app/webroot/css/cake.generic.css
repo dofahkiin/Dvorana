@@ -803,3 +803,8 @@ nav ul li ul li a {
 }
 
 /* END NAV MENU */
+
+.price {
+    display:inline-block;
+    margin-right: 5px;
+}

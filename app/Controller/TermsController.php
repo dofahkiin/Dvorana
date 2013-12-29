@@ -18,6 +18,7 @@ class TermsController extends AppController
 
     public $uses = array('Term','Setting');
 
+    private $cijena = 5;
     /**
      * index method
      *
@@ -154,11 +155,6 @@ class TermsController extends AppController
         $date = date('c', (int)$_POST['start']);
         $status = $_POST['status'];
 
-
-
-
-
-
         if (isset($id) && $this->Term->exists($id)) {
             $currentDay = $this->Term->find('all', array(
                 'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)),
@@ -180,6 +176,7 @@ class TermsController extends AppController
                 exit;
             }
 
+            $price = $this->getPrice($date, $start,$end);
 
             $this->Term->read(null, $id);
             $this->Term->set(array(
@@ -187,7 +184,8 @@ class TermsController extends AppController
                 'end' => $end,
                 'date' => date("Y-m-d", strtotime($date)),
                 'comment' => $_POST['body'],
-                'status' => $status
+                'status' => $status,
+                'price' => $price
             ));
             $this->Term->save();
         } else {
@@ -211,6 +209,7 @@ class TermsController extends AppController
                 exit;
             }
 
+            $price = $this->getPrice($date, $start,$end);
 
 
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
@@ -220,6 +219,7 @@ class TermsController extends AppController
             $this->request->data['Term']['date'] = date("Y-m-d", strtotime($date));
             $this->request->data['Term']['comment'] = $_POST['body'];
             $this->request->data['Term']['hall_id'] = intval($_POST['hall']);
+            $this->request->data['Term']['price'] = $price;
             if ($this->Term->save($this->request->data)) {
                 $term_id = $this->Term->getLastInsertId();
                 echo json_encode(intval($term_id));
@@ -296,11 +296,13 @@ class TermsController extends AppController
         $end = date('H:i:s', (int)$_POST['end']);
         $date = date('c', (int)$_POST['start']);
 
+        $price = $this->getPrice($date, $start,$end);
         $this->Term->read(null, $id);
         $this->Term->set(array(
             'start' => $start,
             'end' => $end,
-            'date' => date("Y-m-d", strtotime($date))
+            'date' => date("Y-m-d", strtotime($date)),
+            'price' => $price
         ));
         $this->Term->save();
 
@@ -492,5 +494,15 @@ class TermsController extends AppController
 
 
         }
+    }
+
+    public function getPrice($date, $start, $end){
+        $startTime = new DateTime(date("Y-m-d", strtotime($date)).'T'.$start);
+        $endTime = new DateTime(date("Y-m-d", strtotime($date)).'T'.$end);
+        $interval = $startTime->diff($endTime);
+        $minutes = $interval->i+ $interval->h*60;
+
+        return $minutes*$this->cijena/15;
+
     }
 }

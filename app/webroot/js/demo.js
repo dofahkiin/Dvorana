@@ -7,6 +7,9 @@ $(document).ready(function () {
     var limit;
     var menadzer;
     var ownerTerms;
+    var cijena = 5;
+    var minutes;
+    var priceField;
 
     $calendar.weekCalendar({
         // timeslotsPerHour: 4,
@@ -81,8 +84,10 @@ $(document).ready(function () {
                 var titleField = $dialogContent.find("input[name='title']");
                 var bodyField = $dialogContent.find("textarea[name='body']");
                 var statusField = $dialogContent.find("select[name='status']");
-//                    var hallField = $dialogContent.find("select[name='hall']");
+                priceField = $dialogContent.find("label[name='price']");
 
+                minutes = getMinutes(calEvent.start, calEvent.end);
+                priceField.text(minutes*cijena/15);
 
                 $dialogContent.dialog({
                     modal: true,
@@ -208,6 +213,10 @@ $(document).ready(function () {
             var statusField = $dialogContent.find("select[name='status']").val(calEvent.status);
             var bodyField = $dialogContent.find("textarea[name='body']");
             bodyField.val(calEvent.body);
+            priceField = $dialogContent.find("label[name='price']");
+
+            minutes = getMinutes(calEvent.start, calEvent.end);
+            priceField.text(minutes*cijena/15);
 
 
             if ($.inArray(calEvent.id, ownerTerms["owner"]) != -1 || menadzer) {
@@ -411,6 +420,35 @@ $(document).ready(function () {
         var d = new Date();
         var timeDiff = termDate.getTime() - d.getTime();
         return Math.ceil(timeDiff / (1000 * 3600 * 24));
+    }
+
+    function getMinutes(start, end){
+        var s = new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes());
+        var e = new Date(end.getFullYear(), end.getMonth(), end.getDate(), end.getHours(), end.getMinutes());
+        var timeDiff = e.getTime() - s.getTime();
+        return Math.ceil(timeDiff / (1000 * 60));
+    }
+
+    $('#start').change(function(){
+        calculateTime();
+    });
+
+    $('#end').change(function(){
+        calculateTime();
+    });
+
+    function getDate(time){
+        var t = time.split(/:/);
+        var hours = t[0].slice(-2);
+        var minutes = t[1];
+        return new Date(2000, 0, 1, hours, minutes);
+    }
+
+    function calculateTime(){
+        var startTime = $("#start").val();
+        var endTime = $("#end").val();
+        minutes = getMinutes(getDate(startTime), getDate(endTime));
+        priceField.text(minutes*cijena/15+'KM');
     }
 
 });

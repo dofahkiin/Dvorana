@@ -40,6 +40,9 @@ echo $this->Html->script(array(
                     <li>
                         <label for="body">Body: </label><textarea name="body"></textarea>
                     </li>
+                    <li>
+                        <label for="price" class="price">Cijena: </label><label name="price" id="price" class="price"></label>
+                    </li>
                 </ul>
             </form>
         </div>
