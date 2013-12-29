@@ -7,7 +7,7 @@
 <?php
 echo $this->Form->create('Setting');
 echo $this->Form->input('limit', array(
-    'label' => 'Minimalni broj dana nakon kojih korisnik može mijenjati termin:',
+    'label' => 'Termini se mogu uređivati/rezervisati minimalno dana unaprijed:',
     'id' => 'value',
     'value' => $this->request->data['Setting']['value']));
 echo $this->Form->submit('Sačuvaj podešavanja', array(
