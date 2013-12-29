@@ -178,6 +178,11 @@ class TermsController extends AppController
 
             $price = $this->getPrice($date, $start,$end);
 
+            if($_POST['iznos'] != "")
+            {
+                $price = (float)$_POST['iznos'];
+            }
+
             $this->Term->read(null, $id);
             $this->Term->set(array(
                 'start' => $start,

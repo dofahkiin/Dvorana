@@ -43,6 +43,9 @@ echo $this->Html->script(array(
                     <li>
                         <label for="price" class="price">Cijena: </label><label name="price" id="price" class="price"></label>
                     </li>
+                    <li class="iznos">
+                        <label for="iznos">Naplaćeni iznos:</label><input name="iznos" id="iznos"/>
+                    </li>
                 </ul>
             </form>
         </div>

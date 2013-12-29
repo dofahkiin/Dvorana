@@ -77,6 +77,7 @@ $(document).ready(function () {
                 if (!menadzer) {
                     $("#status").hide();
                 }
+                $('.iznos').hide();
                 var $dialogContent = $("#event_edit_container");
                 resetForm($dialogContent);
                 var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
@@ -214,6 +215,8 @@ $(document).ready(function () {
             var bodyField = $dialogContent.find("textarea[name='body']");
             bodyField.val(calEvent.body);
             priceField = $dialogContent.find("label[name='price']");
+            var iznosField = $dialogContent.find("input[name='iznos']");
+
 
             minutes = getMinutes(calEvent.start, calEvent.end);
             priceField.text(minutes*cijena/15);
@@ -231,6 +234,7 @@ $(document).ready(function () {
                 else {
                     if (!menadzer) {
                         $("#status").hide();
+                        $('.iznos').hide();
                     }
 
                     $dialogContent.dialog({
@@ -251,12 +255,13 @@ $(document).ready(function () {
                                 calEvent.body = bodyField.val();
                                 calEvent.status = statusField.val();
 
+                                var iznos = iznosField.val();
                                 var start = calEvent.start.getTime() / 1000;
                                 var end = calEvent.end.getTime() / 1000;
                                 var title = calEvent.title;
                                 var body = calEvent.body;
 
-                                $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id }, function (data) {
+                                $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id, iznos:iznos}, function (data) {
                                     var tmp = jQuery.parseJSON(data);
                                     if (tmp == "error") {
                                         alert("Greška, izaberite slobodan termin.");
