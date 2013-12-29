@@ -214,6 +214,7 @@ $(document).ready(function () {
                         calEvent.title = titleField.val();
                         calEvent.body = bodyField.val();
                         calEvent.status = statusField.val();
+                        calEvent.hall = sale.val();
 
                         var iznos = iznosField.val();
                         var start = calEvent.start.getTime() / 1000;
@@ -221,7 +222,7 @@ $(document).ready(function () {
                         var title = calEvent.title;
                         var body = calEvent.body;
 
-                        $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id, iznos: iznos}, function (data) {
+                        $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id, hall: calEvent.hall, iznos: iznos}, function (data) {
                             var tmp = jQuery.parseJSON(data);
                             if (tmp == "error") {
                                 toastr.error("Greška, izaberite slobodan termin.");

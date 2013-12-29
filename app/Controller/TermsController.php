@@ -154,11 +154,13 @@ class TermsController extends AppController
         $end = date('H:i:s', (int)$_POST['end']);
         $date = date('c', (int)$_POST['start']);
         $status = $_POST['status'];
+        $hall = intval($_POST['hall']);
 
         if (isset($id) && $this->Term->exists($id)) {
             $currentDay = $this->Term->find('all', array(
                 'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)),
-                                      'Term.id <>' => $id)
+                                      'Term.id <>' => $id,
+                                      'Term.hall_id' => $hall)
             ));
 
             $this->checkOverlap($currentDay, $start, $end);
@@ -182,8 +184,10 @@ class TermsController extends AppController
             $this->Term->save();
         } else {
 
+
             $currentDay = $this->Term->find('all', array(
-                'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)))
+                'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)),
+                                      'Term.hall_id' => $hall)
             ));
 
             $this->checkOverlap($currentDay, $start, $end);
@@ -196,7 +200,7 @@ class TermsController extends AppController
             $this->request->data['Term']['end'] = $end;
             $this->request->data['Term']['date'] = date("Y-m-d", strtotime($date));
             $this->request->data['Term']['comment'] = $_POST['body'];
-            $this->request->data['Term']['hall_id'] = intval($_POST['hall']);
+            $this->request->data['Term']['hall_id'] = $hall;
             $this->request->data['Term']['price'] = $price;
             if ($this->Term->save($this->request->data)) {
                 $term_id = $this->Term->getLastInsertId();
