@@ -161,20 +161,7 @@ class TermsController extends AppController
                                       'Term.id <>' => $id)
             ));
 
-            $overlap = false;
-
-            foreach ($currentDay as $row) {
-                if (($row['Term']['start'] >= $start && $row['Term']['start'] < $end) ||
-                    $row['Term']['end'] > $start && $row['Term']['end'] <= $end
-                ) {
-                    $overlap = true;
-                }
-            }
-
-            if ($overlap) {
-                echo json_encode("error");
-                exit;
-            }
+            $this->checkOverlap($currentDay, $start, $end);
 
             $price = $this->getPrice($date, $start,$end);
 
@@ -199,23 +186,9 @@ class TermsController extends AppController
                 'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)))
             ));
 
-            $overlap = false;
-
-            foreach ($currentDay as $row) {
-                if (($row['Term']['start'] >= $start && $row['Term']['start'] < $end) ||
-                    $row['Term']['end'] > $start && $row['Term']['end'] <= $end
-                ) {
-                    $overlap = true;
-                }
-            }
-
-            if ($overlap) {
-                echo json_encode("error");
-                exit;
-            }
+            $this->checkOverlap($currentDay, $start, $end);
 
             $price = $this->getPrice($date, $start,$end);
-
 
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
             $this->request->data['Term']['status'] = $status;
@@ -229,8 +202,6 @@ class TermsController extends AppController
                 $term_id = $this->Term->getLastInsertId();
                 echo json_encode(intval($term_id));
             }
-
-
         }
 
         exit;
@@ -300,6 +271,12 @@ class TermsController extends AppController
         $start = date('H:i:s', (int)$_POST['start']);
         $end = date('H:i:s', (int)$_POST['end']);
         $date = date('c', (int)$_POST['start']);
+
+        $currentDay = $this->Term->find('all', array(
+            'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)),
+                'Term.id <>' => $id)
+        ));
+        $this->checkOverlap($currentDay, $start, $end);
 
         $price = $this->getPrice($date, $start,$end);
         $this->Term->read(null, $id);
@@ -509,5 +486,28 @@ class TermsController extends AppController
 
         return $minutes*$this->cijena/15;
 
+    }
+
+    /**
+     * @param $currentDay
+     * @param $start
+     * @param $end
+     */
+    public function checkOverlap($currentDay, $start, $end)
+    {
+        $overlap = false;
+
+        foreach ($currentDay as $row) {
+            if (($row['Term']['start'] >= $start && $row['Term']['start'] < $end) ||
+                $row['Term']['end'] > $start && $row['Term']['end'] <= $end
+            ) {
+                $overlap = true;
+            }
+        }
+
+        if ($overlap) {
+            echo json_encode("error");
+            exit;
+        }
     }
 }

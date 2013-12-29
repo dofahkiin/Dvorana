@@ -1,10 +1,10 @@
 <?php
 echo $this->Html->css(array(
     'reset', 'jquery-ui-1.10.3.custom',
-    'jquery.weekcalendar', 'demo'));
+    'jquery.weekcalendar', 'demo', 'toastr'));
 echo $this->Html->script(array(
     'jquery-1.10.2', 'jquery-migrate-1.2.1', 'jquery-ui-1.10.3.custom.min',
-    'jquery.weekcalendar', 'demo'));
+    'jquery.weekcalendar', 'demo', 'toastr'));
 ?>
 
 <div class="terms index">

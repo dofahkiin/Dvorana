@@ -27,8 +27,8 @@ $(document).ready(function () {
             data: $("#submit").closest("form").serialize(),
             dataType: "html",
             success: function (data, textStatus) {
-                toastr.options = {"positionClass": "toast-bottom-full-width"}
-                toastr.success('Podešavanja sačuvana!')
+                toastr.options = {"positionClass": "toast-bottom-full-width"};
+                toastr.success('Podešavanja sačuvana!');
             },
             type: "post", url: myBaseUrl + "settings/edit"});
         return false;
