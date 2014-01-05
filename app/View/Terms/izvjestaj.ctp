@@ -1,11 +1,13 @@
 <?php
 echo $this->Html->script('jquery-1.10.2', FALSE);
-echo $this->Html->script('search', FALSE);
+
+
 $this->Paginator->options(array(
-    'update' => '#listaTermina',
+    'update' => '#content',
     'before' => $this->Js->get('#loading')->effect('show'),
     'complete' => $this->Js->get('#loading')->effect('fadeOut',
-            array('buffer' => false))
+            array('buffer' => false)),
+    'evalScripts' => true
 ));
 ?>
 
@@ -26,6 +28,7 @@ $this->Paginator->options(array(
                     <th><?php echo $this->Paginator->sort('price'); ?></th>
                     <th class="actions"><?php echo __('Actions'); ?></th>
                 </tr>
+
                 <?php foreach ($terms as $term): ?>
                     <tr>
                         <td><?php echo h($term['Term']['date']); ?>&nbsp;</td>
@@ -41,6 +44,7 @@ $this->Paginator->options(array(
                         </td>
                     </tr>
                 <?php endforeach; ?>
+
             </table>
 
         <?php } else { ?>
@@ -56,6 +60,7 @@ $this->Paginator->options(array(
                     <th><?php echo $this->Paginator->sort('price'); ?></th>
                     <th class="actions"><?php echo __('Actions'); ?></th>
                 </tr>
+
                 <?php foreach ($terms as $term): ?>
                     <tr>
                         <td><?php echo h($term['Term']['date']); ?>&nbsp;</td>
@@ -72,6 +77,7 @@ $this->Paginator->options(array(
                         </td>
                     </tr>
                 <?php endforeach; ?>
+
             </table>
 
         <?php } ?>
@@ -94,49 +100,48 @@ $this->Paginator->options(array(
         </div>
 
     </div>
-
-
-    <div class="actions">
-        <?php
-        echo $this->Form->create('Term', array('action' => 'search'));
-
-        echo $this->element('izvjestaj');
-        if ($userData['role'] == 'Menadžer') {
-            echo $this->Form->input('status', array(
-                'label' => 'Termin:',
-                'type' => 'select',
-                'options' => array("nepotvrđen" => "nepotvrđen",
-                    "potvrđen" => "potvrđen",
-                    "otkazan" => "otkazan",
-                    "završen" => "završen"),
-                'empty' => 'Izaberi status'));
-
-            echo $this->Form->input('name', array(
-                'label' => 'Ime:',
-                'type' => 'text'));
-
-            echo $this->Form->input('surname', array(
-                'label' => 'Prezime:',
-                'type' => 'text'));
-        }
-        echo $this->Form->submit('Pretraži', array("id" => "search"));
-        echo $this->Form->end();
-        ?>
-    </div>
-
-
-
-
 </div>
 
-<div id="pretraga"">
+<div class="actions">
+    <?php
+    echo $this->Form->create('Term', array('action' => 'search'));
+
+    echo $this->element('izvjestaj');
+    if ($userData['role'] == 'Menadžer') {
+        echo $this->Form->input('status', array(
+            'label' => 'Termin:',
+            'type' => 'select',
+            'options' => array("nepotvrđen" => "nepotvrđen",
+                "potvrđen" => "potvrđen",
+                "otkazan" => "otkazan",
+                "završen" => "završen"),
+            'empty' => 'Izaberi status'));
+
+        echo $this->Form->input('name', array(
+            'label' => 'Ime:',
+            'type' => 'text'));
+
+        echo $this->Form->input('surname', array(
+            'label' => 'Prezime:',
+            'type' => 'text'));
+    }
+    echo $this->Form->submit('Pretraži', array("id" => "search"));
+    echo $this->Form->end();
+    ?>
+</div>
 
 
+<div id="pretraga">
 </div>
 
 <?php
-echo $this->Js->writeBuffer(array('cache' => TRUE));
-?>
+echo $this->Html->script('search');
+//$this->Js->get('#search');
+//$this->Js->event('click', $this->Js->alert('hey you!'));
+//?>
+
+<?php echo $this->Js->writeBuffer(array('cache' => TRUE)); ?>
+
 
 
 

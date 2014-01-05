@@ -4,7 +4,9 @@ $(document).ready(function () {
         $.ajax({
             dataType: "html",
             success: function (data, textStatus) {
+
                 $("#pretraga").html(data);
+//                $(".actions").remove();
             },
             url: myBaseUrl + "terms/search",
             data: { TermDate: $('#TermDate').val(),
@@ -24,7 +26,8 @@ $(document).ready(function () {
         });
         return false;
 
-
     });
+
+
 });
 
