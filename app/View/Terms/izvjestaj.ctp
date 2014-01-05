@@ -3,7 +3,6 @@ echo $this->Html->script('jquery-1.10.2', FALSE);
 echo $this->Html->script('jquery.activity-indicator-1.0.0', FALSE);
 
 
-
 $this->Paginator->options(array(
     'update' => '#content',
     'before' => "$('#load').activity()",
@@ -59,7 +58,7 @@ $this->Paginator->options(array(
                     <th><?php echo $this->Paginator->sort('Sala'); ?></th>
                     <th><?php echo $this->Paginator->sort('comment'); ?></th>
                     <th><?php echo $this->Paginator->sort('price'); ?></th>
-                    <th class="actions"><?php// echo __('Actions'); ?></th>
+                    <th class="actions"><?php // echo __('Actions'); ?></th>
                 </tr>
 
                 <?php foreach ($terms as $term): ?>
@@ -104,13 +103,26 @@ $this->Paginator->options(array(
     </div>
 </div>
 
-<div class="actions">
+<div class="filtriranje">
     <h2><?php echo __('Filtriranje'); ?></h2>
     <?php
     echo $this->Form->create('Term', array('action' => 'search'));
 
     echo $this->element('izvjestaj');
-    if ($userData['role'] == 'Menadžer') {
+    ?>
+    <div class="block">
+        <?php
+        echo $this->Form->input('hall', array(
+            'label' => 'Sala:',
+            'type' => 'select',
+            'options' => array(1 => 'Sala 1', 2 => 'Sala 2', 3 => 'Sala 3'),
+            'empty' => 'Izaberi salu'));
+        ?>
+
+
+        <?php
+
+        if ($userData['role'] == 'Menadžer') {
         echo $this->Form->input('status', array(
             'label' => 'Termin:',
             'type' => 'select',
@@ -119,7 +131,10 @@ $this->Paginator->options(array(
                 "otkazan" => "otkazan",
                 "završen" => "završen"),
             'empty' => 'Izaberi status'));
-
+        ?>
+    </div>
+    <div class="block">
+        <?php
         echo $this->Form->input('name', array(
             'label' => 'Ime:',
             'type' => 'text'));
@@ -127,10 +142,15 @@ $this->Paginator->options(array(
         echo $this->Form->input('surname', array(
             'label' => 'Prezime:',
             'type' => 'text'));
-    }
-    echo $this->Form->submit('Pretraži', array("id" => "search"));
-    echo $this->Form->end();
-    ?>
+        }
+        ?>
+    </div>
+    <div class="block">
+        <?php
+        echo $this->Form->submit('Pretraži', array("id" => "search"));
+        echo $this->Form->end();
+        ?>
+    </div>
 </div>
 
 
@@ -143,7 +163,8 @@ echo $this->Html->script('search');
 
 //$this->Js->get('#search');
 //$this->Js->event('click', $this->Js->alert('hey you!'));
-//?>
+//
+?>
 
 <?php echo $this->Js->writeBuffer(array('cache' => TRUE)); ?>
 

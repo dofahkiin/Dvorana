@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var error;
+    var error ="";
     toastr.options = {"positionClass": "toast-bottom-full-width"};
     $('#value').keyup(function () {
         $.post(

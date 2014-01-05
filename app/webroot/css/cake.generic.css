@@ -252,9 +252,10 @@ dd {
 /** Forms **/
 form {
 	clear: both;
-	margin-right: 20px;
+	/*margin-right: 20px;*/
 	padding: 0;
-	width: 95%;
+	width: 100%;
+    margin-left: 10px;
 }
 fieldset {
 	border: none;
@@ -279,10 +280,7 @@ fieldset fieldset div {
 	margin: 0 20px;
 }
 form div {
-	clear: both;
-	margin-bottom: 1em;
-	padding: .5em;
-	vertical-align: text-top;
+
 }
 form .input {
 	color: #444;
@@ -814,4 +812,34 @@ nav ul li ul li a {
     margin-left: auto;
     margin-right: auto;
     height: 20px;
+}
+
+.block {
+margin-top: 20px;
+}
+
+
+#TermSearchForm .input {
+    width: 130px;
+    vertical-align: top;
+    display: inline-block;
+    padding-right: 20px;
+    padding-bottom: 5px;
+}
+
+#UserEditForm div, #UserHomeForm div{
+    clear: both;
+    margin-bottom: 1em;
+    padding: .5em;
+    vertical-align: text-top;
+}
+
+#UserEditForm .input, #UserHomeForm .input, #SettingEditForm input{
+    width: 400px;
+
+}
+
+.filtriranje{
+    float:left;
+    width:20%;
 }

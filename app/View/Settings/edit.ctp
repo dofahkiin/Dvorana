@@ -7,10 +7,12 @@
 <?php
 echo $this->Form->create('Setting');
 echo $this->Form->input('value', array(
-    'label' => 'Termini se mogu uređivati/rezervisati minimalno dana unaprijed:',
+    'label' => 'Termini se mogu uređivati min. dana unaprijed:',
     'id' => 'value'));
 echo $this->Form->submit('Sačuvaj podešavanja', array(
     'id' => 'submit'
 ));
 echo $this->Form->end();
 ?>
+
+<?php echo $this->Js->writeBuffer(array('cache' => TRUE)); ?>
