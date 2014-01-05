@@ -39,7 +39,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 
-        echo $this->Js->writeBuffer();
+//        echo $this->Js->writeBuffer(array('cache'=>TRUE));
 	?>
 </head>
 <body>

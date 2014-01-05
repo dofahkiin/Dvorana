@@ -14,7 +14,9 @@ class TermsController extends AppController
      *
      * @var array
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator','RequestHandler');
+
+    public $helpers = array('Js');
 
     public $uses = array('Term','Setting');
 
@@ -325,8 +327,12 @@ class TermsController extends AppController
 //        exit;
 //    }
 
+
+
     public function izvjestaj()
     {
+
+
         $this->Term->recursive = 0;
 
         if ($this->Auth->user('role') == 'Klijent') {
@@ -342,11 +348,12 @@ class TermsController extends AppController
                 'limit' => 10,
                 'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
             );
+
+
+
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
 
-
-//            $this->set('terms', $this->Paginator->paginate());
         }
     }
 

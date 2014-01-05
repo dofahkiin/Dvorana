@@ -1,5 +1,16 @@
+<?php
+echo $this->Html->script('jquery-1.10.2', FALSE);
+$this->Paginator->options(array(
+    'update' => '#content'
+));
+
+
+?>
 <div class="terms index">
     <h2><?php echo __('Terms'); ?></h2>
+
+
+
     <?php
     if ($userData['role'] == 'Klijent') {
         ?>
@@ -64,6 +75,7 @@
 
     <?php } ?>
 
+
     <p>
         <?php
         echo $this->Paginator->counter(array(
@@ -78,7 +90,10 @@
         echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
         ?>
     </div>
+
 </div>
+
+
 <div class="actions">
     <?php
     echo $this->Form->create('Term', array('action' => 'search'));
@@ -106,3 +121,11 @@
     echo $this->Form->end();
     ?>
 </div>
+
+<?php
+
+echo $this->Js->writeBuffer(array('cache'=>TRUE));
+?>
+
+
+
