@@ -1,10 +1,9 @@
 <?php
 $this->Paginator->options(array(
     'update' => '#listaPretrage',
-    'before' => $this->Js->get('#loading')->effect('fadeIn',
-            array('buffer' => false)),
-    'complete' => $this->Js->get('#loading')->effect('fadeOut',
-            array('buffer' => false))
+    'before' => "$('#load').activity()",
+    'complete' => "$('#load').activity(false)",
+    'evalScripts' => true
 ));
 
 ?>

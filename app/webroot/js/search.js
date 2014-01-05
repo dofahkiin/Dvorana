@@ -22,6 +22,12 @@ $(document).ready(function () {
                 TermStatus:$('#TermStatus').val(),
                 TermName:$('#TermName').val(),
                 TermSurname:$('#TermSurname').val()
+            },
+            beforeSend: function(XMLHttpRequest) {
+                $('#load').activity();
+            },
+            complete: function(XMLHttpRequest, textStatus) {
+                $('#load').activity(false);
             }
         });
         return false;

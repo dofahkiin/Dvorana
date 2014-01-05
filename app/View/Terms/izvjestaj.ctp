@@ -1,12 +1,13 @@
 <?php
 echo $this->Html->script('jquery-1.10.2', FALSE);
+echo $this->Html->script('jquery.activity-indicator-1.0.0', FALSE);
+
 
 
 $this->Paginator->options(array(
     'update' => '#content',
-    'before' => $this->Js->get('#loading')->effect('show'),
-    'complete' => $this->Js->get('#loading')->effect('fadeOut',
-            array('buffer' => false)),
+    'before' => "$('#load').activity()",
+    'complete' => "$('#load').activity(false)",
     'evalScripts' => true
 ));
 ?>
@@ -26,7 +27,7 @@ $this->Paginator->options(array(
                     <th><?php echo $this->Paginator->sort('Sala'); ?></th>
                     <th><?php echo $this->Paginator->sort('comment'); ?></th>
                     <th><?php echo $this->Paginator->sort('price'); ?></th>
-                    <th class="actions"><?php echo __('Actions'); ?></th>
+                    <th class="actions"><?php // echo __('Actions'); ?></th>
                 </tr>
 
                 <?php foreach ($terms as $term): ?>
@@ -38,9 +39,9 @@ $this->Paginator->options(array(
                         <td><?php echo h($term['Term']['comment']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['price']); ?>&nbsp;</td>
                         <td class="actions">
-                            <?php echo $this->Html->link(__('View'), array('action' => 'view', $term['Term']['id'])); ?>
-                            <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $term['Term']['id'])); ?>
-                            <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $term['Term']['id']), null, __('Are you sure you want to delete # %s?', $term['Term']['id'])); ?>
+                            <?php // echo $this->Html->link(__('View'), array('action' => 'view', $term['Term']['id'])); ?>
+                            <?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $term['Term']['id'])); ?>
+                            <?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $term['Term']['id']), null, __('Are you sure you want to delete # %s?', $term['Term']['id'])); ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -58,7 +59,7 @@ $this->Paginator->options(array(
                     <th><?php echo $this->Paginator->sort('Sala'); ?></th>
                     <th><?php echo $this->Paginator->sort('comment'); ?></th>
                     <th><?php echo $this->Paginator->sort('price'); ?></th>
-                    <th class="actions"><?php echo __('Actions'); ?></th>
+                    <th class="actions"><?php// echo __('Actions'); ?></th>
                 </tr>
 
                 <?php foreach ($terms as $term): ?>
@@ -71,9 +72,9 @@ $this->Paginator->options(array(
                         <td><?php echo h($term['Term']['comment']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['price']); ?>&nbsp;</td>
                         <td class="actions">
-                            <?php echo $this->Html->link(__('View'), array('action' => 'view', $term['Term']['id'])); ?>
+                            <?php // echo $this->Html->link(__('View'), array('action' => 'view', $term['Term']['id'])); ?>
                             <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $term['Term']['id'])); ?>
-                            <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $term['Term']['id']), null, __('Are you sure you want to delete # %s?', $term['Term']['id'])); ?>
+                            <?php // echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $term['Term']['id']), null, __('Are you sure you want to delete # %s?', $term['Term']['id'])); ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -97,12 +98,14 @@ $this->Paginator->options(array(
             echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
             ?>
             <?php echo $this->Html->image('ajax-loader.gif', array('alt' => 'loading', "style" => "display:none;", "id" => "loading")); ?>
+            <div id="load"></div>
         </div>
 
     </div>
 </div>
 
 <div class="actions">
+    <h2><?php echo __('Filtriranje'); ?></h2>
     <?php
     echo $this->Form->create('Term', array('action' => 'search'));
 
@@ -136,6 +139,8 @@ $this->Paginator->options(array(
 
 <?php
 echo $this->Html->script('search');
+//echo $this->Html->script('jquery.activity-indicator-1.0.0');
+
 //$this->Js->get('#search');
 //$this->Js->event('click', $this->Js->alert('hey you!'));
 //?>
