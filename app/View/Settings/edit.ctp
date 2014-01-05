@@ -15,4 +15,4 @@ echo $this->Form->submit('Sačuvaj podešavanja', array(
 echo $this->Form->end();
 ?>
 
-<?php echo $this->Js->writeBuffer(array('cache' => TRUE)); ?>
+

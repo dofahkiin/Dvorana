@@ -834,7 +834,7 @@ margin-top: 20px;
     vertical-align: text-top;
 }
 
-#UserEditForm .input, #UserHomeForm .input, #SettingEditForm input{
+#UserEditForm .input, #UserHomeForm .input{
     width: 400px;
 
 }
@@ -842,4 +842,8 @@ margin-top: 20px;
 .filtriranje{
     float:left;
     width:20%;
+}
+
+#SettingEditForm .input.text.required {
+    width: 500px;
 }
