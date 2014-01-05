@@ -810,7 +810,8 @@ nav ul li ul li a {
 }
 
 #loading {
-    display: block;
+    /*display: block;*/
     margin-left: auto;
     margin-right: auto;
+    height: 20px;
 }
