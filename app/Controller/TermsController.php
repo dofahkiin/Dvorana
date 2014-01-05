@@ -14,13 +14,14 @@ class TermsController extends AppController
      *
      * @var array
      */
-    public $components = array('Paginator','RequestHandler');
+    public $components = array('Paginator', 'RequestHandler');
 
     public $helpers = array('Js');
 
-    public $uses = array('Term','Setting');
+    public $uses = array('Term', 'Setting');
 
     private $cijena = 5;
+
     /**
      * index method
      *
@@ -161,16 +162,15 @@ class TermsController extends AppController
         if (isset($id) && $this->Term->exists($id)) {
             $currentDay = $this->Term->find('all', array(
                 'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)),
-                                      'Term.id <>' => $id,
-                                      'Term.hall_id' => $hall)
+                    'Term.id <>' => $id,
+                    'Term.hall_id' => $hall)
             ));
 
             $this->checkOverlap($currentDay, $start, $end);
 
-            $price = $this->getPrice($date, $start,$end);
+            $price = $this->getPrice($date, $start, $end);
 
-            if($_POST['iznos'] != "")
-            {
+            if ($_POST['iznos'] != "") {
                 $price = (float)$_POST['iznos'];
             }
 
@@ -189,12 +189,12 @@ class TermsController extends AppController
 
             $currentDay = $this->Term->find('all', array(
                 'conditions' => array('Term.date' => date("Y-m-d", strtotime($date)),
-                                      'Term.hall_id' => $hall)
+                    'Term.hall_id' => $hall)
             ));
 
             $this->checkOverlap($currentDay, $start, $end);
 
-            $price = $this->getPrice($date, $start,$end);
+            $price = $this->getPrice($date, $start, $end);
 
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
             $this->request->data['Term']['status'] = $status;
@@ -222,7 +222,7 @@ class TermsController extends AppController
         $ownerTerms = array();
         foreach ($allTerms as $row) {
             if ($row['Term']['hall_id'] == $_REQUEST['hall']) {
-                if($row['Term']['client_id'] == $this->Auth->user('id')){
+                if ($row['Term']['client_id'] == $this->Auth->user('id')) {
                     $ownerTerms[] = $row['Term']['id'];
                 }
 
@@ -284,7 +284,7 @@ class TermsController extends AppController
         ));
         $this->checkOverlap($currentDay, $start, $end);
 
-        $price = $this->getPrice($date, $start,$end);
+        $price = $this->getPrice($date, $start, $end);
         $this->Term->read(null, $id);
         $this->Term->set(array(
             'start' => $start,
@@ -328,7 +328,6 @@ class TermsController extends AppController
 //    }
 
 
-
     public function izvjestaj()
     {
 
@@ -348,12 +347,8 @@ class TermsController extends AppController
                 'limit' => 10,
                 'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
             );
-
-
-
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
-
         }
     }
 
@@ -489,13 +484,14 @@ class TermsController extends AppController
         }
     }
 
-    public function getPrice($date, $start, $end){
-        $startTime = new DateTime(date("Y-m-d", strtotime($date)).'T'.$start);
-        $endTime = new DateTime(date("Y-m-d", strtotime($date)).'T'.$end);
+    public function getPrice($date, $start, $end)
+    {
+        $startTime = new DateTime(date("Y-m-d", strtotime($date)) . 'T' . $start);
+        $endTime = new DateTime(date("Y-m-d", strtotime($date)) . 'T' . $end);
         $interval = $startTime->diff($endTime);
-        $minutes = $interval->i+ $interval->h*60;
+        $minutes = $interval->i + $interval->h * 60;
 
-        return $minutes*$this->cijena/15;
+        return $minutes * $this->cijena / 15;
 
     }
 

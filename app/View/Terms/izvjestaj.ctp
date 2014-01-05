@@ -1,16 +1,17 @@
 <?php
 echo $this->Html->script('jquery-1.10.2', FALSE);
 $this->Paginator->options(array(
-    'update' => '#content'
+    'update' => '#content',
+    'before' => $this->Js->get('#loading')->effect('fadeIn',
+    array('buffer' => false)),
+    'complete' => $this->Js->get('#loading')->effect('fadeOut',
+    array('buffer' => false))
 ));
 
 
 ?>
 <div class="terms index">
     <h2><?php echo __('Terms'); ?></h2>
-
-
-
     <?php
     if ($userData['role'] == 'Klijent') {
         ?>
@@ -121,6 +122,10 @@ $this->Paginator->options(array(
     echo $this->Form->end();
     ?>
 </div>
+
+
+<?php echo $this->Html->image('ajax-loader.gif', array('alt' => 'loading', "style" => "display:none;", "id"=>"loading")); ?>
+
 
 <?php
 

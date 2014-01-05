@@ -808,3 +808,9 @@ nav ul li ul li a {
     display:inline-block;
     margin-right: 5px;
 }
+
+#loading {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
