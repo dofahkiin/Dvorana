@@ -148,7 +148,7 @@ echo $this->Html->script('search');
 
 ?>
 
-<?php echo $this->Js->writeBuffer(array('cache' => TRUE)); ?>
+<?php echo $this->Js->writeBuffer(); ?>
 
 
 

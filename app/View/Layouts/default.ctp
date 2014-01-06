@@ -39,7 +39,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 
-        echo $this->Js->writeBuffer(array('cache'=>TRUE));
+        echo $this->Js->writeBuffer();
 	?>
 </head>
 <body>
@@ -49,9 +49,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
             <nav>
                 <ul>
                     <li><a href="/github/dvorana">Home</a></li>
-
-
-
                     <?php
                     if($userData != null){
                         echo "<li><a href=\"/github/dvorana/terms\">Termini</a></li>";

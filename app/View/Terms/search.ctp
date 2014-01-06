@@ -81,5 +81,5 @@ $this->Paginator->options(array(
 
 
 <?php
-echo $this->Js->writeBuffer(array('cache' => TRUE));
+echo $this->Js->writeBuffer();
 ?>
