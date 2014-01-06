@@ -15,12 +15,12 @@ $this->Paginator->options(array(
 
             <table cellpadding="0" cellspacing="0">
                 <tr>
-                    <th><?php echo $this->Paginator->sort('date'); ?></th>
-                    <th><?php echo $this->Paginator->sort('status'); ?></th>
-                    <th><?php echo $this->Paginator->sort('term'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Datum'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Status'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Termin'); ?></th>
                     <th><?php echo $this->Paginator->sort('Sala'); ?></th>
-                    <th><?php echo $this->Paginator->sort('comment'); ?></th>
-                    <th><?php echo $this->Paginator->sort('price'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Komentar'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Cijena'); ?></th>
                 </tr>
                 <?php foreach ($terms as $term): ?>
                     <tr>
@@ -38,13 +38,13 @@ $this->Paginator->options(array(
 
             <table cellpadding="0" cellspacing="0">
                 <tr>
-                    <th><?php echo $this->Paginator->sort('date'); ?></th>
-                    <th><?php echo $this->Paginator->sort('status'); ?></th>
-                    <th><?php echo $this->Paginator->sort('term'); ?></th>
-                    <th><?php echo $this->Paginator->sort('name'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Datum'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Status'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Termin'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Ime i prezime'); ?></th>
                     <th><?php echo $this->Paginator->sort('Sala'); ?></th>
-                    <th><?php echo $this->Paginator->sort('comment'); ?></th>
-                    <th><?php echo $this->Paginator->sort('price'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Komentar'); ?></th>
+                    <th><?php echo $this->Paginator->sort('Cijena'); ?></th>
                 </tr>
                 <?php foreach ($terms as $term): ?>
                     <tr>
@@ -65,15 +65,15 @@ $this->Paginator->options(array(
         <p>
             <?php
             echo $this->Paginator->counter(array(
-                'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+                'format' => __('Stranica {:page} od {:pages}, prikazano {:current} termina od ukupno {:count}, počinje od {:start}, završava na {:end}')
             ));
             ?>    </p>
 
         <div class="paging">
             <?php
-            echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+            echo $this->Paginator->prev('< ' . __('prethodni'), array(), null, array('class' => 'prev disabled'));
             echo $this->Paginator->numbers(array('separator' => ''));
-            echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+            echo $this->Paginator->next(__('sljedeći') . ' >', array(), null, array('class' => 'next disabled'));
             ?>
         </div>
 
