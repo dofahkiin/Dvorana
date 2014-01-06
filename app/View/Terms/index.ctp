@@ -15,16 +15,16 @@ echo $this->Html->script(array(
                 <input type="hidden"/>
                 <ul>
                     <li>
-                        <span>Date: </span><span class="date_holder"></span>
+                        <span>Datum: </span><span class="date_holder"></span>
                     </li>
                     <li>
-                        <label for="start">Start Time: </label><select name="start" id="start">
-                            <option value="">Select Start Time</option>
+                        <label for="start">Početak termina: </label><select name="start" id="start">
+                            <option value="">Izaberite početak termina</option>
                         </select>
                     </li>
                     <li>
-                        <label for="end">End Time: </label><select name="end" id="end">
-                            <option value="">Select End Time</option>
+                        <label for="end">Kraj termina: </label><select name="end" id="end">
+                            <option value="">Izaberite kraj termina</option>
                         </select>
                     </li>
                     <li id="status">
@@ -38,7 +38,7 @@ echo $this->Html->script(array(
 
                     </li>
                     <li>
-                        <label for="body">Body: </label><textarea name="body"></textarea>
+                        <label for="body">Komentar: </label><textarea name="body"></textarea>
                     </li>
                     <li>
                         <label for="price" class="price">Cijena: </label><label name="price" id="price" class="price"></label>

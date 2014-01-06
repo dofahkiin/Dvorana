@@ -79,7 +79,6 @@ $(document).ready(function () {
                 resetForm($dialogContent);
                 var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
                 var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
-                var titleField = $dialogContent.find("input[name='title']");
                 var bodyField = $dialogContent.find("textarea[name='body']");
                 var statusField = $dialogContent.find("select[name='status']");
                 priceField = $dialogContent.find("label[name='price']");
@@ -89,7 +88,7 @@ $(document).ready(function () {
 
                 $dialogContent.dialog({
                     modal: true,
-                    title: "New Calendar Event",
+                    title: "Novi termin",
                     close: function () {
                         $dialogContent.dialog("destroy");
                         $dialogContent.hide();
@@ -104,7 +103,6 @@ $(document).ready(function () {
                             id++;
                             calEvent.start = new Date(startField.val());
                             calEvent.end = new Date(endField.val());
-                            calEvent.title = titleField.val();
                             calEvent.body = bodyField.val();
                             calEvent.status = statusField.val();
                             calEvent.hall = sale.val();
@@ -112,7 +110,6 @@ $(document).ready(function () {
                             //post to events.php
                             var start = calEvent.start.getTime() / 1000;
                             var end = calEvent.end.getTime() / 1000;
-                            var title = calEvent.title;
                             var body = calEvent.body;
 
 
@@ -182,7 +179,6 @@ $(document).ready(function () {
             resetForm($dialogContent);
             var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
             var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
-            var titleField = $dialogContent.find("input[name='title']").val(calEvent.title);
             var statusField = $dialogContent.find("select[name='status']").val(calEvent.status);
             var bodyField = $dialogContent.find("textarea[name='body']");
             bodyField.val(calEvent.body);
@@ -199,7 +195,7 @@ $(document).ready(function () {
 
             $dialogContent.dialog({
                 modal: true,
-                title: "Edit - " + calEvent.title,
+                title: "Uređivanje termina",
                 close: function () {
                     $dialogContent.dialog("destroy");
                     $dialogContent.hide();
@@ -211,7 +207,6 @@ $(document).ready(function () {
 
                         calEvent.start = new Date(startField.val());
                         calEvent.end = new Date(endField.val());
-                        calEvent.title = titleField.val();
                         calEvent.body = bodyField.val();
                         calEvent.status = statusField.val();
                         calEvent.hall = sale.val();
@@ -219,7 +214,6 @@ $(document).ready(function () {
                         var iznos = iznosField.val();
                         var start = calEvent.start.getTime() / 1000;
                         var end = calEvent.end.getTime() / 1000;
-                        var title = calEvent.title;
                         var body = calEvent.body;
 
                         $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, id: calEvent.id, hall: calEvent.hall, iznos: iznos}, function (data) {
@@ -248,8 +242,8 @@ $(document).ready(function () {
                 }
             }).show();
 
-            var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
-            var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
+            startField = $dialogContent.find("select[name='start']").val(calEvent.start);
+            ndField = $dialogContent.find("select[name='end']").val(calEvent.end);
             $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
             setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
             $(window).resize().resize(); //fixes a bug in modal overlay size ??
