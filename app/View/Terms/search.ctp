@@ -1,6 +1,6 @@
 <?php
 $this->Paginator->options(array(
-    'update' => '#listaPretrage',
+    'update' => '#listaTermina',
     'before' => "$('#load').activity()",
     'complete' => "$('#load').activity(false)",
     'evalScripts' => true
@@ -8,7 +8,7 @@ $this->Paginator->options(array(
 
 ?>
 
-<div id="listaPretrage">
+
     <div class="terms index">
         <h2><?php echo __('Pretraga'); ?></h2>
         <?php
@@ -93,7 +93,6 @@ $this->Paginator->options(array(
 
     </div>
 
-</div>
 
 <?php
 echo $this->Js->writeBuffer(array('cache' => TRUE));
