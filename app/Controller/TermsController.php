@@ -355,221 +355,113 @@ class TermsController extends AppController
 
     public function search()
     {
-        if (isset($_REQUEST["data"])) {
-
-            $keyword = $_REQUEST["data"]["Term"]["date"];
-            $od = $_REQUEST["data"]["Term"]["od"];
-            $do = $_REQUEST["data"]["Term"]["do"];
-            $hall = $_REQUEST["data"]["Term"]["hall"];
-            $status = "";
-            $name = "";
-            $surname = "";
-
-            if ($this->Auth->user('role') == 'Menadžer') {
-                $status = $_REQUEST["data"]["Term"]["status"];
-                $name = $_REQUEST["data"]["Term"]["name"];
-                $surname = $_REQUEST["data"]["Term"]["surname"];
-            }
-
-            if ($_REQUEST["data"]["Term"]["vrijemeOd"]["hour"] != "") {
-                $vrijemeOd = $_REQUEST["data"]["Term"]["vrijemeOd"]["hour"] .
-                    ':' .
-                    $_REQUEST["data"]["Term"]["vrijemeOd"]["min"] .
-                    ':' .
-                    '00';
-                $vrijemeOd = $_REQUEST["data"]["Term"]["vrijemeOd"] = $vrijemeOd;
-            } else {
-                $vrijemeOd = "";
-                $vrijemeOd = $_REQUEST["data"]["Term"]["vrijemeOd"] = "";
-            }
-
-            if ($_REQUEST["data"]["Term"]["vrijemeDo"]["hour"] != "") {
-                $vrijemeDo = $_REQUEST["data"]["Term"]["vrijemeDo"]["hour"] .
-                    ':' .
-                    $_REQUEST["data"]["Term"]["vrijemeDo"]["min"] .
-                    ':' .
-                    '00';
-                $_REQUEST["data"]["Term"]["vrijemeDo"] = $vrijemeDo;
-            } else {
-                $vrijemeDo = "";
-                $_REQUEST["data"]["Term"]["vrijemeDo"] = "";
-            }
 
 
-            if ($_REQUEST["data"]["Term"]["vrijemeT"]["hour"] != "") {
-                $vrijemeT = $_REQUEST["data"]["Term"]["vrijemeT"]["hour"] .
-                    ':' .
-                    $_REQUEST["data"]["Term"]["vrijemeT"]["min"] .
-                    ':' .
-                    '00';
-                $_REQUEST["data"]["Term"]["vrijemeT"] = $vrijemeT;
-            } else {
-                $vrijemeT = "";
-                $_REQUEST["data"]["Term"]["vrijemeT"] = "";
-            }
+        $keyword = $_REQUEST["TermDate"];
+        $od = $_REQUEST["TermOd"];
+        $do = $_REQUEST["TermDo"];
+        $hall = $_REQUEST["TermHall"];
+        $status = "";
+        $name = "";
+        $surname = "";
 
-            $this->Term->recursive = 0;
-
-            $range = array();
-            $num = count(array_filter($_REQUEST["data"]["Term"]));
-            if (count(array_filter($_REQUEST["data"]["Term"])) > 1) {
-                $cond = array();
-                if ($keyword != "") {
-                    $cond[] = array('Term.date' => $keyword);
-                }
-                if ($od != "") {
-                    $cond[] = array('Term.date >=' => $od);
-                }
-                if ($do != "") {
-                    $cond[] = array('Term.date <=' => $do);
-                }
-                if ($hall != "") {
-                    $cond[] = array('Term.hall_id' => $hall);
-                }
-                if ($status != "") {
-                    $cond[] = array('Term.status' => $status);
-                }
-                if ($vrijemeT != "") {
-                    $cond[] = array('Term.start' => $vrijemeT);
-                }
-                if ($vrijemeOd != "") {
-                    $cond[] = array('Term.start >=' => $vrijemeOd);
-                }
-                if ($vrijemeDo != "") {
-                    $cond[] = array('Term.start <=' => $vrijemeDo);
-                }
-
-                if ($name != "") {
-                    $cond[] = array('User.name' => $name);
-                }
-                if ($surname != "") {
-                    $cond[] = array('User.surname' => $surname);
-                }
-                $range = array('AND' => $cond);
-            } else {
-                $range = array('OR' => array(
-                    'Term.date' => $keyword,
-                    'Term.date >=' => $od,
-                    'Term.date <=' => $do,
-                    'Term.hall_id' => $hall,
-                    'Term.status' => $status,
-                    'Term.start >=' => $vrijemeOd,
-                    'Term.start <=' => $vrijemeDo,
-                    'Term.start' => $vrijemeT,
-                    'User.name' => $name,
-                    'User.surname' => $surname));
-            }
-
-
-        } else {
-
-
-            $keyword = $_REQUEST["TermDate"];
-            $od = $_REQUEST["TermOd"];
-            $do = $_REQUEST["TermDo"];
-            $hall = $_REQUEST["TermHall"];
-            $status = "";
-            $name = "";
-            $surname = "";
-
-            if ($this->Auth->user('role') == 'Menadžer') {
-                $status = $_REQUEST["TermStatus"];
-                $name = $_REQUEST["TermName"];
-                $surname = $_REQUEST["TermSurname"];
-            }
-
-
-            if ($_REQUEST["TermVrijemeOdHour"] != "") {
-                $vrijemeOd = $_REQUEST["TermVrijemeOdHour"] .
-                    ':' .
-                    $_REQUEST["TermVrijemeOdMin"] .
-                    ':' .
-                    '00';
-                $_REQUEST["vrijemeOd"] = $vrijemeOd;
-            } else {
-                $vrijemeOd = "";
-                $_REQUEST["vrijemeOd"] = "";
-            }
-
-            if ($_REQUEST["TermVrijemeDoHour"] != "") {
-                $vrijemeDo = $_REQUEST["TermVrijemeDoHour"] .
-                    ':' .
-                    $_REQUEST["TermVrijemeDoMin"] .
-                    ':' .
-                    '00';
-                $_REQUEST["vrijemeDo"] = $vrijemeDo;
-            } else {
-                $vrijemeDo = "";
-                $_REQUEST["vrijemeDo"] = "";
-            }
-
-
-            if ($_REQUEST["TermVrijemeTHour"] != "") {
-                $vrijemeT = $_REQUEST["TermVrijemeTHour"] .
-                    ':' .
-                    $_REQUEST["TermVrijemeTMin"] .
-                    ':' .
-                    '00';
-                $_REQUEST["vrijemeT"] = $vrijemeT;
-            } else {
-                $vrijemeT = "";
-                $_REQUEST["vrijemeT"] = "";
-            }
-
-
-            $this->Term->recursive = 0;
-
-            $range = array();
-            $num = count(array_filter($_REQUEST));
-            if (count(array_filter($_REQUEST)) > 1) {
-                $cond = array();
-                if ($keyword != "") {
-                    $cond[] = array('Term.date' => $keyword);
-                }
-                if ($od != "") {
-                    $cond[] = array('Term.date >=' => $od);
-                }
-                if ($do != "") {
-                    $cond[] = array('Term.date <=' => $do);
-                }
-                if ($hall != "") {
-                    $cond[] = array('Term.hall_id' => $hall);
-                }
-                if ($status != "") {
-                    $cond[] = array('Term.status' => $status);
-                }
-                if ($vrijemeT != "") {
-                    $cond[] = array('Term.start' => $vrijemeT);
-                }
-                if ($vrijemeOd != "") {
-                    $cond[] = array('Term.start >=' => $vrijemeOd);
-                }
-                if ($vrijemeDo != "") {
-                    $cond[] = array('Term.start <=' => $vrijemeDo);
-                }
-
-                if ($name != "") {
-                    $cond[] = array('User.name' => $name);
-                }
-                if ($surname != "") {
-                    $cond[] = array('User.surname' => $surname);
-                }
-                $range = array('AND' => $cond);
-            } else {
-                $range = array('OR' => array(
-                    'Term.date' => $keyword,
-                    'Term.date >=' => $od,
-                    'Term.date <=' => $do,
-                    'Term.hall_id' => $hall,
-                    'Term.status' => $status,
-                    'Term.start >=' => $vrijemeOd,
-                    'Term.start <=' => $vrijemeDo,
-                    'Term.start' => $vrijemeT,
-                    'User.name' => $name,
-                    'User.surname' => $surname));
-            }
-
+        if ($this->Auth->user('role') == 'Menadžer') {
+            $status = $_REQUEST["TermStatus"];
+            $name = $_REQUEST["TermName"];
+            $surname = $_REQUEST["TermSurname"];
         }
+
+
+        if ($_REQUEST["TermVrijemeOdHour"] != "") {
+            $vrijemeOd = $_REQUEST["TermVrijemeOdHour"] .
+                ':' .
+                $_REQUEST["TermVrijemeOdMin"] .
+                ':' .
+                '00';
+            $_REQUEST["vrijemeOd"] = $vrijemeOd;
+        } else {
+            $vrijemeOd = "";
+            $_REQUEST["vrijemeOd"] = "";
+        }
+
+        if ($_REQUEST["TermVrijemeDoHour"] != "") {
+            $vrijemeDo = $_REQUEST["TermVrijemeDoHour"] .
+                ':' .
+                $_REQUEST["TermVrijemeDoMin"] .
+                ':' .
+                '00';
+            $_REQUEST["vrijemeDo"] = $vrijemeDo;
+        } else {
+            $vrijemeDo = "";
+            $_REQUEST["vrijemeDo"] = "";
+        }
+
+
+        if ($_REQUEST["TermVrijemeTHour"] != "") {
+            $vrijemeT = $_REQUEST["TermVrijemeTHour"] .
+                ':' .
+                $_REQUEST["TermVrijemeTMin"] .
+                ':' .
+                '00';
+            $_REQUEST["vrijemeT"] = $vrijemeT;
+        } else {
+            $vrijemeT = "";
+            $_REQUEST["vrijemeT"] = "";
+        }
+
+
+        $this->Term->recursive = 0;
+
+        $range = array();
+        $num = count(array_filter($_REQUEST));
+        if (count(array_filter($_REQUEST)) > 1) {
+            $cond = array();
+            if ($keyword != "") {
+                $cond[] = array('Term.date' => $keyword);
+            }
+            if ($od != "") {
+                $cond[] = array('Term.date >=' => $od);
+            }
+            if ($do != "") {
+                $cond[] = array('Term.date <=' => $do);
+            }
+            if ($hall != "") {
+                $cond[] = array('Term.hall_id' => $hall);
+            }
+            if ($status != "") {
+                $cond[] = array('Term.status' => $status);
+            }
+            if ($vrijemeT != "") {
+                $cond[] = array('Term.start' => $vrijemeT);
+            }
+            if ($vrijemeOd != "") {
+                $cond[] = array('Term.start >=' => $vrijemeOd);
+            }
+            if ($vrijemeDo != "") {
+                $cond[] = array('Term.start <=' => $vrijemeDo);
+            }
+
+            if ($name != "") {
+                $cond[] = array('User.name' => $name);
+            }
+            if ($surname != "") {
+                $cond[] = array('User.surname' => $surname);
+            }
+            $range = array('AND' => $cond);
+        } else {
+            $range = array('OR' => array(
+                'Term.date' => $keyword,
+                'Term.date >=' => $od,
+                'Term.date <=' => $do,
+                'Term.hall_id' => $hall,
+                'Term.status' => $status,
+                'Term.start >=' => $vrijemeOd,
+                'Term.start <=' => $vrijemeDo,
+                'Term.start' => $vrijemeT,
+                'User.name' => $name,
+                'User.surname' => $surname));
+        }
+
 
         if ($this->Auth->user('role') == 'Klijent') {
             $this->Paginator->settings = array(

@@ -97,11 +97,13 @@ $this->Paginator->options(array(
             echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
             ?>
             <?php echo $this->Html->image('ajax-loader.gif', array('alt' => 'loading', "style" => "display:none;", "id" => "loading")); ?>
-            <div id="load"></div>
+
         </div>
 
     </div>
 </div>
+
+
 
 <div class="filtriranje">
     <h2><?php echo __('Filtriranje'); ?></h2>
@@ -152,6 +154,8 @@ $this->Paginator->options(array(
         ?>
     </div>
 </div>
+
+<div id="load"></div>
 
 
 <div id="pretraga">

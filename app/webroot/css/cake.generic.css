@@ -847,3 +847,7 @@ margin-top: 20px;
 #SettingEditForm .input.text.required {
     width: 500px;
 }
+
+#load {
+    margin-top: 30px;
+}
