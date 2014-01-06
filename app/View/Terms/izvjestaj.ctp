@@ -26,7 +26,6 @@ $this->Paginator->options(array(
                     <th><?php echo $this->Paginator->sort('Sala'); ?></th>
                     <th><?php echo $this->Paginator->sort('comment'); ?></th>
                     <th><?php echo $this->Paginator->sort('price'); ?></th>
-                    <th class="actions"><?php // echo __('Actions'); ?></th>
                 </tr>
 
                 <?php foreach ($terms as $term): ?>
@@ -37,11 +36,6 @@ $this->Paginator->options(array(
                         <td><?php echo h($term['Hall']['name']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['comment']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['price']); ?>&nbsp;</td>
-                        <td class="actions">
-                            <?php // echo $this->Html->link(__('View'), array('action' => 'view', $term['Term']['id'])); ?>
-                            <?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $term['Term']['id'])); ?>
-                            <?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $term['Term']['id']), null, __('Are you sure you want to delete # %s?', $term['Term']['id'])); ?>
-                        </td>
                     </tr>
                 <?php endforeach; ?>
 
@@ -58,7 +52,6 @@ $this->Paginator->options(array(
                     <th><?php echo $this->Paginator->sort('Sala'); ?></th>
                     <th><?php echo $this->Paginator->sort('comment'); ?></th>
                     <th><?php echo $this->Paginator->sort('price'); ?></th>
-                    <th class="actions"><?php // echo __('Actions'); ?></th>
                 </tr>
 
                 <?php foreach ($terms as $term): ?>
@@ -70,11 +63,6 @@ $this->Paginator->options(array(
                         <td><?php echo h($term['Hall']['name']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['comment']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['price']); ?>&nbsp;</td>
-                        <td class="actions">
-                            <?php // echo $this->Html->link(__('View'), array('action' => 'view', $term['Term']['id'])); ?>
-                            <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $term['Term']['id'])); ?>
-                            <?php // echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $term['Term']['id']), null, __('Are you sure you want to delete # %s?', $term['Term']['id'])); ?>
-                        </td>
                     </tr>
                 <?php endforeach; ?>
 
