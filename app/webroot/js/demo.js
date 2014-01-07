@@ -13,6 +13,16 @@ $(document).ready(function () {
     var allTerms;
     toastr.options = {"positionClass": "toast-bottom-full-width"};
 
+
+    function saveChangedTerm(calEvent) {
+        $.each(allTerms, function (index, term) {
+            if (term.id == calEvent.id) {
+                term.start = calEvent.start;
+                term.end = calEvent.end;
+            }
+        });
+    }
+
     $calendar.weekCalendar({
 
         daysToShow: 7,
@@ -72,74 +82,7 @@ $(document).ready(function () {
                 $calendar.weekCalendar("removeUnsavedEvents");
             }
             else {
-                if (!menadzer) {
-                    $("#status").hide();
-                }
-                $('.iznos').hide();
-                var $dialogContent = $("#event_edit_container");
-                resetForm($dialogContent);
-                var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
-                var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
-                var bodyField = $dialogContent.find("textarea[name='body']");
-                var statusField = $dialogContent.find("select[name='status']");
-                priceField = $dialogContent.find("label[name='price']");
-
-                minutes = getMinutes(calEvent.start, calEvent.end);
-                priceField.text(minutes * cijena / 15);
-
-                $dialogContent.dialog({
-                    modal: true,
-                    title: "Novi termin",
-                    close: function () {
-                        $dialogContent.dialog("destroy");
-                        $dialogContent.hide();
-                        clearTime();
-                        $('#calendar').weekCalendar("removeUnsavedEvents");
-                    },
-                    buttons: {
-                        save: function () {
-
-
-                            calEvent.id = id;
-                            id++;
-                            calEvent.start = new Date(startField.val());
-                            calEvent.end = new Date(endField.val());
-                            calEvent.body = bodyField.val();
-                            calEvent.status = statusField.val();
-                            calEvent.hall = sale.val();
-
-                            //post to events.php
-                            var start = calEvent.start.getTime() / 1000;
-                            var end = calEvent.end.getTime() / 1000;
-                            var body = calEvent.body;
-
-
-                            $.post(myBaseUrl + "terms/save", {start: start, end: end, status: calEvent.status, body: body, hall: calEvent.hall }, function (data) {
-                                var tmp = jQuery.parseJSON(data);
-                                if (tmp == "error") {
-                                    toastr.error("Greška, izaberite slobodan termin");
-                                }
-                                else {
-                                    calEvent.id = tmp;
-                                    ownerTerms["owner"].push(calEvent.id);
-                                    allTerms.push(calEvent);
-                                    $calendar.weekCalendar("removeUnsavedEvents");
-                                    $calendar.weekCalendar("updateEvent", calEvent);
-                                    clearTime();
-                                    $dialogContent.dialog("close");
-                                }
-                            });
-
-
-                        },
-                        cancel: function () {
-                            $dialogContent.dialog("close");
-                        }
-                    }
-                }).show();
-
-                $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
-                setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
+                noviTermin(calEvent);
             }
 
 
@@ -160,13 +103,7 @@ $(document).ready(function () {
                 }, null);
 
 
-                $.each(allTerms, function(index, term)
-                {
-                    if(term.id == calEvent.id){
-                        term.start = calEvent.start;
-                        term.end = calEvent.end;
-                    }
-                });
+                saveChangedTerm(calEvent);
 
             }
         },
@@ -179,13 +116,7 @@ $(document).ready(function () {
                 'end': calEvent.end.getTime() / 1000
             }, null);
 
-            $.each(allTerms, function(index, term)
-            {
-                if(term.id == calEvent.id){
-                    term.start = calEvent.start;
-                    term.end = calEvent.end;
-                }
-            });
+            saveChangedTerm(calEvent);
 
         },
         eventClick: function (calEvent, $event) {
@@ -262,7 +193,7 @@ $(document).ready(function () {
             }).show();
 
             startField = $dialogContent.find("select[name='start']").val(calEvent.start);
-            ndField = $dialogContent.find("select[name='end']").val(calEvent.end);
+            endField = $dialogContent.find("select[name='end']").val(calEvent.end);
             $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
             setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
             $(window).resize().resize(); //fixes a bug in modal overlay size ??
@@ -502,8 +433,11 @@ $(document).ready(function () {
         calEvent.start = termin;
         calEvent.end = new Date(termin.getTime() + 30*60*1000);
 
+        noviTermin(calEvent);
 
+    });
 
+    function noviTermin(calEvent) {
         if (!menadzer) {
             $("#status").hide();
         }
@@ -572,7 +506,6 @@ $(document).ready(function () {
 
         $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
         setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
-
-    });
+    }
 
 });
