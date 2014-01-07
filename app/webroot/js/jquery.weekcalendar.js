@@ -253,11 +253,15 @@
 
 
 
-/*
-      getData : function(key) {
-         return this._getData(key);
+
+      getOptions : function() {
+         return this.options;
       },
-      */
+
+      scroll : function(hour){
+        this._scrollToHour(hour);
+       },
+
 
       /*********************
        * private functions *
@@ -1026,7 +1030,7 @@
             grid: options.timeslotHeight,
             containment : $weekDay,
             handles: "s",
-            minHeight: options.timeslotHeight,
+            minHeight: options.timeslotHeight*2,
             stop :function(event, ui) {
                var $calEvent = ui.element;
                var newEnd = new Date($calEvent.data("calEvent").start.getTime() + ($calEvent.height() / options.timeslotHeight) * options.millisPerTimeslot);

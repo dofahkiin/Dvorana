@@ -232,23 +232,12 @@ class TermsController extends AppController
                 $termArray['id'] = $row['Term']['id'];
                 $termArray['status'] = $row['Term']['status'];
                 $termArray['body'] = $row['Term']['comment'];
-//                $termArray['start'] = date('Y-m-d\TH:i', strtotime($row['Term']['start']));
                 $termArray['start'] = date('Y-m-d\T', strtotime($date)) . date('H:i', strtotime($start));
-//                $termArray['end'] = date('Y-m-d\TH:i', strtotime($row['Term']['end']));
                 $termArray['end'] = date('Y-m-d\T', strtotime($date)) . date('H:i', strtotime($end));
                 $termArray['hall'] = $row['Term']['hall_id'];
                 $terms[] = $termArray;
             }
         }
-
-//        $owner = $this->Term->find('all', array(
-//           'conditions' => array('Term.client_id' => $this->Auth->user('id'))
-//        ));
-//
-//        $ownerTerms = array();
-//        foreach($owner as $row){
-//            $ownerTerms[] = $row['Term']['id'];
-//        }
 
         $menadzer = ($this->Auth->user('role') == 'Menadžer');
 

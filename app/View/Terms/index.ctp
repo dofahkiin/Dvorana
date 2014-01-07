@@ -7,6 +7,14 @@ echo $this->Html->script(array(
     'jquery.weekcalendar', 'demo', 'toastr'));
 ?>
 
+<div id="termSidebar">
+    <div id="kalendar">
+    <h2><?php echo __('Kalendar'); ?></h2>
+    </div>
+    <input id="noviTermin" type="submit" value="Novi termin">
+
+</div>
+
 <div class="terms index">
     <div id="cal">
         <div id='calendar'></div>

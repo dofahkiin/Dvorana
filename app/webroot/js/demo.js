@@ -338,7 +338,7 @@ $(document).ready(function () {
                 return false;
             }
         });
-
+        $endTimeField[0][0].remove();
         if (!endTimeSelected) {
             //automatically select an end date 2 slots away.
             $endTimeField.find("option:eq(1)").attr("selected", "selected");
@@ -405,5 +405,35 @@ $(document).ready(function () {
         minutes = getMinutes(getDate(startTime), getDate(endTime));
         priceField.text(minutes * cijena / 15 + 'KM');
     }
+
+    $('#noviTermin').click(function () {
+        var termin;
+        var timeSlots;
+        var danTermina = new Date();
+        danTermina.setDate(danTermina.getDate()+limit);
+
+        var terminPronadjen = false;
+
+        while(!terminPronadjen)
+        {
+            timeSlots = $("#calendar").weekCalendar("getTimeslotTimes", danTermina);
+
+            for(var i=0; i<timeSlots.length-1; i++)
+            {
+                if(timeSlots[i].endFormatted == timeSlots[i+1].startFormatted )
+                {
+
+                }
+
+            }
+        }
+
+
+        var options = $("#calendar").weekCalendar("getOptions");
+        var pocetak = options.businessHours.start;
+        var kraj =  options.businessHours.end;
+
+
+    });
 
 });
