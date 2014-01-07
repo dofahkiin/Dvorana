@@ -340,7 +340,7 @@ $(document).ready(function () {
             if (ind < terminiDan.length - 1) {
                 var tmp2 = tmp.filter(function () {
                     console.log($(this).val());
-                    if(terminiDan[ind+1].start.toString() > $(this).val()){
+                    if(terminiDan[ind+1].start.toString() >= $(this).val()){
                         return $(this).val();
                     }
 
