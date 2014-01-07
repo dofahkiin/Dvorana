@@ -4,8 +4,8 @@ $(document).ready(function () {
         $.ajax({
             dataType: "html",
             success: function (data, textStatus) {
-                $("#listaTermina").children().remove();
-                $("#listaTermina").html(data);
+                $("#listaTermina").children().remove().end().html(data);
+//                $("#listaTermina").html(data);
             },
             url: myBaseUrl + "terms/search",
             data: { TermDate: $('#TermDate').val(),

@@ -10,6 +10,7 @@ $(document).ready(function () {
     var cijena = 5;
     var minutes;
     var priceField;
+    var allTerms;
     toastr.options = {"positionClass": "toast-bottom-full-width"};
 
     $calendar.weekCalendar({
@@ -121,6 +122,7 @@ $(document).ready(function () {
                                 else {
                                     calEvent.id = tmp;
                                     ownerTerms["owner"].push(calEvent.id);
+                                    allTerms.push(calEvent);
                                     $calendar.weekCalendar("removeUnsavedEvents");
                                     $calendar.weekCalendar("updateEvent", calEvent);
                                     clearTime();
@@ -157,6 +159,15 @@ $(document).ready(function () {
                     'end': calEvent.end.getTime() / 1000
                 }, null);
 
+
+                $.each(allTerms, function(index, term)
+                {
+                    if(term.id == calEvent.id){
+                        term.start = calEvent.start;
+                        term.end = calEvent.end;
+                    }
+                });
+
             }
         },
 
@@ -166,7 +177,15 @@ $(document).ready(function () {
                 'id': calEvent.id,
                 'start': calEvent.start.getTime() / 1000,
                 'end': calEvent.end.getTime() / 1000
-            }, null)
+            }, null);
+
+            $.each(allTerms, function(index, term)
+            {
+                if(term.id == calEvent.id){
+                    term.start = calEvent.start;
+                    term.end = calEvent.end;
+                }
+            });
 
         },
         eventClick: function (calEvent, $event) {
@@ -272,6 +291,7 @@ $(document).ready(function () {
 
                 ownerTerms = result.pop();
 
+                allTerms = result;
 
                 callback(result);
             });
@@ -408,31 +428,79 @@ $(document).ready(function () {
 
     $('#noviTermin').click(function () {
         var termin;
+        var count = 0;
+        var zauzet = false;
+        var slotIndex;
+        var terminiDan = [];
         var timeSlots;
         var danTermina = new Date();
+
+
+
+
+
         danTermina.setDate(danTermina.getDate()+limit);
 
         var terminPronadjen = false;
+        var day = 0;
 
         while(!terminPronadjen)
         {
+
+            terminiDan = [];
+            danTermina.setDate(danTermina.getDate()+day);
+            $.each(allTerms, function(index, term)
+            {
+                if(term.start.getDate() == danTermina.getDate()){
+                    terminiDan.push(term);
+                }
+            });
+
             timeSlots = $("#calendar").weekCalendar("getTimeslotTimes", danTermina);
 
-            for(var i=0; i<timeSlots.length-1; i++)
+            for(var i=0; i<timeSlots.length; i++)
             {
-                if(timeSlots[i].endFormatted == timeSlots[i+1].startFormatted )
+                zauzet = false;
+                for(var j=0; j<terminiDan.length; j++)
                 {
+                    var diffStart = terminiDan[j].start.getTime() - timeSlots[i].start.getTime();
+                    var diffEnd = terminiDan[j].end.getTime() - timeSlots[i].start.getTime();
 
+                    if(diffStart == 0 || (diffStart < 0 && diffEnd > 0)){
+                        zauzet = true;
+                        break;
+                    }
                 }
 
+                if(!zauzet){
+                    if(count == 0)
+                    {
+                        count++;
+                        termin = timeSlots[i].start;
+                        slotIndex = i;
+                    }
+                    else if(count == 1 && i-slotIndex == 1)
+                    {
+                        terminPronadjen = true;
+                        break;
+
+                    }
+                    else
+                    {
+                        slotIndex = i;
+                        termin = timeSlots[i].start;
+//                        count = 0;
+//                        termin = "";
+                    }
+                }
+
+
             }
+            day++;
+
         }
 
-
-        var options = $("#calendar").weekCalendar("getOptions");
-        var pocetak = options.businessHours.start;
-        var kraj =  options.businessHours.end;
-
+        console.log(termin);
 
     });
 
