@@ -76,9 +76,26 @@ $(document).ready(function () {
         eventNew: function (calEvent, $event) {
 
             var diffDays = getDifference(calEvent.start);
+            var slobodanTermin = true;
+            var tmp = new Date(calEvent.start.getTime() + 15*60*1000)
+
+            $.each(allTerms, function (index, term) {
+
+                if (term.start.toString() == tmp.toString()) {
+                    slobodanTermin = false;
+                }
+            });
+
+            if(tmp.getHours() == 22){
+                slobodanTermin = false;
+            }
 
             if (diffDays < limit && !menadzer) {
-                toastr.error("Termin mora biti zakazan minimalno " + limit + " dana unaprijed.");
+                toastr.info("Termin mora biti zakazan minimalno " + limit + " dana unaprijed");
+                $calendar.weekCalendar("removeUnsavedEvents");
+            }
+            else if (!slobodanTermin){
+                toastr.info("Minimalna dužina termina je 30min");
                 $calendar.weekCalendar("removeUnsavedEvents");
             }
             else {
