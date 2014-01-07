@@ -157,6 +157,8 @@ class TermsController extends AppController
         $end = date('H:i:s', (int)$_POST['end']);
         $date = date('c', (int)$_POST['start']);
         $status = $_POST['status'];
+        if($status == "")
+            $status = "nepotvrđen";
         $hall = intval($_POST['hall']);
 
         if (isset($id) && $this->Term->exists($id)) {

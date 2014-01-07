@@ -130,12 +130,10 @@ $(document).ready(function () {
             var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
             var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
 
-            if(calEvent.status != "nepotvrđen")
-            {
+            if (calEvent.status != "nepotvrđen") {
                 var statusField = $dialogContent.find("select[name='status']").val(calEvent.status);
             }
-            else
-            {
+            else {
                 var statusField = $dialogContent.find("select[name='status']").val("");
             }
 
@@ -167,8 +165,7 @@ $(document).ready(function () {
                         calEvent.start = new Date(startField.val());
                         calEvent.end = new Date(endField.val());
                         calEvent.body = bodyField.val();
-                        if(statusField.val() != "")
-                        {
+                        if (statusField.val() != "") {
                             calEvent.status = statusField.val();
                         }
 
@@ -286,13 +283,74 @@ $(document).ready(function () {
 
     //reduces the end time options to be only after the start time options.
     $("select[name='start']").change(function () {
+        var terminiDan = [];
         var startTime = $(this).find(":selected").val();
         var currentEndTime = $endTimeField.find("option:selected").val();
-        $endTimeField.html(
-            $endTimeOptions.filter(function () {
-                return startTime < $(this).val();
-            })
-        );
+        var tmp = $endTimeOptions.filter(function () {
+//            console.log($(this).val());
+            return startTime < $(this).val();
+        });
+        $endTimeField.html(tmp);
+
+
+
+        $.each(allTerms, function (index, term) {
+            if (term.start.getDate() == parseInt(startTime.split(" ")[2])) {
+                terminiDan.push(term);
+            }
+        });
+
+
+        terminiDan.sort(SortByName);
+
+        var ind = -1;
+
+        $.each(terminiDan, function (index, term) {
+            if (term.start.toString() == startTime) {
+                ind = index;
+            }
+        });
+
+        if (ind == -1) {
+            for (var j = 0; j < terminiDan.length; j++) {
+                if (terminiDan[j].start.toString() > startTime) {
+                    ind = j;
+                    break;
+                }
+            }
+
+
+            if (ind < terminiDan.length) {
+//                $endTimeField[0] = jQuery.grep($endTimeField[0], function(value) {
+//                    return value < terminiDan[ind];
+//                });
+
+                var tmp2 = tmp.filter(function () {
+                    console.log($(this).val());
+                    if(terminiDan[ind].start.toString() >= $(this).val()){
+                        return $(this).val();
+                    }
+
+                });
+                $endTimeField.html(tmp2);
+            }
+        }
+
+        else {
+            if (ind < terminiDan.length - 1) {
+                var tmp2 = tmp.filter(function () {
+                    console.log($(this).val());
+                    if(terminiDan[ind+1].start.toString() > $(this).val()){
+                        return $(this).val();
+                    }
+
+                });
+                $endTimeField.html(tmp2);
+            }
+        }
+
+        $endTimeField[0][0].remove();
+
 
         var endTimeSelected = false;
         $endTimeField.find("option").each(function () {
@@ -302,13 +360,19 @@ $(document).ready(function () {
                 return false;
             }
         });
-        $endTimeField[0][0].remove();
+
         if (!endTimeSelected) {
             //automatically select an end date 2 slots away.
             $endTimeField.find("option:eq(1)").attr("selected", "selected");
         }
 
     });
+
+    function SortByName(a, b) {
+        var aName = a.start;
+        var bName = b.start;
+        return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+    }
 
 
     var $about = $("#about");
@@ -379,54 +443,47 @@ $(document).ready(function () {
         var timeSlots;
         var danTermina = new Date();
 
-        danTermina.setDate(danTermina.getDate()+limit);
+        danTermina.setDate(danTermina.getDate() + limit);
 
         var terminPronadjen = false;
         var day = 0;
 
-        while(!terminPronadjen)
-        {
+        while (!terminPronadjen) {
 
             terminiDan = [];
-            danTermina.setDate(danTermina.getDate()+day);
-            $.each(allTerms, function(index, term)
-            {
-                if(term.start.getDate() == danTermina.getDate()){
+            danTermina.setDate(danTermina.getDate() + day);
+            $.each(allTerms, function (index, term) {
+                if (term.start.getDate() == danTermina.getDate()) {
                     terminiDan.push(term);
                 }
             });
 
             timeSlots = $("#calendar").weekCalendar("getTimeslotTimes", danTermina);
 
-            for(var i=0; i<timeSlots.length; i++)
-            {
+            for (var i = 0; i < timeSlots.length; i++) {
                 zauzet = false;
-                for(var j=0; j<terminiDan.length; j++)
-                {
+                for (var j = 0; j < terminiDan.length; j++) {
                     var diffStart = terminiDan[j].start.getTime() - timeSlots[i].start.getTime();
                     var diffEnd = terminiDan[j].end.getTime() - timeSlots[i].start.getTime();
 
-                    if(diffStart == 0 || (diffStart < 0 && diffEnd > 0)){
+                    if (diffStart == 0 || (diffStart < 0 && diffEnd > 0)) {
                         zauzet = true;
                         break;
                     }
                 }
 
-                if(!zauzet){
-                    if(count == 0)
-                    {
+                if (!zauzet) {
+                    if (count == 0) {
                         count++;
                         termin = timeSlots[i].start;
                         slotIndex = i;
                     }
-                    else if(count == 1 && i-slotIndex == 1)
-                    {
+                    else if (count == 1 && i - slotIndex == 1) {
                         terminPronadjen = true;
                         break;
 
                     }
-                    else
-                    {
+                    else {
                         slotIndex = i;
                         termin = timeSlots[i].start;
 //                        count = 0;
@@ -444,7 +501,7 @@ $(document).ready(function () {
 
         var calEvent = {};
         calEvent.start = termin;
-        calEvent.end = new Date(termin.getTime() + 30*60*1000);
+        calEvent.end = new Date(termin.getTime() + 30 * 60 * 1000);
 
         noviTermin(calEvent);
 
@@ -460,7 +517,7 @@ $(document).ready(function () {
         var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
         var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
         var bodyField = $dialogContent.find("textarea[name='body']");
-        var statusField = $dialogContent.find("select[name='status']");
+        var statusField = $dialogContent.find("select[name='status']").val("");
         priceField = $dialogContent.find("label[name='price']");
 
         minutes = getMinutes(calEvent.start, calEvent.end);
