@@ -129,7 +129,16 @@ $(document).ready(function () {
             resetForm($dialogContent);
             var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
             var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
-            var statusField = $dialogContent.find("select[name='status']").val(calEvent.status);
+
+            if(calEvent.status != "nepotvrđen")
+            {
+                var statusField = $dialogContent.find("select[name='status']").val(calEvent.status);
+            }
+            else
+            {
+                var statusField = $dialogContent.find("select[name='status']").val("");
+            }
+
             var bodyField = $dialogContent.find("textarea[name='body']");
             bodyField.val(calEvent.body);
             priceField = $dialogContent.find("label[name='price']");
@@ -158,7 +167,11 @@ $(document).ready(function () {
                         calEvent.start = new Date(startField.val());
                         calEvent.end = new Date(endField.val());
                         calEvent.body = bodyField.val();
-                        calEvent.status = statusField.val();
+                        if(statusField.val() != "")
+                        {
+                            calEvent.status = statusField.val();
+                        }
+
                         calEvent.hall = sale.val();
 
                         var iznos = iznosField.val();

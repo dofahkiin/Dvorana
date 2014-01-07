@@ -38,7 +38,7 @@ echo $this->Html->script(array(
                     <li id="status">
                         <label>Status: </label>
                         <select name="status">
-                            <option value="nepotvrđen">nepotvrđen</option>
+                            <option value="">Izaberite status</option>
                             <option value="potvrđen">potvrđen</option>
                             <option value="završen">završen</option>
                             <option value="otkazan">otkazan</option>
