@@ -22,7 +22,7 @@
        options : {
          date: new Date(),
          timeFormat : "H:i",
-         dateFormat : "M d, Y",
+         dateFormat : "d.m.Y",
          alwaysDisplayTimeMinutes: true,
          use24Hour : true,
          daysToShow : 7,

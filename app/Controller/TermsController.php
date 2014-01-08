@@ -218,10 +218,21 @@ class TermsController extends AppController
 
     public function getEvents()
     {
+        $dan = $_REQUEST['dan'];
+        $lastDay = date('Y-m-d', strtotime($dan. ' + 6 days'));
+
         $options = array('order' => array('Terms.start' => 'desc'));
-        $allTerms = $this->Term->find('all');
+
+        $allTerms = $this->Term->find('all', array(
+            'conditions' => array(
+                'Term.date >=' => $dan,
+                'Term.date <=' => $lastDay
+            )
+        ));
         $terms = array();
         $ownerTerms = array();
+
+
         foreach ($allTerms as $row) {
             if ($row['Term']['hall_id'] == $_REQUEST['hall']) {
                 if ($row['Term']['client_id'] == $this->Auth->user('id')) {

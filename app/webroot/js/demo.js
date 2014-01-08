@@ -235,10 +235,16 @@ $(document).ready(function () {
 
         },
         data: function (start, end, callback) {
+            var datumTmp = $(".wc-day-1").html().split(".");
+            var mjesec =parseInt(datumTmp[1]);
+            var dan = datumTmp[2] + '-'+ mjesec+'-'+ datumTmp[0].split("<br>")[1];
+            console.log(dan);
+
             $.getJSON(myBaseUrl + "terms/getEvents", {
                 start: start.getTime(),
                 end: end.getTime(),
-                hall: sale.val()
+                hall: sale.val(),
+                dan: dan
             }, function (result) {
 
                 var tmp = result.pop();
@@ -612,6 +618,7 @@ $(document).ready(function () {
             $("#status").hide();
         }
         $('.iznos').hide();
+        $("#calendar").weekCalendar("gotoWeek", calEvent.start);
         var $dialogContent = $("#event_edit_container");
         resetForm($dialogContent);
         var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
