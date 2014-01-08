@@ -77,7 +77,7 @@ $(document).ready(function () {
 
             var diffDays = getDifference(calEvent.start);
             var slobodanTermin = true;
-            var tmp = new Date(calEvent.start.getTime() + 15*60*1000)
+            var tmp = new Date(calEvent.start.getTime() + 15 * 60 * 1000)
 
             $.each(allTerms, function (index, term) {
 
@@ -86,7 +86,7 @@ $(document).ready(function () {
                 }
             });
 
-            if(tmp.getHours() == 22){
+            if (tmp.getHours() == 22) {
                 slobodanTermin = false;
             }
 
@@ -94,7 +94,7 @@ $(document).ready(function () {
                 toastr.info("Termin mora biti zakazan minimalno " + limit + " dana unaprijed");
                 $calendar.weekCalendar("removeUnsavedEvents");
             }
-            else if (!slobodanTermin){
+            else if (!slobodanTermin) {
                 toastr.info("Minimalna dužina termina je 30min");
                 $calendar.weekCalendar("removeUnsavedEvents");
             }
@@ -267,18 +267,113 @@ $(document).ready(function () {
      */
     function setupStartAndEndTimeFields($startTimeField, $endTimeField, calEvent, timeslotTimes) {
 
-        for (var i = 0; i < timeslotTimes.length; i++) {
-            var startTime = timeslotTimes[i].start;
-            var endTime = timeslotTimes[i].end;
+        var freeTimeSlots = [];
+
+        var terminiDan = [];
+        $.each(allTerms, function (index, term) {
+            if (term.start.getDate() == calEvent.start.getDate()) {
+                terminiDan.push(term);
+            }
+        });
+
+        var zauzet;
+
+        // New event
+        if (calEvent.id == null) {
+            for (var i = 0; i < timeslotTimes.length; i++) {
+                zauzet = false;
+                for (var j = 0; j < terminiDan.length; j++) {
+                    var diffStart = terminiDan[j].start.getTime() - timeslotTimes[i].start.getTime();
+                    var diffEnd = terminiDan[j].end.getTime() - timeslotTimes[i].start.getTime();
+
+                    if (diffStart == 0 || (diffStart < 0 && diffEnd > 0)) {
+                        zauzet = true;
+                    }
+                }
+                if (!zauzet) {
+                    freeTimeSlots.push(timeslotTimes[i]);
+                }
+            }
+            freeTimeSlots = $.grep(freeTimeSlots, function (el) {
+
+                for(var i=0; i<terminiDan.length; i++)
+                {
+                    if(el.end.getTime() == terminiDan[i].start.getTime()){
+                        return false;
+                    }
+                }
+
+                // do your normal code on el
+
+                return true; // keep the element in the array
+            });
+        }
+
+        else {
+            // Edit event
+            for (var i = 0; i < timeslotTimes.length; i++) {
+                if (calEvent.start.getTime() == timeslotTimes[i].start.getTime() ||
+                    (calEvent.start.getTime() < timeslotTimes[i].start.getTime() &&  timeslotTimes[i].start.getTime() < calEvent.end.getTime() )) {
+                    freeTimeSlots.push(timeslotTimes[i]);
+                }
+                else {
+                    zauzet = false;
+                    for (var j = 0; j < terminiDan.length; j++) {
+                        var diffStart = terminiDan[j].start.getTime() - timeslotTimes[i].start.getTime();
+                        var diffEnd = terminiDan[j].end.getTime() - timeslotTimes[i].start.getTime();
+
+                        if (diffStart == 0 || (diffStart < 0 && diffEnd > 0)) {
+                            zauzet = true;
+                        }
+                    }
+                    if (!zauzet) {
+                        freeTimeSlots.push(timeslotTimes[i]);
+                    }
+
+                }
+
+            }
+
+            freeTimeSlots = $.grep(freeTimeSlots, function (el) {
+
+                if(el.end.getTime() != calEvent.start.getTime())
+                {
+                    for(var i=0; i<terminiDan.length; i++)
+                    {
+                        if(el.end.getTime() == terminiDan[i].start.getTime()){
+                            return false;
+                        }
+                    }
+                }
+                // do your normal code on el
+
+                return true; // keep the element in the array
+            });
+        }
+
+
+
+        // StartField
+        for (var i = 0; i < freeTimeSlots.length; i++) {
+            var startTime = freeTimeSlots[i].start;
             var startSelected = "";
             if (startTime.getTime() === calEvent.start.getTime()) {
                 startSelected = "selected=\"selected\"";
             }
+            if(!(startTime.getHours() == 21 && startTime.getMinutes() == 45))
+            {
+                $startTimeField.append("<option value=\"" + startTime + "\" " + startSelected + ">" + freeTimeSlots[i].startFormatted + "</option>");
+            }
+
+        }
+
+        // Endfield
+        for (var i = 0; i < timeslotTimes.length; i++) {
+            var endTime = timeslotTimes[i].end;
             var endSelected = "";
             if (endTime.getTime() === calEvent.end.getTime()) {
                 endSelected = "selected=\"selected\"";
             }
-            $startTimeField.append("<option value=\"" + startTime + "\" " + startSelected + ">" + timeslotTimes[i].startFormatted + "</option>");
             $endTimeField.append("<option value=\"" + endTime + "\" " + endSelected + ">" + timeslotTimes[i].endFormatted + "</option>");
 
         }
@@ -298,17 +393,16 @@ $(document).ready(function () {
     var $endTimeField = $("select[name='end']");
     var $endTimeOptions = $endTimeField.find("option");
 
-    //reduces the end time options to be only after the start time options.
+
+//reduces the end time options to be only after the start time options.
     $("select[name='start']").change(function () {
         var terminiDan = [];
         var startTime = $(this).find(":selected").val();
         var currentEndTime = $endTimeField.find("option:selected").val();
         var tmp = $endTimeOptions.filter(function () {
-//            console.log($(this).val());
             return startTime < $(this).val();
         });
         $endTimeField.html(tmp);
-
 
 
         $.each(allTerms, function (index, term) {
@@ -336,18 +430,12 @@ $(document).ready(function () {
                 }
             }
 
-
-            if (ind < terminiDan.length) {
-//                $endTimeField[0] = jQuery.grep($endTimeField[0], function(value) {
-//                    return value < terminiDan[ind];
-//                });
+            if (ind < terminiDan.length && ind != -1) {
 
                 var tmp2 = tmp.filter(function () {
-                    console.log($(this).val());
-                    if(terminiDan[ind].start.toString() >= $(this).val()){
+                    if (terminiDan[ind].start.toString() >= $(this).val()) {
                         return $(this).val();
                     }
-
                 });
                 $endTimeField.html(tmp2);
             }
@@ -356,18 +444,15 @@ $(document).ready(function () {
         else {
             if (ind < terminiDan.length - 1) {
                 var tmp2 = tmp.filter(function () {
-                    console.log($(this).val());
-                    if(terminiDan[ind+1].start.toString() >= $(this).val()){
+                    if (terminiDan[ind + 1].start.toString() >= $(this).val()) {
                         return $(this).val();
                     }
-
                 });
                 $endTimeField.html(tmp2);
             }
         }
 
         $endTimeField[0][0].remove();
-
 
         var endTimeSelected = false;
         $endTimeField.find("option").each(function () {
@@ -514,8 +599,6 @@ $(document).ready(function () {
 
         }
 
-//        console.log(termin);
-
         var calEvent = {};
         calEvent.start = termin;
         calEvent.end = new Date(termin.getTime() + 30 * 60 * 1000);
@@ -595,4 +678,5 @@ $(document).ready(function () {
         setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
     }
 
-});
+})
+;
