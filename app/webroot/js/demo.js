@@ -23,6 +23,13 @@ $(document).ready(function () {
         });
     }
 
+    function getPonedjeljak() {
+        var datumTmp = $(".wc-day-1").html().split(".");
+        var mjesec = parseInt(datumTmp[1]);
+        var dan = datumTmp[2] + '-' + mjesec + '-' + datumTmp[0].split("<br>")[1];
+        return dan;
+    }
+
     $calendar.weekCalendar({
 
         daysToShow: 7,
@@ -235,10 +242,7 @@ $(document).ready(function () {
 
         },
         data: function (start, end, callback) {
-            var datumTmp = $(".wc-day-1").html().split(".");
-            var mjesec =parseInt(datumTmp[1]);
-            var dan = datumTmp[2] + '-'+ mjesec+'-'+ datumTmp[0].split("<br>")[1];
-            console.log(dan);
+            var dan = getPonedjeljak();
 
             $.getJSON(myBaseUrl + "terms/getEvents", {
                 start: start.getTime(),
@@ -302,9 +306,8 @@ $(document).ready(function () {
             }
             freeTimeSlots = $.grep(freeTimeSlots, function (el) {
 
-                for(var i=0; i<terminiDan.length; i++)
-                {
-                    if(el.end.getTime() == terminiDan[i].start.getTime()){
+                for (var i = 0; i < terminiDan.length; i++) {
+                    if (el.end.getTime() == terminiDan[i].start.getTime()) {
                         return false;
                     }
                 }
@@ -319,7 +322,7 @@ $(document).ready(function () {
             // Edit event
             for (var i = 0; i < timeslotTimes.length; i++) {
                 if (calEvent.start.getTime() == timeslotTimes[i].start.getTime() ||
-                    (calEvent.start.getTime() < timeslotTimes[i].start.getTime() &&  timeslotTimes[i].start.getTime() < calEvent.end.getTime() )) {
+                    (calEvent.start.getTime() < timeslotTimes[i].start.getTime() && timeslotTimes[i].start.getTime() < calEvent.end.getTime() )) {
                     freeTimeSlots.push(timeslotTimes[i]);
                 }
                 else {
@@ -342,11 +345,9 @@ $(document).ready(function () {
 
             freeTimeSlots = $.grep(freeTimeSlots, function (el) {
 
-                if(el.end.getTime() != calEvent.start.getTime())
-                {
-                    for(var i=0; i<terminiDan.length; i++)
-                    {
-                        if(el.end.getTime() == terminiDan[i].start.getTime()){
+                if (el.end.getTime() != calEvent.start.getTime()) {
+                    for (var i = 0; i < terminiDan.length; i++) {
+                        if (el.end.getTime() == terminiDan[i].start.getTime()) {
                             return false;
                         }
                     }
@@ -358,7 +359,6 @@ $(document).ready(function () {
         }
 
 
-
         // StartField
         for (var i = 0; i < freeTimeSlots.length; i++) {
             var startTime = freeTimeSlots[i].start;
@@ -366,8 +366,7 @@ $(document).ready(function () {
             if (startTime.getTime() === calEvent.start.getTime()) {
                 startSelected = "selected=\"selected\"";
             }
-            if(!(startTime.getHours() == 21 && startTime.getMinutes() == 45))
-            {
+            if (!(startTime.getHours() == 21 && startTime.getMinutes() == 45)) {
                 $startTimeField.append("<option value=\"" + startTime + "\" " + startSelected + ">" + freeTimeSlots[i].startFormatted + "</option>");
             }
 
@@ -542,83 +541,12 @@ $(document).ready(function () {
         priceField.text(minutes * cijena / 15 + 'KM');
     }
 
-    $('#noviTermin').click(function () {
-        var termin;
-        var count = 0;
-        var zauzet = false;
-        var slotIndex;
-        var terminiDan = [];
-        var timeSlots;
-        var danTermina = new Date();
-
-        danTermina.setDate(danTermina.getDate() + limit);
-
-        var terminPronadjen = false;
-        var day = 0;
-
-        while (!terminPronadjen) {
-
-            terminiDan = [];
-            danTermina.setDate(danTermina.getDate() + day);
-            $.each(allTerms, function (index, term) {
-                if (term.start.getDate() == danTermina.getDate()) {
-                    terminiDan.push(term);
-                }
-            });
-
-            timeSlots = $("#calendar").weekCalendar("getTimeslotTimes", danTermina);
-
-            for (var i = 0; i < timeSlots.length; i++) {
-                zauzet = false;
-                for (var j = 0; j < terminiDan.length; j++) {
-                    var diffStart = terminiDan[j].start.getTime() - timeSlots[i].start.getTime();
-                    var diffEnd = terminiDan[j].end.getTime() - timeSlots[i].start.getTime();
-
-                    if (diffStart == 0 || (diffStart < 0 && diffEnd > 0)) {
-                        zauzet = true;
-                        break;
-                    }
-                }
-
-                if (!zauzet) {
-                    if (count == 0) {
-                        count++;
-                        termin = timeSlots[i].start;
-                        slotIndex = i;
-                    }
-                    else if (count == 1 && i - slotIndex == 1) {
-                        terminPronadjen = true;
-                        break;
-
-                    }
-                    else {
-                        slotIndex = i;
-                        termin = timeSlots[i].start;
-//                        count = 0;
-//                        termin = "";
-                    }
-                }
-
-
-            }
-            day++;
-
-        }
-
-        var calEvent = {};
-        calEvent.start = termin;
-        calEvent.end = new Date(termin.getTime() + 30 * 60 * 1000);
-
-        noviTermin(calEvent);
-
-    });
-
     function noviTermin(calEvent) {
         if (!menadzer) {
             $("#status").hide();
         }
         $('.iznos').hide();
-        $("#calendar").weekCalendar("gotoWeek", calEvent.start);
+
         var $dialogContent = $("#event_edit_container");
         resetForm($dialogContent);
         var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
@@ -685,5 +613,121 @@ $(document).ready(function () {
         setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
     }
 
-})
-;
+    $('#noviTermin').click(function () {
+        var danTermina = new Date();
+        danTermina.setDate(danTermina.getDate() + limit);
+
+        var termin;
+        var count = 0;
+        var zauzet = false;
+        var slotIndex;
+        var terminiDan = [];
+        var timeSlots;
+        var terminPronadjen = false;
+        var day = 0;
+
+        var ponedjeljak = new Date(danTermina.getTime() - (danTermina.getDay() - 1) * 1000 * 60 * 60 * 24)
+
+        var danTerminaStr = ponedjeljak.getFullYear() + '-' + parseInt(ponedjeljak.getMonth()) + 1 + '-' + ponedjeljak.getDate();
+        var p = convertDay(getPonedjeljak());
+        if(ponedjeljak.getDate() != p.getDate()){
+            $("#calendar").weekCalendar("gotoWeek", danTermina);
+        }
+
+        $.getJSON(myBaseUrl + "terms/getEvents", {dan: danTerminaStr, hall: sale.val()}, function (result) {
+            var prvrmn = result.pop();
+            prvrmn = result.pop();
+            prvrmn = result.pop();
+
+            allTerms = convertToDate(result);
+            while (!terminPronadjen) {
+
+                terminiDan = [];
+                danTermina.setDate(danTermina.getDate() + day);
+                $.each(allTerms, function (index, term) {
+                    if (term.start.getDate() == danTermina.getDate()) {
+                        terminiDan.push(term);
+                    }
+                });
+
+                timeSlots = $("#calendar").weekCalendar("getTimeslotTimes", danTermina);
+
+                for (var i = 0; i < timeSlots.length; i++) {
+                    zauzet = false;
+                    for (var j = 0; j < terminiDan.length; j++) {
+                        var diffStart = terminiDan[j].start.getTime() - timeSlots[i].start.getTime();
+                        var diffEnd = terminiDan[j].end.getTime() - timeSlots[i].start.getTime();
+
+                        if (diffStart == 0 || (diffStart < 0 && diffEnd > 0)) {
+                            zauzet = true;
+                            break;
+                        }
+                    }
+
+                    if (!zauzet) {
+                        if (count == 0) {
+                            count++;
+                            termin = timeSlots[i].start;
+                            slotIndex = i;
+                        }
+                        else if (count == 1 && i - slotIndex == 1) {
+                            terminPronadjen = true;
+                            break;
+
+                        }
+                        else {
+                            slotIndex = i;
+                            termin = timeSlots[i].start;
+//                        count = 0;
+//                        termin = "";
+                        }
+                    }
+
+
+                }
+                day++;
+
+            }
+
+            var calEvent = {};
+            calEvent.start = termin;
+            calEvent.end = new Date(termin.getTime() + 30 * 60 * 1000);
+
+            noviTermin(calEvent);
+
+//            callback(result);
+
+        })
+    });
+
+    function convertToDate(terms) {
+
+        function extractDate(term) {
+            var godina;
+            var mjesec;
+            var dan;
+            var sat;
+            var min;
+            godina = term.split('T')[0].split('-')[0];
+            mjesec = parseInt(term.split('T')[0].split('-')[1]) - 1;
+            dan = term.split('T')[0].split('-')[2];
+            sat = term.split('T')[1].split(':')[0];
+            min = term.split('T')[1].split(':')[1];
+            return new Date(godina, mjesec, dan, sat, min);
+        }
+
+        $.each(terms, function (index, term) {
+            term.start = extractDate(term.start);
+            term.end = extractDate(term.end);
+        });
+
+        return terms;
+    }
+
+    function convertDay(date){
+        var tmp = date.split('-');
+        var mjesec = parseInt(tmp[1])-1;
+        return new Date(tmp[0], mjesec, tmp[2]);
+    }
+
+});
