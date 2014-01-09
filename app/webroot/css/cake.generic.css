@@ -859,3 +859,29 @@ margin-top: 20px;
 #kalendar{
     font-size: 150%;
 }
+
+.uputstvo {
+    margin:20px 0 10px 0;
+    /*float:left;*/
+    width:200px;
+    padding:5px;
+    text-align:left;
+    font-size:12px;
+    color:#333;
+    background:#fafbd2;
+    border:1px solid #e8eac0;
+    border-right-color:#f5f7ce;
+    border-bottom-color:#f5f7ce;
+    border-radius:4px;
+}
+
+.uputstvo img
+{
+    float:left;
+    margin-right:10px;
+    border:1px solid #ccc
+}
+
+.uputstvo p {
+    margin:2px 0
+}
