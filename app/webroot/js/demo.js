@@ -13,6 +13,16 @@ $(document).ready(function () {
     var allTerms;
     toastr.options = {"positionClass": "toast-bottom-full-width"};
 
+    $(document).tooltip(
+        {
+            content:  function() {
+
+            return "<img src=\"/github/dvorana/img/popup_uputsvo.png\" alt=\"uputsvo_za_boje\">";
+
+            }});
+
+
+
 
     function saveChangedTerm(calEvent) {
         $.each(allTerms, function (index, term) {
@@ -729,5 +739,7 @@ $(document).ready(function () {
         var mjesec = parseInt(tmp[1])-1;
         return new Date(tmp[0], mjesec, tmp[2]);
     }
+
+
 
 });

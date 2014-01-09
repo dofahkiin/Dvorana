@@ -12,7 +12,7 @@ echo $this->Html->script(array(
     <h2><?php echo __('Kalendar'); ?></h2>
     </div>
     <input id="noviTermin" type="submit" value="Novi termin">
-    <div class="uputstvo">
+    <div class="uputstvo" title="Klinite za prikaz značenja boja statusa">
         <?php echo $this->Html->image('uputstvo3.png', array('alt' => 'uputsvo_za_boje')); ?>
         <p>
             <strong>Uputstvo:</strong>
