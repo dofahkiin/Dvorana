@@ -15,7 +15,7 @@ echo $this->Html->script(array(
     <div class="uputstvo" title="Klinite za prikaz značenja boja statusa">
         <?php echo $this->Html->image('uputstvo3.png', array('alt' => 'uputsvo_za_boje')); ?>
         <p>
-            <strong>Uputstvo:</strong>
+            <strong>Savjet:</strong>
             Značenje boja termina.
         </p>
     </div>

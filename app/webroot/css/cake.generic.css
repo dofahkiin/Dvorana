@@ -853,17 +853,19 @@ margin-top: 20px;
 }
 
 #termSidebar {
-    float: left;
+    /*float: left;*/
+    position: absolute;
 }
 
 #kalendar{
     font-size: 150%;
+    width: 120px;
 }
 
 .uputstvo {
     margin:20px 0 10px 0;
     /*float:left;*/
-    width:200px;
+    width:180px;
     padding:5px;
     text-align:left;
     font-size:12px;
