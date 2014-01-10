@@ -9,17 +9,15 @@
 		echo $this->Form->input('password');
 		echo $this->Form->input('telephone');
 		echo $this->Form->input('email');
+    if($userData['role'] == 'Menadžer')
+    {
 		echo $this->Form->input('role', array(
-            'options' => array('Menadžer'=>'Menadžer', 'Klijent' => 'Klijent')
+            'options' => array('Klijent' => 'Klijent', 'Menadžer'=>'Menadžer')
         ));
+    }
+    // TODO ispravi role problem
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
 
-		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?></li>
-	</ul>
-</div>

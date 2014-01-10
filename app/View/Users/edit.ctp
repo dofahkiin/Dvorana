@@ -9,9 +9,12 @@
         echo $this->Form->input('username',array("label" => "Korisničko ime"));
         echo $this->Form->input('telephone',array("label" => "Telefon"));
         echo $this->Form->input('email',array("label" => "Email"));
+        if($userData['role'] == 'Menadžer')
+        {
         echo $this->Form->input('role', array(
-            'options' => array('Menadžer' => 'Menadžer', 'Klijent' => 'Klijent'),
+            'options' => array('Klijent' => 'Klijent', 'Menadžer' => 'Menadžer'),
             "label" => "Rola"));
+        }
         echo $this->Form->input('password', array(
             'value' => '',
             'autocomplete' => 'off',

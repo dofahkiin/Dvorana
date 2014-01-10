@@ -262,7 +262,8 @@ form {
 fieldset {
 	border: none;
 	margin-bottom: 1em;
-	padding: 16px 10px;
+	padding: 16px 10px 0 0;
+    margin-left: 0;
 }
 fieldset legend {
 	color: #e32;
@@ -829,14 +830,14 @@ margin-top: 20px;
     padding-bottom: 5px;
 }
 
-#UserEditForm div, #UserHomeForm div{
+#UserEditForm div, #UserHomeForm div, #UserAddForm div, #UserAddForm .submit{
     clear: both;
     margin-bottom: 1em;
     padding: .5em;
     vertical-align: text-top;
 }
 
-#UserEditForm .input, #UserHomeForm .input{
+#UserEditForm .input, #UserHomeForm .input, #UserAddForm .input{
     width: 400px;
 
 }

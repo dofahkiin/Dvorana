@@ -85,6 +85,11 @@ class UsersController extends AppController
                 $loggedUser = false;
             }
 
+
+            if(!$loggedUser){
+                $this->request->data["User"]["role"]="Klijent";
+            }
+
             $this->User->create();
             if ($this->User->save($this->request->data)) {
                 if (!$loggedUser) {
@@ -121,6 +126,11 @@ class UsersController extends AppController
 //                $this->request->data['User']['password'] =  $user['User']['password'];
                 unset($this->request->data['User']['password']);
             }
+
+            if ($this->Auth->user('role') == "Klijent"){
+                $this->request->data["User"]["role"]="Klijent";
+            }
+
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('The user has been saved.'));
                 if ($this->Auth->user('role') == "Klijent") {
