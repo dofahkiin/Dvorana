@@ -853,8 +853,9 @@ margin-top: 20px;
 }
 
 #termSidebar {
-    /*float: left;*/
+    float: left;
     position: absolute;
+    width:14em;
 }
 
 #kalendar{
@@ -886,4 +887,8 @@ margin-top: 20px;
 
 .uputstvo p {
     margin:2px 0
+}
+
+div.calendar {
+    margin-left:16em;
 }
