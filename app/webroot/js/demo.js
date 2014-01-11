@@ -20,8 +20,6 @@ $(document).ready(function () {
                 if ( element.is( ".uputstvo" ) ) {
                     return "<img src=\"/img/popup_uputsvo.png\" alt=\"uputsvo_za_boje\">";
                 }
-
-
             }});
 
 

@@ -899,3 +899,11 @@ div.calendar {
 #kalendar h2 {
     margin: 0 0 0.5em;
 }
+
+#event_edit_container ul, li {
+    margin: 0 5px;
+}
+
+#event_edit_container form{
+    margin-left: 0;
+}
