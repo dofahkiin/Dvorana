@@ -16,8 +16,11 @@ $(document).ready(function () {
     $(document).tooltip(
         {
             content:  function() {
+                var element = $( this );
+                if ( element.is( ".uputstvo" ) ) {
+                    return "<img src=\"/img/popup_uputsvo.png\" alt=\"uputsvo_za_boje\">";
+                }
 
-            return "<img src=\"/github/dvorana/img/popup_uputsvo.png\" alt=\"uputsvo_za_boje\">";
 
             }});
 

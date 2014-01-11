@@ -48,19 +48,19 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
             <nav>
                 <ul>
-                    <li><a href="/github/dvorana">Home</a></li>
+                    <li><a href="/">Home</a></li>
                     <?php
                     if($userData != null){
-                        echo "<li><a href=\"/github/dvorana/terms\">Termini</a></li>";
+                        echo "<li><a href=\"/terms\">Termini</a></li>";
                         if($userData['role'] == 'Menadžer')
                         {
-                            echo "<li><a href=\"/github/dvorana/users\">Korisnici</a></li>";
-                            echo "<li><a href=\"/github/dvorana/settings/edit/\">Podešavanja</a></li>";
+                            echo "<li><a href=\"/users\">Korisnici</a></li>";
+                            echo "<li><a href=\"/settings/edit/\">Podešavanja</a></li>";
                         }
 
-                        echo "<li><a href=\"/github/dvorana/terms/izvjestaj\">Izvještaj</a></li>";
-                        echo "<li><a href=\"/github/dvorana/users/edit/". $userData['id']."\">Uredi profil</a></li>";
-                        echo "<li><a href=\"/github/dvorana/users/logout\">Logout(".$userData['name'].")</a></li>";
+                        echo "<li><a href=\"/terms/izvjestaj\">Izvještaj</a></li>";
+                        echo "<li><a href=\"/users/edit/". $userData['id']."\">Uredi profil</a></li>";
+                        echo "<li><a href=\"/users/logout\">Logout(".$userData['name'].")</a></li>";
                     }
                     ?>
 
