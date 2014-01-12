@@ -1,10 +1,10 @@
 <?php
 echo $this->Html->css(array(
     'reset', 'jquery-ui-1.10.3.custom',
-    'jquery.weekcalendar', 'demo', 'toastr'));
+    'jquery.weekcalendar', 'demo', 'toastr.min'));
 echo $this->Html->script(array(
-    'jquery-1.10.2', 'jquery-migrate-1.2.1', 'jquery-ui-1.10.3.custom.min',
-    'jquery.weekcalendar', 'demo', 'toastr'));
+    'jquery-1.10.2.min', 'jquery-migrate-1.2.1.min', 'jquery-ui-1.10.3.custom.min',
+    'jquery.weekcalendar', 'demo', 'toastr.min'));
 ?>
 <div id="sadrzaj">
 

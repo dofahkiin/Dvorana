@@ -1,5 +1,5 @@
 <?php
-echo $this->Html->script('jquery-1.10.2', FALSE);
+echo $this->Html->script('jquery-1.10.2.min', FALSE);
 echo $this->Html->script('jquery.activity-indicator-1.0.0', FALSE);
 
 
