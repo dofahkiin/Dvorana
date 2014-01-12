@@ -4,10 +4,14 @@
         'url' => array('controller' => 'users', 'action' => 'login')
     )); ?>
     <fieldset>
-        <legend><?php echo __('Please enter your username and password'); ?></legend>
-        <?php echo $this->Form->input('username');
-        echo $this->Form->input('password');
+        <legend><?php echo __('Molimo unesite vaše korisničko ime i šifru'); ?></legend>
+        <?php echo $this->Form->input('username', array(
+            "label" => "Korisničko ime"
+        ));
+        echo $this->Form->input('password', array(
+            "label" => "Lozinka"
+        ));
         ?>
     </fieldset>
-    <?php echo $this->Form->end(__('Login')); ?>
+    <?php echo $this->Form->end(__('Prijavi se')); ?>
 </div>

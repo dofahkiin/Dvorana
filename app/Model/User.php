@@ -63,7 +63,7 @@ class User extends AppModel
         ),
         'telephone' => array(
             'phone' => array(
-                'rule' => array('phone', '/^[0-9-+()# ]{6,12}+$/'),
+                'rule' => array('phone', '/^[0-9-+()# ]{4,12}+$/'),
                 'message' => 'Telefonski broj nije ispravan',
                 //'allowEmpty' => false,
                 //'required' => false,

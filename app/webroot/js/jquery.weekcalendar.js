@@ -1098,9 +1098,13 @@
          var $target = this.element.find(".wc-grid-timeslot-header .wc-hour-header:eq(" + slot + ")");
 
          $scrollable.animate({scrollTop: 0}, 0, function() {
-            var targetOffset = $target.offset().top;
-            var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
-            $scrollable.animate({scrollTop: scroll}, options.scrollToHourMillis);
+            var tmp = $target.offset();
+            if(tmp != null){
+                var targetOffset = tmp.top;
+                var scroll = targetOffset - $scrollable.offset().top - $target.outerHeight();
+                $scrollable.animate({scrollTop: scroll}, options.scrollToHourMillis);
+            }
+
          });
       },
 
