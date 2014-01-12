@@ -1,3 +1,4 @@
+<div id="sadrzaj">
 <div class="users form">
 <?php echo $this->Form->create('User'); ?>
 	<fieldset>
@@ -21,3 +22,4 @@
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 
+</div>

@@ -1,3 +1,4 @@
+<div id="sadrzaj">
 <div id="userEdit">
     <?php echo $this->Form->create('User'); ?>
     <fieldset>
@@ -23,4 +24,5 @@
         ?>
     </fieldset>
     <?php echo $this->Form->end(__('Sačuvaj')); ?>
+</div>
 </div>

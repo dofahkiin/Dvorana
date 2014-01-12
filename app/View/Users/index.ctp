@@ -1,3 +1,5 @@
+<div id="sadrzaj">
+
 <div class="actions">
     <h3><?php echo __('Radnje'); ?></h3>
     <ul>
@@ -48,3 +50,4 @@
 	</div>
 </div>
 
+</div>

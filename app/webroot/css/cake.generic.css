@@ -100,11 +100,11 @@ p {
 	text-decoration: underline;
 }
 #content{
-	background: #fff;
-	clear: both;
-	color: #333;
-	padding: 10px 20px 40px 20px;
-	overflow: auto;
+	/*background: #fff;*/
+	/*clear: both;*/
+	/*color: #333;*/
+	/*padding: 0;*/
+	overflow: hidden;
 }
 #footer {
 	clear: both;
@@ -830,7 +830,7 @@ margin-top: 20px;
     padding-bottom: 5px;
 }
 
-#UserEditForm div, #UserHomeForm div, #UserAddForm div, #UserAddForm .submit{
+#UserEditForm div, #UserHomeForm div, #UserAddForm div, #UserAddForm .submit, #home a{
     clear: both;
     margin-bottom: 1em;
     padding: .5em;
@@ -906,4 +906,26 @@ div.calendar {
 
 #event_edit_container form{
     margin-left: 0;
+}
+
+#sadrzaj{
+    background: #fff;
+    clear: both;
+    color: #333;
+    padding: 10px 20px 40px 20px;
+    overflow: auto;
+}
+
+#home a {
+    /*margin-top: 30px;*/
+color: #fff;
+    margin-left: 1em;
+}
+
+#home div.form {
+    width: 90%;
+}
+
+#UserHomeForm .input {
+    color: #FFF;
 }

@@ -2,7 +2,7 @@
 <?php
 
 if($userData == null){
-    echo "<a href=\"/users/add\">Registracija</a>";
+    // echo "<a href=\"/users/add\">Registracija</a>";
     echo $this->element('login');
 }
 else {

@@ -11,6 +11,8 @@ $this->Paginator->options(array(
 ));
 ?>
 
+<div id="sadrzaj">
+
 <div id="listaTermina">
     <div class="terms index">
         <h2><?php echo __('Termini'); ?></h2>
@@ -143,9 +145,10 @@ $this->Paginator->options(array(
 
 <div id="load"></div>
 
+</div>
+
 <?php
 echo $this->Html->script('search');
-
 ?>
 
 <?php echo $this->Js->writeBuffer(); ?>

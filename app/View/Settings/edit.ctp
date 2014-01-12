@@ -4,6 +4,8 @@
 
 <?php echo $this->Html->css('toastr'); ?>
 
+<div id="sadrzaj">
+
 <?php
 echo $this->Form->create('Setting');
 echo $this->Form->input('value', array(
@@ -15,4 +17,4 @@ echo $this->Form->submit('Sačuvaj podešavanja', array(
 echo $this->Form->end();
 ?>
 
-
+</div>

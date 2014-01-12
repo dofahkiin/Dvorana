@@ -23,9 +23,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-
 	</title>
-
 
     <script type="text/javascript">var myBaseUrl = '<?php echo $this->Html->url('/'); ?>';</script>
 
@@ -63,6 +61,9 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
                         echo "<li><a href=\"/users/edit/". $userData['id']."\">Uredi profil</a></li>";
                         echo "<li><a href=\"/users/logout\">Logout(".$userData['name'].")</a></li>";
                     }
+                    else {
+
+                    }
                     ?>
 
                 </ul>
@@ -70,10 +71,8 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
 		</div>
 		<div id="content">
-
-			<?php echo $this->Session->flash(); ?>
-
-			<?php echo $this->fetch('content'); ?>
+                <?php echo $this->Session->flash(); ?>
+                <?php echo $this->fetch('content'); ?>
 		</div>
 		<div id="footer">
 			<?php echo $this->Html->link(
