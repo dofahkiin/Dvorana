@@ -847,6 +847,10 @@ margin-top: 20px;
     width:20%;
 }
 
+#SettingEditForm{
+    margin-top: 20px;
+}
+
 #SettingEditForm .input.text.required {
     width: 500px;
 }
@@ -928,4 +932,13 @@ color: #fff;
 
 #UserHomeForm .input {
     color: #FFF;
+}
+
+#UserHomeForm legend {
+    color: #fff;
+}
+
+#logout
+{
+    float: right;
 }

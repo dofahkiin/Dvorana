@@ -49,7 +49,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
                     <?php
                     if($userData != null){
-                        echo "<li><a href=\"/\">Home</a></li>";
+//                        echo "<li><a href=\"/\">Home</a></li>";
                         echo "<li><a href=\"/terms\">Termini</a></li>";
                         if($userData['role'] == 'Menadžer')
                         {
@@ -59,7 +59,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
                         echo "<li><a href=\"/terms/izvjestaj\">Izvještaj</a></li>";
                         echo "<li><a href=\"/users/edit/". $userData['id']."\">Uredi profil</a></li>";
-                        echo "<li><a href=\"/users/logout\">Logout(".$userData['name'].")</a></li>";
+                        echo "<li id=\"logout\"><a href=\"/users/logout\" >Logout(".$userData['name'].")</a></li>";
                     }
                     else {
 
