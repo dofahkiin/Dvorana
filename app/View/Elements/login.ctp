@@ -6,21 +6,15 @@ echo $this->Html->script(array('jquery-1.10.2.min', 'slider.min'), FALSE);
 <div class="full-width">
     <div class="inner">
         <div class="slide">
-            <img src="http://lorempixel.com/1020/400/sports" width="1020" height="400">
+            <div>Dobrodošli na stranicu sportske dvorane.</div>
+            <?php echo $this->Html->image('dvorana1.jpg', array('alt' => 'dvorana1', "width" => "1020", "height"=> "400")); ?>
         </div>
         <div class="slide">
-            <div>Nullam dictum magna sapien, sed adipiscing nibh. <br>Curabitur molestie elit et ultricies vehicula.
-            </div>
-            <img src="http://lorempixel.com/1020/400/city" width="1020" height="400">
+            <div>Želimo vam prijatan boravak.</div>
+            <?php echo $this->Html->image('dvorana2.jpg', array('alt' => 'dvorana2', "width" => "1020", "height"=> "400")); ?>
         </div>
         <div class="slide">
-            <div>Donec malesuada hendrerit velit, sed consequat. <br>Curabitur molestie elit et ultricies vehicula.
-            </div>
-            <img src="http://lorempixel.com/1020/400/cats" width="1020" height="400">
-        </div>
-        <div class="slide">
-            <div>Maecenas augue dui, rhoncus a blandit non. <br>Curabitur molestie elit et ultricies vehicula.</div>
-            <img src="http://lorempixel.com/1020/400/business" width="1020" height="400">
+            <?php echo $this->Html->image('dvorana3.jpg', array('alt' => 'dvorana2', "width" => "1020", "height"=> "400")); ?>
         </div>
     </div>
     <div class="controls">
