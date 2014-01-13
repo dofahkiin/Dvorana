@@ -93,6 +93,8 @@ $(document).ready(function () {
         },
         eventNew: function (calEvent, $event) {
 
+
+
             var diffDays = getDifference(calEvent.start);
             var slobodanTermin = true;
             var tmp = new Date(calEvent.start.getTime() + 15 * 60 * 1000)
@@ -558,6 +560,7 @@ $(document).ready(function () {
         }
         $('.iznos').hide();
 
+
         var $dialogContent = $("#event_edit_container");
         resetForm($dialogContent);
         var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
@@ -565,6 +568,35 @@ $(document).ready(function () {
         var bodyField = $dialogContent.find("textarea[name='body']");
         var statusField = $dialogContent.find("select[name='status']").val("");
         priceField = $dialogContent.find("label[name='price']");
+
+        statusField.change(function(){
+            calEvent.body = bodyField.val();
+            calEvent.hall = sale.val();
+            calEvent.start = new Date(startField.val());
+            calEvent.end = new Date(endField.val());
+            calEvent.status = statusField.val();
+            $calendar.weekCalendar("updateEvent", calEvent);
+        });
+
+        endField.change(function(){
+            calEvent.body = bodyField.val();
+            calEvent.hall = sale.val();
+            calEvent.start = new Date(startField.val());
+            calEvent.end = new Date(endField.val());
+            calEvent.status = statusField.val();
+            $calendar.weekCalendar("removeEvent", calEvent.id);
+            $calendar.weekCalendar("updateEvent", calEvent);
+        });
+
+        startField.change(function(){
+            calEvent.body = bodyField.val();
+            calEvent.hall = sale.val();
+            calEvent.start = new Date(startField.val());
+            calEvent.end = new Date(endField.val());
+            calEvent.status = statusField.val();
+            $calendar.weekCalendar("removeEvent", calEvent.id);
+            $calendar.weekCalendar("updateEvent", calEvent);
+        });
 
         minutes = getMinutes(calEvent.start, calEvent.end);
         priceField.text(minutes * cijena / 15);
