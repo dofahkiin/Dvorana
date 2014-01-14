@@ -79,7 +79,6 @@ $this->Paginator->options(array(
 
     </div>
 
-
 <?php
 echo $this->Js->writeBuffer();
 ?>
