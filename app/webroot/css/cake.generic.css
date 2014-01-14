@@ -830,14 +830,14 @@ margin-top: 20px;
     padding-bottom: 5px;
 }
 
-#UserEditForm div, #UserHomeForm div, #UserAddForm div, #UserAddForm .submit, #home a{
+#UserEditForm div, #UserHomeForm div, #UserAddForm div, #UserAddForm .submit, #home a, #UserLoginForm div{
     clear: both;
     margin-bottom: 1em;
     padding: .5em;
     vertical-align: text-top;
 }
 
-#UserEditForm .input, #UserHomeForm .input, #UserAddForm .input{
+#UserEditForm .input, #UserHomeForm .input, #UserAddForm .input, #UserLoginForm .input{
     width: 400px;
 
 }
@@ -930,15 +930,21 @@ color: #fff;
     width: 90%;
 }
 
-#UserHomeForm .input {
+#UserHomeForm .input, #UserLoginForm .input{
     color: #FFF;
 }
 
-#UserHomeForm legend {
+#UserHomeForm legend, #UserLoginForm legend{
     color: #fff;
+}
+
+#UserLoginForm{
+    margin-top:30px
+
 }
 
 #logout
 {
     float: right;
 }
+

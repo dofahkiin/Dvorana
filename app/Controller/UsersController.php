@@ -28,7 +28,7 @@ class UsersController extends AppController
             if ($this->Auth->login()) {
                 return $this->redirect($this->Auth->redirect());
             }
-            $this->Session->setFlash(__('Invalid username or password, try again'));
+            $this->Session->setFlash(__('Korisničko ime ili lozinka nisu tačni, molimo pokušajte ponovo.'));
         }
     }
 
@@ -103,7 +103,7 @@ class UsersController extends AppController
                 //$this->Session->setFlash(__('The user has been saved.'));
                 return $this->redirect(array('controller' => 'terms', 'action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('Korisnik nije mogao biti sačuvan. Molimo pokušajte ponovo.'));
             }
         }
     }
@@ -132,7 +132,7 @@ class UsersController extends AppController
             }
 
             if ($this->User->save($this->request->data)) {
-                $this->Session->setFlash(__('The user has been saved.'));
+                $this->Session->setFlash(__('Korisnik je sačuvan.'));
                 if ($this->Auth->user('role') == "Klijent") {
                     return $this->redirect(array('action' => 'edit', $this->Auth->user('id')));
                 } else {
@@ -140,7 +140,7 @@ class UsersController extends AppController
                 }
 
             } else {
-                $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('Korisnik nije mogao biti sačuvan. Molimo pokušajte ponovo.'));
             }
         } else {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -163,9 +163,9 @@ class UsersController extends AppController
         }
         $this->request->onlyAllow('post', 'delete');
         if ($this->User->delete()) {
-            $this->Session->setFlash(__('The user has been deleted.'));
+            $this->Session->setFlash(__('Korisnik je obrisan.'));
         } else {
-            $this->Session->setFlash(__('The user could not be deleted. Please, try again.'));
+            $this->Session->setFlash(__('Korisnik nije mogao biti obrisan. Molimo pokušajte ponovo.'));
         }
         return $this->redirect(array('action' => 'index'));
     }

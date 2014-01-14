@@ -60,10 +60,10 @@ class TermsController extends AppController
             $this->request->data['Term']['client_id'] = $this->Auth->user('id');
             $this->request->data['Term']['status'] = "nepotvrđen";
             if ($this->Term->save($this->request->data)) {
-                $this->Session->setFlash(__('The term has been saved.'));
+                $this->Session->setFlash(__('Termin je sačuvan.'));
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The term could not be saved. Please, try again.'));
+                $this->Session->setFlash(__('Termin nije uspješno sačuvan. Molimo pokušajte ponovo.'));
             }
         }
     }
@@ -85,17 +85,17 @@ class TermsController extends AppController
 
             if ($this->request->is(array('post', 'put'))) {
                 if ($this->Term->save($this->request->data)) {
-                    $this->Session->setFlash(__('The term has been saved.'));
+                    $this->Session->setFlash(__('Termin je sačuvan.'));
                     return $this->redirect(array('action' => 'index'));
                 } else {
-                    $this->Session->setFlash(__('The term could not be saved. Please, try again.'));
+                    $this->Session->setFlash(__('Termin nije moguće sačuvati. Molimo pokušajte ponovo.'));
                 }
             } else {
                 $options = array('conditions' => array('Term.' . $this->Term->primaryKey => $id));
                 $this->request->data = $this->Term->find('first', $options);
             }
         } else {
-            $this->Session->setFlash(__('The term could not be edited.'));
+            $this->Session->setFlash(__('Termin nije moguće uređivati.'));
             return $this->redirect(array('action' => 'index'));
         }
     }
