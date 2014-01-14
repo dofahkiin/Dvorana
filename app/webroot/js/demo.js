@@ -600,33 +600,12 @@ $(document).ready(function () {
     }
 
     function refreshTermin(statusField, calEvent, bodyField, startField, endField) {
-        statusField.change(function () {
+        statusField.change(function (calEvent) {
             calEvent.body = bodyField.val();
             calEvent.hall = sale.val();
             calEvent.start = new Date(startField.val());
             calEvent.end = new Date(endField.val());
             calEvent.status = statusField.val();
-            $calendar.weekCalendar("updateEvent", calEvent);
-        });
-
-        endField.change(function () {
-            calEvent.body = bodyField.val();
-            calEvent.hall = sale.val();
-            calEvent.start = new Date(startField.val());
-            calEvent.end = new Date(endField.val());
-            calEvent.status = statusField.val();
-            $calendar.weekCalendar("removeEvent", calEvent.id);
-            $calendar.weekCalendar("updateEvent", calEvent);
-        });
-
-        startField.change(function () {
-            calEvent.body = bodyField.val();
-            calEvent.hall = sale.val();
-            calEvent.start = new Date(startField.val());
-            startPocetni = calEvent.start;
-            calEvent.end = new Date(endField.val());
-            calEvent.status = statusField.val();
-            $calendar.weekCalendar("removeEvent", calEvent.id);
             $calendar.weekCalendar("updateEvent", calEvent);
         });
     }
@@ -646,7 +625,7 @@ $(document).ready(function () {
         var statusField = $dialogContent.find("select[name='status']").val("");
         priceField = $dialogContent.find("label[name='price']");
 
-        refreshTermin(statusField, calEvent, bodyField, startField, endField);
+
         minutes = getMinutes(calEvent.start, calEvent.end);
         priceField.text(minutes * cijena / 15);
 
@@ -703,6 +682,8 @@ $(document).ready(function () {
 
         $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
         setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
+
+        refreshTermin(statusField, calEvent, bodyField, startField, endField);
     }
 
     $('#noviTermin').click(function () {
