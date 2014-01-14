@@ -182,6 +182,11 @@ $(document).ready(function () {
             minutes = getMinutes(calEvent.start, calEvent.end);
             priceField.text(minutes * cijena / 15);
 
+            var tmpEvent = {};
+
+
+
+
             if (!menadzer) {
                 $("#status").hide();
                 $('.iznos').hide();
@@ -235,15 +240,25 @@ $(document).ready(function () {
                     },
                     cancel: function () {
                         $dialogContent.dialog("close");
+                        calEvent.start = tmpEvent.start;
+                        calEvent.end = tmpEvent.end;
+                        $calendar.weekCalendar("updateEvent", calEvent);
                     }
                 }
             }).show();
 
+            refreshTermin(statusField, calEvent, bodyField, startField, endField);
             startField = $dialogContent.find("select[name='start']").val(calEvent.start);
             endField = $dialogContent.find("select[name='end']").val(calEvent.end);
+
+
+
             $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
             setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
             $(window).resize().resize(); //fixes a bug in modal overlay size ??
+
+            tmpEvent.start = new Date(startField.val());
+            tmpEvent.end = new Date(endField.val());
 
 
         },
@@ -470,7 +485,7 @@ $(document).ready(function () {
             }
         }
 
-        $endTimeField[0][0].remove();
+//        $endTimeField[0][0].remove();
 
         var endTimeSelected = false;
         $endTimeField.find("option").each(function () {
@@ -554,6 +569,37 @@ $(document).ready(function () {
         priceField.text(minutes * cijena / 15 + 'KM');
     }
 
+    function refreshTermin(statusField, calEvent, bodyField, startField, endField) {
+        statusField.change(function () {
+            calEvent.body = bodyField.val();
+            calEvent.hall = sale.val();
+            calEvent.start = new Date(startField.val());
+            calEvent.end = new Date(endField.val());
+            calEvent.status = statusField.val();
+            $calendar.weekCalendar("updateEvent", calEvent);
+        });
+
+        endField.change(function () {
+            calEvent.body = bodyField.val();
+            calEvent.hall = sale.val();
+            calEvent.start = new Date(startField.val());
+            calEvent.end = new Date(endField.val());
+            calEvent.status = statusField.val();
+            $calendar.weekCalendar("removeEvent", calEvent.id);
+            $calendar.weekCalendar("updateEvent", calEvent);
+        });
+
+        startField.change(function () {
+            calEvent.body = bodyField.val();
+            calEvent.hall = sale.val();
+            calEvent.start = new Date(startField.val());
+            calEvent.end = new Date(endField.val());
+            calEvent.status = statusField.val();
+            $calendar.weekCalendar("removeEvent", calEvent.id);
+            $calendar.weekCalendar("updateEvent", calEvent);
+        });
+    }
+
     function noviTermin(calEvent) {
         if (!menadzer) {
             $("#status").hide();
@@ -569,35 +615,7 @@ $(document).ready(function () {
         var statusField = $dialogContent.find("select[name='status']").val("");
         priceField = $dialogContent.find("label[name='price']");
 
-        statusField.change(function(){
-            calEvent.body = bodyField.val();
-            calEvent.hall = sale.val();
-            calEvent.start = new Date(startField.val());
-            calEvent.end = new Date(endField.val());
-            calEvent.status = statusField.val();
-            $calendar.weekCalendar("updateEvent", calEvent);
-        });
-
-        endField.change(function(){
-            calEvent.body = bodyField.val();
-            calEvent.hall = sale.val();
-            calEvent.start = new Date(startField.val());
-            calEvent.end = new Date(endField.val());
-            calEvent.status = statusField.val();
-            $calendar.weekCalendar("removeEvent", calEvent.id);
-            $calendar.weekCalendar("updateEvent", calEvent);
-        });
-
-        startField.change(function(){
-            calEvent.body = bodyField.val();
-            calEvent.hall = sale.val();
-            calEvent.start = new Date(startField.val());
-            calEvent.end = new Date(endField.val());
-            calEvent.status = statusField.val();
-            $calendar.weekCalendar("removeEvent", calEvent.id);
-            $calendar.weekCalendar("updateEvent", calEvent);
-        });
-
+        refreshTermin(statusField, calEvent, bodyField, startField, endField);
         minutes = getMinutes(calEvent.start, calEvent.end);
         priceField.text(minutes * cijena / 15);
 
