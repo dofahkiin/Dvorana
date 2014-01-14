@@ -11,6 +11,7 @@ $(document).ready(function () {
     var minutes;
     var priceField;
     var allTerms;
+    var startPocetni;
     toastr.options = {"positionClass": "toast-bottom-full-width"};
 
     $(document).tooltip(
@@ -200,6 +201,7 @@ $(document).ready(function () {
                     $dialogContent.hide();
                     clearTime();
                     $('#calendar').weekCalendar("removeUnsavedEvents");
+                    startPocetni = null;
                 },
                 buttons: {
                     save: function () {
@@ -226,6 +228,7 @@ $(document).ready(function () {
                             else {
                                 $calendar.weekCalendar("updateEvent", calEvent);
                                 $dialogContent.dialog("close");
+                                startPocetni = null;
                             }
                         });
                     },
@@ -235,6 +238,7 @@ $(document).ready(function () {
 //                                          $calendar.weekCalendar("removeEvent", calEvent.id);
                             $calendar.weekCalendar("refresh");
                             $dialogContent.dialog("close");
+                            startPocetni = null;
                         }
 
                     },
@@ -243,6 +247,7 @@ $(document).ready(function () {
                         calEvent.start = tmpEvent.start;
                         calEvent.end = tmpEvent.end;
                         $calendar.weekCalendar("updateEvent", calEvent);
+                        startPocetni = null;
                     }
                 }
             }).show();
@@ -259,6 +264,8 @@ $(document).ready(function () {
 
             tmpEvent.start = new Date(startField.val());
             tmpEvent.end = new Date(endField.val());
+
+            startPocetni = tmpEvent.start;
 
 
         },
@@ -455,7 +462,29 @@ $(document).ready(function () {
             }
         });
 
-        if (ind == -1) {
+        if(startPocetni != null)
+        {
+            for (var j = 0; j < terminiDan.length; j++) {
+                if (terminiDan[j].start.toString() > startTime && startPocetni.toString() != terminiDan[j].start.toString()) {
+                    ind = j;
+                    break;
+                }
+            }
+
+            if (ind < terminiDan.length && ind != -1) {
+
+                var tmp2 = tmp.filter(function () {
+//                    console.log($(this).val());
+                    if (terminiDan[ind].start.toString() >= $(this).val()) {
+                        return $(this).val();
+                    }
+                });
+                $endTimeField.html(tmp2);
+            }
+
+        }
+
+        else if (ind == -1) {
             for (var j = 0; j < terminiDan.length; j++) {
                 if (terminiDan[j].start.toString() > startTime) {
                     ind = j;
@@ -466,6 +495,7 @@ $(document).ready(function () {
             if (ind < terminiDan.length && ind != -1) {
 
                 var tmp2 = tmp.filter(function () {
+//                    console.log($(this).val());
                     if (terminiDan[ind].start.toString() >= $(this).val()) {
                         return $(this).val();
                     }
@@ -485,7 +515,7 @@ $(document).ready(function () {
             }
         }
 
-//        $endTimeField[0][0].remove();
+        $endTimeField[0][0].remove();
 
         var endTimeSelected = false;
         $endTimeField.find("option").each(function () {
@@ -593,6 +623,7 @@ $(document).ready(function () {
             calEvent.body = bodyField.val();
             calEvent.hall = sale.val();
             calEvent.start = new Date(startField.val());
+            startPocetni = calEvent.start;
             calEvent.end = new Date(endField.val());
             calEvent.status = statusField.val();
             $calendar.weekCalendar("removeEvent", calEvent.id);
