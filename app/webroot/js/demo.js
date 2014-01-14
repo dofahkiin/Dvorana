@@ -608,6 +608,17 @@ $(document).ready(function () {
             calEvent.status = statusField.val();
             $calendar.weekCalendar("updateEvent", calEvent);
         });
+
+//        startField.change(function (calEvent) {
+//            calEvent.body = bodyField.val();
+//            calEvent.hall = sale.val();
+//            calEvent.start = new Date(startField.val());
+//            startPocetni = calEvent.start;
+//            calEvent.end = new Date(endField.val());
+//            calEvent.status = statusField.val();
+//            $calendar.weekCalendar("removeEvent", calEvent.id);
+//            $calendar.weekCalendar("updateEvent", calEvent);
+//        });
     }
 
     function noviTermin(calEvent) {
