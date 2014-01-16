@@ -98,6 +98,7 @@ class UsersController extends AppController
                         $this->request->data['User'],
                         array('id' => $id)
                     );
+                    $this->Session->setFlash(__('Uspješna registracija. Dobrodošao/la '.$this->request->data['User']['name'].'!'));
                     $this->Auth->login($this->request->data['User']);
                 }
                 //$this->Session->setFlash(__('The user has been saved.'));

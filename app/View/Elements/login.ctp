@@ -15,6 +15,6 @@
             ?>
         </fieldset>
         <?php echo $this->Form->end(__('Prijavi se'));
-        echo "<a href=\"/users/add\">Registracija</a>";?>
+        echo "<a href=\"". $this->webroot. "users/add\">Registracija</a>";?>
     </div>
 </div>

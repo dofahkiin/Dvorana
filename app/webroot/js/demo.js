@@ -19,7 +19,7 @@ $(document).ready(function () {
             content:  function() {
                 var element = $( this );
                 if ( element.is( ".uputstvo" ) ) {
-                    return "<img src=\"/img/popup_uputsvo.png\" alt=\"uputsvo_za_boje\">";
+                    return "<img src=\""+myBaseUrl +"img/popup_uputsvo.png\" alt=\"uputsvo_za_boje\">";
                 }
             }});
 

@@ -63,8 +63,8 @@ class User extends AppModel
         ),
         'telephone' => array(
             'phone' => array(
-                'rule' => array('phone', '/^[0-9-+()# ]{4,12}+$/'),
-                'message' => 'Telefonski broj nije ispravan',
+                'rule' => array('phone', '/^[0-9-+()# ]{9,12}+$/'),
+                'message' => 'Telefonski broj nije ispravan. Broj mora imati minimalno 9 cifara',
                 //'allowEmpty' => false,
                 //'required' => false,
                 //'last' => false, // Stop validation after this rule
