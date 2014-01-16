@@ -24,7 +24,7 @@ $this->Paginator->options(array(
                 </tr>
                 <?php foreach ($terms as $term): ?>
                     <tr>
-                        <td><?php echo h($term['Term']['date']); ?>&nbsp;</td>
+                        <td><?php echo h($term[0]['date']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['status']); ?>&nbsp;</td>
                         <td><?php echo h($term[0]['term']); ?>&nbsp;</td>
                         <td><?php echo h($term['Hall']['name']); ?>&nbsp;</td>
@@ -48,7 +48,7 @@ $this->Paginator->options(array(
                 </tr>
                 <?php foreach ($terms as $term): ?>
                     <tr>
-                        <td><?php echo h($term['Term']['date']); ?>&nbsp;</td>
+                        <td><?php echo h($term[0]['date']); ?>&nbsp;</td>
                         <td><?php echo h($term['Term']['status']); ?>&nbsp;</td>
                         <td><?php echo h($term[0]['term']); ?>&nbsp;</td>
                         <td><?php echo h($term['User']['name']) . ' ' . h($term['User']['surname']); ?>&nbsp;</td>

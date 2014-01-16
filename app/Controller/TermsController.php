@@ -340,28 +340,48 @@ class TermsController extends AppController
             $this->Paginator->settings = array(
                 'conditions' => array('Term.client_id' => $this->Auth->user('id')),
                 'limit' => 10,
-                'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                'fields' => array('Term.id', "DATE_FORMAT(Term.date, '%d.%m.%Y.') as date", "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
             );
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
         } else {
             $this->Paginator->settings = array(
                 'limit' => 10,
-                'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                'fields' => array('Term.id', "DATE_FORMAT(Term.date, '%d.%m.%Y.') as date", "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
             );
             $data = $this->Paginator->paginate('Term');
             $this->set('terms', $data);
         }
     }
 
+    function KonverzijaDatum($mysqlDatum)
+    {
+        $tmp = explode(".", $mysqlDatum);
+        if (count($tmp) < 3) {
+            return "";
+        }
+
+        $DATUM = $tmp[2] . "-" . $tmp[1] . "-" . $tmp[0];
+        return $DATUM;
+
+
+    }
 
     public function search()
     {
 
         if ($this->request->is('ajax')) {
-            $keyword = $_REQUEST["TermDate"];
-            $od = $_REQUEST["TermOd"];
-            $do = $_REQUEST["TermDo"];
+                $keyword = $this->KonverzijaDatum($_REQUEST["TermDate"]);
+
+
+
+                $od = $this->KonverzijaDatum($_REQUEST["TermOd"]);
+
+
+
+                $do = $this->KonverzijaDatum($_REQUEST["TermDo"]);
+
+
             $hall = $_REQUEST["TermHall"];
             $status = "";
             $name = "";
@@ -471,7 +491,7 @@ class TermsController extends AppController
                         $range
                     ),
                     'limit' => 10,
-                    'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                    'fields' => array('Term.id', "DATE_FORMAT(Term.date, '%d.%m.%Y.') as date", "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
                 );
                 $data = $this->Paginator->paginate('Term');
                 $this->set('terms', $data);
@@ -479,7 +499,7 @@ class TermsController extends AppController
                 $this->Paginator->settings = array(
                     'conditions' => array($range),
                     'limit' => 10,
-                    'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                    'fields' => array('Term.id', "DATE_FORMAT(Term.date, '%d.%m.%Y.') as date", "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
                 );
                 $data = $this->Paginator->paginate('Term');
                 $this->set('terms', $data);
@@ -596,7 +616,7 @@ class TermsController extends AppController
                         $range
                     ),
                     'limit' => 10,
-                    'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                    'fields' => array('Term.id', "DATE_FORMAT(Term.date, '%d.%m.%Y.') as date", "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
                 );
                 $data = $this->Paginator->paginate('Term');
                 $this->set('terms', $data);
@@ -604,7 +624,7 @@ class TermsController extends AppController
                 $this->Paginator->settings = array(
                     'conditions' => array($range),
                     'limit' => 10,
-                    'fields' => array('Term.id', 'Term.date', "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
+                    'fields' => array('Term.id', "DATE_FORMAT(Term.date, '%d.%m.%Y.') as date", "concat(DATE_FORMAT(Term.start, '%H:%i'),'-',DATE_FORMAT(Term.end, '%H:%i')) as term", "User.name, User.surname", 'Term.status', 'Hall.name', 'Term.comment', 'Term.price')
                 );
                 $data = $this->Paginator->paginate('Term');
                 $this->set('terms', $data);
