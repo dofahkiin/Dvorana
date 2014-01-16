@@ -371,16 +371,9 @@ class TermsController extends AppController
     {
 
         if ($this->request->is('ajax')) {
-                $keyword = $this->KonverzijaDatum($_REQUEST["TermDate"]);
-
-
-
-                $od = $this->KonverzijaDatum($_REQUEST["TermOd"]);
-
-
-
-                $do = $this->KonverzijaDatum($_REQUEST["TermDo"]);
-
+            $keyword = $this->KonverzijaDatum($_REQUEST["TermDate"]);
+            $od = $this->KonverzijaDatum($_REQUEST["TermOd"]);
+            $do = $this->KonverzijaDatum($_REQUEST["TermDo"]);
 
             $hall = $_REQUEST["TermHall"];
             $status = "";
@@ -506,9 +499,9 @@ class TermsController extends AppController
             }
 
         } else {
-            $keyword = $this->request->data['Term']['date'];
-            $od = $this->request->data['Term']['od'];
-            $do = $this->request->data['Term']['do'];
+            $keyword = $this->KonverzijaDatum($this->request->data['Term']['date']);
+            $od = $this->KonverzijaDatum($this->request->data['Term']['od']);
+            $do = $this->KonverzijaDatum($this->request->data['Term']['do']);
             $hall = $this->request->data['Term']['hall'];
             $status = "";
             $name = "";
