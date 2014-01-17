@@ -15,8 +15,13 @@
 
 </div>
 
-<div class="block">
-    <div>
+<div class="vremena">
+    <div id="radioVrijeme">
+        <input type="radio" id="radioV1" name="radioVrijeme" checked="checked"><label for="radioV1">Vrijeme</label>
+        <input type="radio" id="radioV2" name="radioVrijeme"><label for="radioV2">Opseg vremena</label>
+    </div>
+
+    <div id="vrijeme">
         <?php
         echo $this->Form->input('vrijemeT', array(
             'label' => 'Vrijeme',
@@ -26,6 +31,22 @@
             'empty' => array("")));
         ?>
     </div>
+
+</div>
+
+
+<div id="datumRange">
+    <?php
+    echo $this->Form->input('od', array(
+        'label' => 'Od:',
+        'type' => 'text'));
+    echo $this->Form->input('do', array(
+        'label' => 'Do:',
+        'type' => 'text'));
+    ?>
+</div>
+
+<div id="vrijemeRange">
     <?php
     echo $this->Form->input('vrijemeOd', array(
         'label' => 'Vrijeme od:',
@@ -39,18 +60,6 @@
         'interval' => 15,
         'timeFormat' => '24',
         'empty' => array("")));
-    ?>
-</div>
-
-
-<div id="datumRange">
-    <?php
-    echo $this->Form->input('od', array(
-        'label' => 'Od:',
-        'type' => 'text'));
-    echo $this->Form->input('do', array(
-        'label' => 'Do:',
-        'type' => 'text'));
     ?>
 </div>
 

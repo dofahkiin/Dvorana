@@ -948,17 +948,25 @@ color: #fff;
     float: right;
 }
 
-#datumRange {
+.datumi {
+    margin-top: 23px;
+}
+
+#datumRange, #vrijemeRange {
     display: none;
 }
 
-#radio
+#radio, #radioVrijeme
 {
     display: inline;
 }
 
-#datum, #datumRange {
+#datum, #datumRange, #vrijeme, #vrijemeRange {
     margin-top: 5px;
+}
+
+.vremena {
+    margin-top: 20px;
 }
 
 

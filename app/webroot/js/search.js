@@ -2,24 +2,31 @@ $(document).ready(function () {
 
 
     $( "#radio" ).buttonset();
+    $( "#radioVrijeme" ).buttonset();
 
     var datum = $("#datum");
     var datumRange = $("#datumRange");
+    var vrijeme = $("#vrijeme");
+    var vrijemeRange = $("#vrijemeRange");
 
     $("#radio2").bind("click", function (event) {
-
         datum.remove();
         $(".datumi").append(datumRange.show());
-//        $("#datumRange").show();
     });
 
     $("#radio1").bind("click", function (event) {
-
         datumRange.remove();
         $(".datumi").append(datum);
-//        $(datum).appendTo(".datumi");
-//        $(".datumi").append($("#datum"));
-//        $("#datumRange").show();
+    });
+
+    $("#radioV2").bind("click", function (event) {
+        vrijeme.remove();
+        $(".vremena").append(vrijemeRange.show());
+    });
+
+    $("#radioV1").bind("click", function (event) {
+        vrijemeRange.remove();
+        $(".vremena").append(vrijeme);
     });
 
     $("#search").bind("click", function (event) {

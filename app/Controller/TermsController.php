@@ -412,42 +412,66 @@ class TermsController extends AppController
             }
 
 
-            if ($_REQUEST["TermVrijemeOdHour"] != "") {
-                $vrijemeOd = $_REQUEST["TermVrijemeOdHour"] .
-                    ':' .
-                    $_REQUEST["TermVrijemeOdMin"] .
-                    ':' .
-                    '00';
-                $_REQUEST["vrijemeOd"] = $vrijemeOd;
-            } else {
+            if(isset($_REQUEST["TermVrijemeOdHour"])){
+                if ($_REQUEST["TermVrijemeOdHour"] != "") {
+                    $vrijemeOd = $_REQUEST["TermVrijemeOdHour"] .
+                        ':' .
+                        $_REQUEST["TermVrijemeOdMin"] .
+                        ':' .
+                        '00';
+                    $_REQUEST["vrijemeOd"] = $vrijemeOd;
+                } else {
+                    $vrijemeOd = "";
+                    $_REQUEST["vrijemeOd"] = "";
+                }
+            }
+            else
+            {
                 $vrijemeOd = "";
                 $_REQUEST["vrijemeOd"] = "";
+
             }
 
-            if ($_REQUEST["TermVrijemeDoHour"] != "") {
-                $vrijemeDo = $_REQUEST["TermVrijemeDoHour"] .
-                    ':' .
-                    $_REQUEST["TermVrijemeDoMin"] .
-                    ':' .
-                    '00';
-                $_REQUEST["vrijemeDo"] = $vrijemeDo;
-            } else {
+
+            if(isset($_REQUEST["TermVrijemeDoHour"])){
+                if ($_REQUEST["TermVrijemeDoHour"] != "") {
+                    $vrijemeDo = $_REQUEST["TermVrijemeDoHour"] .
+                        ':' .
+                        $_REQUEST["TermVrijemeDoMin"] .
+                        ':' .
+                        '00';
+                    $_REQUEST["vrijemeDo"] = $vrijemeDo;
+                } else {
+                    $vrijemeDo = "";
+                    $_REQUEST["vrijemeDo"] = "";
+                }
+            }
+            else
+            {
                 $vrijemeDo = "";
                 $_REQUEST["vrijemeDo"] = "";
             }
 
 
-            if ($_REQUEST["TermVrijemeTHour"] != "") {
-                $vrijemeT = $_REQUEST["TermVrijemeTHour"] .
-                    ':' .
-                    $_REQUEST["TermVrijemeTMin"] .
-                    ':' .
-                    '00';
-                $_REQUEST["vrijemeT"] = $vrijemeT;
-            } else {
+            if(isset($_REQUEST["TermVrijemeTHour"])){
+                if ($_REQUEST["TermVrijemeTHour"] != "") {
+                    $vrijemeT = $_REQUEST["TermVrijemeTHour"] .
+                        ':' .
+                        $_REQUEST["TermVrijemeTMin"] .
+                        ':' .
+                        '00';
+                    $_REQUEST["vrijemeT"] = $vrijemeT;
+                } else {
+                    $vrijemeT = "";
+                    $_REQUEST["vrijemeT"] = "";
+                }
+            }
+            else
+            {
                 $vrijemeT = "";
                 $_REQUEST["vrijemeT"] = "";
             }
+
 
 
             $this->Term->recursive = 0;
