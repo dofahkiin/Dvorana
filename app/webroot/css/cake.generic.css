@@ -948,3 +948,17 @@ color: #fff;
     float: right;
 }
 
+#datumRange {
+    display: none;
+}
+
+#radio
+{
+    display: inline;
+}
+
+#datum, #datumRange {
+    margin-top: 5px;
+}
+
+

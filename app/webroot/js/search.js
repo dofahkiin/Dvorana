@@ -1,4 +1,27 @@
 $(document).ready(function () {
+
+
+    $( "#radio" ).buttonset();
+
+    var datum = $("#datum");
+    var datumRange = $("#datumRange");
+
+    $("#radio2").bind("click", function (event) {
+
+        datum.remove();
+        $(".datumi").append(datumRange.show());
+//        $("#datumRange").show();
+    });
+
+    $("#radio1").bind("click", function (event) {
+
+        datumRange.remove();
+        $(".datumi").append(datum);
+//        $(datum).appendTo(".datumi");
+//        $(".datumi").append($("#datum"));
+//        $("#datumRange").show();
+    });
+
     $("#search").bind("click", function (event) {
 
         $.ajax({

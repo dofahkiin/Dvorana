@@ -356,6 +356,7 @@ class TermsController extends AppController
 
     function KonverzijaDatum($mysqlDatum)
     {
+
         $tmp = explode(".", $mysqlDatum);
         if (count($tmp) < 3) {
             return "";
@@ -367,13 +368,37 @@ class TermsController extends AppController
 
     }
 
+
     public function search()
     {
 
         if ($this->request->is('ajax')) {
-            $keyword = $this->KonverzijaDatum($_REQUEST["TermDate"]);
-            $od = $this->KonverzijaDatum($_REQUEST["TermOd"]);
-            $do = $this->KonverzijaDatum($_REQUEST["TermDo"]);
+
+            if(isset($_REQUEST["TermDate"])){
+                $keyword = $this->KonverzijaDatum($_REQUEST["TermDate"]);
+            }
+            else
+            {
+                $keyword = "";
+            }
+
+            if(isset($_REQUEST["TermOd"])){
+                $od = $this->KonverzijaDatum($_REQUEST["TermOd"]);
+            }
+            else
+            {
+                $od = "";
+            }
+
+            if(isset($_REQUEST["TermDo"])){
+                $do = $this->KonverzijaDatum($_REQUEST["TermDo"]);
+            }
+            else
+            {
+                $do = "";
+            }
+
+
 
             $hall = $_REQUEST["TermHall"];
             $status = "";

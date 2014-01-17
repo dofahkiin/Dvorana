@@ -1,6 +1,10 @@
 <?php
+echo $this->Html->css('jquery-ui', FALSE);
+
 echo $this->Html->script('jquery-1.10.2.min', FALSE);
+echo $this->Html->script('jquery-ui-1.10.3.custom.min', FALSE);
 echo $this->Html->script('jquery.activity-indicator-1.0.0', FALSE);
+
 
 
 $this->Paginator->options(array(
