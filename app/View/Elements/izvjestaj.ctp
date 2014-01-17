@@ -49,13 +49,13 @@
 <div id="vrijemeRange">
     <?php
     echo $this->Form->input('vrijemeOd', array(
-        'label' => 'Vrijeme od:',
+        'label' => 'Od:',
         'type' => 'time',
         'interval' => 15,
         'timeFormat' => '24',
         'empty' => array("")));
     echo $this->Form->input('vrijemeDo', array(
-        'label' => 'Vrijeme do:',
+        'label' => 'Do:',
         'type' => 'time',
         'interval' => 15,
         'timeFormat' => '24',
